@@ -1,4 +1,4 @@
-
+ 
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,7 +7,7 @@ table, th, td  {
   border: 1px solid black;
   text-align: center;
 }
-p, h1, h2, div {
+p, h1, h2, h3, div {
   text-align: center;
 }
 .center {
@@ -41,18 +41,14 @@ p, h1, h2, div {
                 <td>Contact Info:</td>
                 <td>+34 123 456  7890</td>
             </tr>
-            <tr>        
-                <td>LOTOTO Tag ID:</td>
-                <td>987654321</td>
-            </tr>
         </table>
     </td>
   </tr>
 </table> 
 </p>
-<table  class="center">
+<table  class="center" style="width:70%">
         <tr>
-                <th colspan="2">Johnny's LOCATION SPECIFIC NOTES</th>
+                <th colspan="2">LOCATION SPECIFIC NOTES</th>
     </tr>
     <tr>
         <td>
@@ -66,7 +62,39 @@ p, h1, h2, div {
         </td>
     </tr>
 </table>
+<hr class="solid">
+<h2>Notifications When Tag is Removed</h2>
+<table class="center">
+  <tr>
+      <th>Name</th>
+      <th>Text Number</th>
+  </tr>
+  <tr>
+      <td>Wayne Gretski</td>
+      <td>+1-780-555-1234</td>
+  </tr>
+    <tr>
+      <td>Bugs Bunny</td>
+      <td>+1-780-111-2222</td>
+  </tr>
+</table>
+<h3>Sign-up for Notification of Tag Removal</h3>
+<form action="/page1_action.html" >
 
+  <div class="container">
+    <label for="tname"><b>Name</b></label>
+    <input type="text" placeholder="Enter Username" name="tag-name" >
+
+        </br>
+    <label for="psw"><b>Text #</b></label>
+    <input type="password" placeholder="Text #" name="text-num" >
+        </br>
+
+    <button type="submit">Add Me</button></br>
+
+  </div>
+  </form>
+<hr class="solid">
 <h2>Authenticate for Further Access</h2>
 
 <form action="/page1_action.html" >
