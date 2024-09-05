@@ -77,20 +77,21 @@
                 border: none;
                 border-bottom: 1px solid #eee;
                 position: relative;
-                padding-left: 50%;
+                padding-left: 40%;
+                padding-right: 10px; /* Adjusted padding for better spacing */
             }
             td:before {
                 position: absolute;
                 top: 10px;
                 left: 10px;
-                width: 45%;
+                width: 35%; /* Reduced width to allow more space for data */
                 padding-right: 10px;
                 white-space: nowrap;
                 font-weight: bold;
             }
             td:nth-of-type(1):before { content: "Date"; }
-            td:nth-of-type(2):before { content: "Odometer Reading (km)"; }
-            td:nth-of-type(3):before { content: "Service Performed"; }
+            td:nth-of-type(2):before { content: "Odometer (km)"; }
+            td:nth-of-type(3):before { content: "Service"; }
             td:nth-of-type(4):before { content: "Notes"; }
         }
     </style>
