@@ -1,176 +1,99 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<style>
-table, th, td  {
-  border: 1px solid black;
-  text-align: center;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-p, h1, h2, h3, div {
-  text-align: center;
-}
-.center {
-  margin-left: auto;
-  margin-right: auto;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOTO Tag Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .label {
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        .info {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-
-<h1>Lock Out Tag Out - Johnny Appleseed</h1>
-<h2>LOTO Tag 1</h2>
-<h2>LOCKOUT/TAGOUT - Area 4G1</h2>
- <table  class="center">
-  <tr>
-    <th colspan="2">Owner Information</th>
-
-  </tr>
-  <tr>
-    <td>
-        <table>
-                <tr>
-                <td>Tag Owner:</td>
-                <td>Johnny Appleseed</td>
-            </tr>
-            <tr>
-                <td>Section:</td>
-                <td>Mine Maintenance</sup></td>
-            </tr>
-            <tr>
-                <td>Contact Info:</td>
-                <td>+34 123 456  7890</td>
-            </tr>
-        </table>
-    </td>
-  </tr>
-</table>
-</p>
-
-<hr class="solid">
- <table  class="center">
-  <tr>
-    <th colspan="2"><h3>When</h3></th>
-
-  </tr>
-  <tr>
-    <td>
-        <table>
-            <tr>
-                <td>Work Location:</td>
-                <td>Area 4G</td>
-            </tr>
-            <tr>
-                <td>LOTO Placed On:</td>
-                <td>Feb 23, 2023</td>
-            </tr>
-            <tr>
-                <td style="background-color:Black; color:White">Expected Removal/Completion Date:</td>
-                <td style="background-color:Black; color:White"><b>March 2, 2023</b></sup></td>
-            </tr>
-        </table>
-    </td>
-  </tr>
-</table>
-
-<hr class="solid">
-
-
-<table  class="center" style="width:70%">
-     <tr>
-         <th colspan="2"><h3>Johnny's NOTES</h3></th>
-    </tr>
-    <tr>
-        <td>
-        <table>
-                <tr>
-                <td colspan="2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</td>
-
-            </tr>
-
-        </table>
-        </td>
-    </tr>
-</table>
-<hr class="solid">
-
-
-<table  class="center">
-    <tr>
-         <th colspan="2"><h3>Work Related Info</h3></th>
-    </tr>
-    <tr>
-        <td>
-        <table>
-             <tr>
-                <td>Work Plan:</td>
-                <td><a href="docs/SLD1.pdf">WorkPlan.pdf</a></br></td>
-            </tr>
-             <tr>
-                <td>Work Permit:</td>
-                <td><a href="docs/SLD1.pdf">WorkPermit.pdf</a></br></td>
-            </tr>            
-            <tr>
-                <td valign="top">Other Related Documents:</td>
-                <td><a href="docs/SLD1.pdf">Doc1.pdf</a></br>
-                <a href="docs/SLD1.pdf">Doc2.pdf</a></br>
-                <a href="docs/SLD1.pdf">Doc3.pdf</a></br>
-            </tr>
-        </table>
-        </td>
-    </tr>
-</table>
-<hr class="solid">
-<h2>Notifications When Tag is Removed</h2>
-<table class="center">
-  <tr>
-      <th>Name</th>
-      <th>Text Number</th>
-  </tr>
-  <tr>
-      <td>Wayne Gretzky</td>
-      <td>+1-780-555-1234</td>
-  </tr>
-    <tr>
-      <td>Bugs Bunny</td>
-      <td>+1-780-111-2222</td>
-  </tr>
-</table>
-<h3>Sign-up for Notification of Tag Removal</h3>
-<form action="/page1_action.html" >
-
-  <div class="container">
-    <label for="tname"><b>Name</b></label>
-    <input type="text" placeholder="Enter Name" name="tag-name" >
-
-        </br>
-    <label for="psw"><b>Text #</b></label>
-    <input type="password" placeholder="Text #" name="text-num" >
-        </br>
-
-    <button type="submit">Add Me</button></br>
-
-  </div>
-  </form>
-<hr class="solid">
-<h2>Authenticate for Further Access</h2>
-
-<form action="/page1_action.html" >
-
-  <div class="container">
-    <label for="uname"><b>Username</b></label>
-    <input type="text" placeholder="Enter Username" name="uname" >
-
-        </br>
-    <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="psw" >
-        </br>
-
-    <button type="submit">Login</button></br>
-
-  </div>
-  </form>
-
+    <div class="container">
+        <h1>LOTO Tag Information</h1>
+        <div class="info">
+            <div class="label">Name of Authorized Person:</div>
+            <div contenteditable="true">Johnny Appleseed</div>
+        </div>
+        <div class="info">
+            <div class="label">Plant Card ID:</div>
+            <div contenteditable="true">JA LOTO Tag1</div>
+        </div>
+        <div class="info">
+            <div class="label">Date and Time of Application:</div>
+            <div contenteditable="true">2024-09-06 07:53</div>
+        </div>
+        <div class="info">
+            <div class="label">Reason for Lockout:</div>
+            <div contenteditable="true">Working on EEJHA #98765</div>
+        </div>
+        <div class="info">
+            <div class="label">Equipment Identification:</div>
+            <div contenteditable="true">MCC-001, Serial No. 12345</div>
+        </div>
+        <div class="info">
+            <div class="label">Contact Information:</div>
+            <div contenteditable="true">555-555-5555</div>
+        </div>
+        <div class="info">
+            <div class="label">Expected Duration of Lockout:</div>
+            <div contenteditable="true">4 hours</div>
+        </div>
+        <div class="info">
+            <div class="label">Hazard Identification:</div>
+            <div contenteditable="true">High Voltage</div>
+        </div>
+        <div class="info">
+            <div class="label">Supervisor or Approver Name:</div>
+            <div contenteditable="true">Jane Smith</div>
+        </div>
+        <div class="info">
+            <div class="label">Special Instructions or Notes:</div>
+            <div contenteditable="true">Ensure all tools are removed before re-energizing.</div>
+        </div>
+        <div class="footer">
+            This LOTO tag is to be removed only by Johnny Appleseed.
+        </div>
+    </div>
 </body>
 </html>
