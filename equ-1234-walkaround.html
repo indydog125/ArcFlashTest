@@ -1,10 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vehicle Walkaround Inspection Report</title>
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Vehicle Walkaround Inspection Report</title>
+<style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
@@ -58,140 +59,104 @@
     </style>
 </head>
 <body>
-
-    <div class="container">
-        <h2>Vehicle Walkaround Inspection Report</h2>
-        
-        <!-- Vehicle Information Section -->
-        <div class="section">
-            <div class="section-title">Vehicle Information</div>
-            <label for="vin">VIN:</label>
-            <div class="static-text" id="vin">1HGCM82633A123456</div>
-
-            <label for="make_model">Make and Model:</label>
-            <div class="static-text" id="make_model">Honda Accord 2023</div>
-
-            <label for="license_plate">License Plate:</label>
-            <div class="static-text" id="license_plate">XYZ1234</div>
-
-            <label for="odometer_reading">Odometer Reading:</label>
-            <input type="number" id="odometer_reading" name="odometer_reading" placeholder="Enter Odometer Reading">
-	    <div class="previous-reading">Previous Odometer Reading: 142,850 km</div>
-
-            <label for="inspection_date">Inspection Date:</label>
-            <input type="date" id="inspection_date" name="inspection_date">
-
-            <label for="inspector_name">Inspector's Name:</label>
-            <input type="text" id="inspector_name" name="inspector_name" placeholder="Enter Inspector's Name">
-        </div>
-
-        <!-- Exterior Check Section -->
-        <div class="section">
-            <div class="section-title">Exterior Check</div>
-            <label for="bodywork_condition">Bodywork Condition:</label>
-            <input type="text" id="bodywork_condition" name="bodywork_condition" placeholder="Describe Bodywork Condition">
-
-            <label for="windows_mirrors_condition">Windows and Mirrors Condition:</label>
-            <input type="text" id="windows_mirrors_condition" name="windows_mirrors_condition" placeholder="Describe Windows and Mirrors Condition">
-
-            <label for="lights_functionality">Lights Functionality:</label>
-            <input type="text" id="lights_functionality" name="lights_functionality" placeholder="Describe Lights Functionality">
-
-            <label for="tires_condition">Tires Condition:</label>
-            <input type="text" id="tires_condition" name="tires_condition" placeholder="Describe Tires Condition">
-
-            <label for="wipers_washer_fluid_condition">Wipers and Washer Fluid Condition:</label>
-            <input type="text" id="wipers_washer_fluid_condition" name="wipers_washer_fluid_condition" placeholder="Describe Wipers and Washer Fluid Condition">
-
-            <label for="license_plates_condition">License Plates Condition:</label>
-            <input type="text" id="license_plates_condition" name="license_plates_condition" placeholder="Describe License Plates Condition">
-
-            <label for="trailer_condition">Trailer Condition (if applicable):</label>
-            <input type="text" id="trailer_condition" name="trailer_condition" placeholder="Describe Trailer Condition">
-        </div>
-
-        <!-- Interior Check Section -->
-        <div class="section">
-            <div class="section-title">Interior Check</div>
-            <label for="dashboard_indicators_functionality">Dashboard Indicators Functionality:</label>
-            <input type="text" id="dashboard_indicators_functionality" name="dashboard_indicators_functionality" placeholder="Describe Dashboard Indicators Functionality">
-
-            <label for="seatbelts_condition">Seatbelts Condition:</label>
-            <input type="text" id="seatbelts_condition" name="seatbelts_condition" placeholder="Describe Seatbelts Condition">
-
-            <label for="horn_functionality">Horn Functionality:</label>
-            <input type="text" id="horn_functionality" name="horn_functionality" placeholder="Describe Horn Functionality">
-
-            <label for="ac_heating_functionality">A/C and Heating Functionality:</label>
-            <input type="text" id="ac_heating_functionality" name="ac_heating_functionality" placeholder="Describe A/C and Heating Functionality">
-
-            <label for="windows_locks_functionality">Windows and Locks Functionality:</label>
-            <input type="text" id="windows_locks_functionality" name="windows_locks_functionality" placeholder="Describe Windows and Locks Functionality">
-
-            <label for="mirrors_condition">Mirrors Condition:</label>
-            <input type="text" id="mirrors_condition" name="mirrors_condition" placeholder="Describe Mirrors Condition">
-
-            <label for="cleanliness">Cleanliness:</label>
-            <input type="text" id="cleanliness" name="cleanliness" placeholder="Describe Cleanliness of the Interior">
-        </div>
-
-        <!-- Engine Compartment Section -->
-        <div class="section">
-            <div class="section-title">Engine Compartment</div>
-            <label for="oil_level">Oil Level:</label>
-            <input type="text" id="oil_level" name="oil_level" placeholder="Describe Oil Level">
-
-            <label for="coolant_level">Coolant Level:</label>
-            <input type="text" id="coolant_level" name="coolant_level" placeholder="Describe Coolant Level">
-
-            <label for="brake_fluid_level">Brake Fluid Level:</label>
-            <input type="text" id="brake_fluid_level" name="brake_fluid_level" placeholder="Describe Brake Fluid Level">
-
-            <label for="battery_condition">Battery Condition:</label>
-            <input type="text" id="battery_condition" name="battery_condition" placeholder="Describe Battery Condition">
-
-            <label for="belts_hoses_condition">Belts and Hoses Condition:</label>
-            <input type="text" id="belts_hoses_condition" name="belts_hoses_condition" placeholder="Describe Belts and Hoses Condition">
-        </div>
-
-        <!-- Operational Check Section -->
-        <div class="section">
-            <div class="section-title">Operational Check</div>
-            <label for="engine_start">Engine Start:</label>
-            <input type="text" id="engine_start" name="engine_start" placeholder="Describe Engine Start">
-
-            <label for="brakes_functionality">Brakes Functionality:</label>
-            <input type="text" id="brakes_functionality" name="brakes_functionality" placeholder="Describe Brakes Functionality">
-
-            <label for="steering_responsiveness">Steering Responsiveness:</label>
-            <input type="text" id="steering_responsiveness" name="steering_responsiveness" placeholder="Describe Steering Responsiveness">
-
-            <label for="transmission_operation">Transmission Operation:</label>
-            <input type="text" id="transmission_operation" name="transmission_operation" placeholder="Describe Transmission Operation">
-
-            <label for="exhaust_system_condition">Exhaust System Condition:</label>
-            <input type="text" id="exhaust_system_condition" name="exhaust_system_condition" placeholder="Describe Exhaust System Condition">
-        </div>
-
-        <!-- Additional Comments Section -->
-        <div class="section">
-            <div class="section-title">Additional Comments/Notes</div>
-            <textarea id="comments_notes" name="comments_notes" rows="4" placeholder="Enter any additional comments or notes"></textarea>
-        </div>
-
-        <!-- Follow-Up Actions Section -->
-        <div class="section">
-            <div class="section-title">Follow-Up Actions</div>
-            <textarea id="follow_up_actions" name="follow_up_actions" rows="4" placeholder="Enter any required follow-up actions"></textarea>
-        </div>
-
-        <!-- Inspector's Signature -->
-        <div class="section">
-            <div class="section-title">Inspector's Signature</div>
-            <input type="text" id="inspector_signature" name="inspector_signature" placeholder="Enter Inspector's Signature">
-        </div>
-
-    </div>
-
+<div class="container"><div style="float: left; margin-right: 10px;"><img alt="EquipTag Logo" src="EquipTag-logo.png" style="width: 140px; height: auto;"/></div>
+<h2>Vehicle Walkaround Inspection Report</h2>
+<!-- Vehicle Information Section -->
+<div class="section">
+<div class="section-title">Vehicle Information</div>
+<label for="vin">VIN:</label>
+<div class="static-text" id="vin">1HGCM82633A123456</div>
+<label for="make_model">Make and Model:</label>
+<div class="static-text" id="make_model">Honda Accord 2023</div>
+<label for="license_plate">License Plate:</label>
+<div class="static-text" id="license_plate">XYZ1234</div>
+<label for="odometer_reading">Odometer Reading:</label>
+<input id="odometer_reading" name="odometer_reading" placeholder="Enter Odometer Reading" type="number"/>
+<div class="previous-reading">Previous Odometer Reading: 142,850 km</div>
+<label for="inspection_date">Inspection Date:</label>
+<input id="inspection_date" name="inspection_date" type="date"/>
+<label for="inspector_name">Inspector's Name:</label>
+<input id="inspector_name" name="inspector_name" placeholder="Enter Inspector's Name" type="text"/>
+</div>
+<!-- Exterior Check Section -->
+<div class="section">
+<div class="section-title">Exterior Check</div>
+<label for="bodywork_condition">Bodywork Condition:</label>
+<input id="bodywork_condition" name="bodywork_condition" placeholder="Describe Bodywork Condition" type="text"/>
+<label for="windows_mirrors_condition">Windows and Mirrors Condition:</label>
+<input id="windows_mirrors_condition" name="windows_mirrors_condition" placeholder="Describe Windows and Mirrors Condition" type="text"/>
+<label for="lights_functionality">Lights Functionality:</label>
+<input id="lights_functionality" name="lights_functionality" placeholder="Describe Lights Functionality" type="text"/>
+<label for="tires_condition">Tires Condition:</label>
+<input id="tires_condition" name="tires_condition" placeholder="Describe Tires Condition" type="text"/>
+<label for="wipers_washer_fluid_condition">Wipers and Washer Fluid Condition:</label>
+<input id="wipers_washer_fluid_condition" name="wipers_washer_fluid_condition" placeholder="Describe Wipers and Washer Fluid Condition" type="text"/>
+<label for="license_plates_condition">License Plates Condition:</label>
+<input id="license_plates_condition" name="license_plates_condition" placeholder="Describe License Plates Condition" type="text"/>
+<label for="trailer_condition">Trailer Condition (if applicable):</label>
+<input id="trailer_condition" name="trailer_condition" placeholder="Describe Trailer Condition" type="text"/>
+</div>
+<!-- Interior Check Section -->
+<div class="section">
+<div class="section-title">Interior Check</div>
+<label for="dashboard_indicators_functionality">Dashboard Indicators Functionality:</label>
+<input id="dashboard_indicators_functionality" name="dashboard_indicators_functionality" placeholder="Describe Dashboard Indicators Functionality" type="text"/>
+<label for="seatbelts_condition">Seatbelts Condition:</label>
+<input id="seatbelts_condition" name="seatbelts_condition" placeholder="Describe Seatbelts Condition" type="text"/>
+<label for="horn_functionality">Horn Functionality:</label>
+<input id="horn_functionality" name="horn_functionality" placeholder="Describe Horn Functionality" type="text"/>
+<label for="ac_heating_functionality">A/C and Heating Functionality:</label>
+<input id="ac_heating_functionality" name="ac_heating_functionality" placeholder="Describe A/C and Heating Functionality" type="text"/>
+<label for="windows_locks_functionality">Windows and Locks Functionality:</label>
+<input id="windows_locks_functionality" name="windows_locks_functionality" placeholder="Describe Windows and Locks Functionality" type="text"/>
+<label for="mirrors_condition">Mirrors Condition:</label>
+<input id="mirrors_condition" name="mirrors_condition" placeholder="Describe Mirrors Condition" type="text"/>
+<label for="cleanliness">Cleanliness:</label>
+<input id="cleanliness" name="cleanliness" placeholder="Describe Cleanliness of the Interior" type="text"/>
+</div>
+<!-- Engine Compartment Section -->
+<div class="section">
+<div class="section-title">Engine Compartment</div>
+<label for="oil_level">Oil Level:</label>
+<input id="oil_level" name="oil_level" placeholder="Describe Oil Level" type="text"/>
+<label for="coolant_level">Coolant Level:</label>
+<input id="coolant_level" name="coolant_level" placeholder="Describe Coolant Level" type="text"/>
+<label for="brake_fluid_level">Brake Fluid Level:</label>
+<input id="brake_fluid_level" name="brake_fluid_level" placeholder="Describe Brake Fluid Level" type="text"/>
+<label for="battery_condition">Battery Condition:</label>
+<input id="battery_condition" name="battery_condition" placeholder="Describe Battery Condition" type="text"/>
+<label for="belts_hoses_condition">Belts and Hoses Condition:</label>
+<input id="belts_hoses_condition" name="belts_hoses_condition" placeholder="Describe Belts and Hoses Condition" type="text"/>
+</div>
+<!-- Operational Check Section -->
+<div class="section">
+<div class="section-title">Operational Check</div>
+<label for="engine_start">Engine Start:</label>
+<input id="engine_start" name="engine_start" placeholder="Describe Engine Start" type="text"/>
+<label for="brakes_functionality">Brakes Functionality:</label>
+<input id="brakes_functionality" name="brakes_functionality" placeholder="Describe Brakes Functionality" type="text"/>
+<label for="steering_responsiveness">Steering Responsiveness:</label>
+<input id="steering_responsiveness" name="steering_responsiveness" placeholder="Describe Steering Responsiveness" type="text"/>
+<label for="transmission_operation">Transmission Operation:</label>
+<input id="transmission_operation" name="transmission_operation" placeholder="Describe Transmission Operation" type="text"/>
+<label for="exhaust_system_condition">Exhaust System Condition:</label>
+<input id="exhaust_system_condition" name="exhaust_system_condition" placeholder="Describe Exhaust System Condition" type="text"/>
+</div>
+<!-- Additional Comments Section -->
+<div class="section">
+<div class="section-title">Additional Comments/Notes</div>
+<textarea id="comments_notes" name="comments_notes" placeholder="Enter any additional comments or notes" rows="4"></textarea>
+</div>
+<!-- Follow-Up Actions Section -->
+<div class="section">
+<div class="section-title">Follow-Up Actions</div>
+<textarea id="follow_up_actions" name="follow_up_actions" placeholder="Enter any required follow-up actions" rows="4"></textarea>
+</div>
+<!-- Inspector's Signature -->
+<div class="section">
+<div class="section-title">Inspector's Signature</div>
+<input id="inspector_signature" name="inspector_signature" placeholder="Enter Inspector's Signature" type="text"/>
+</div>
+</div>
 </body>
 </html>
