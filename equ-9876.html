@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Equipment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        input[type="text"], input[type="number"], input[type="date"], select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+            font-size: 1em;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 1.2em;
+            color: #fff;
+            background-color: #28a745;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+    <script>
+        function showEquipmentFields() {
+            var equipmentType = document.getElementById('equipment_type').value;
+            document.getElementById('vehicle_fields').classList.add('hidden');
+            document.getElementById('hours_fields').classList.add('hidden');
+            document.getElementById('certification_fields').classList.add('hidden');
+            document.getElementById('seasonal_fields').classList.add('hidden');
+
+            if (equipmentType === 'vehicle') {
+                document.getElementById('vehicle_fields').classList.remove('hidden');
+            } else if (equipmentType === 'hours') {
+                document.getElementById('hours_fields').classList.remove('hidden');
+            } else if (equipmentType === 'certification') {
+                document.getElementById('certification_fields').classList.remove('hidden');
+            } else if (equipmentType === 'seasonal') {
+                document.getElementById('seasonal_fields').classList.remove('hidden');
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Create New Equipment</h2>
+        
+        <form>
+            <div class="section">
+                <label for="equipment_name">Equipment Name</label>
+                <input type="text" id="equipment_name" name="equipment_name" required>
+
+                <label for="equipment_type">Select Equipment Type</label>
+                <select id="equipment_type" name="equipment_type" onchange="showEquipmentFields()" required>
+                    <option value="">--Select Type--</option>
+                    <option value="vehicle">Vehicle (Tracked by Km/Miles)</option>
+                    <option value="hours">Equipment (Tracked by Hours)</option>
+                    <option value="certification">Equipment (Tracked by Certification Dates)</option>
+                    <option value="seasonal">Equipment (Tracked by Seasonal Maintenance)</option>
+                </select>
+            </div>
+
+            <!-- Vehicle Fields -->
+            <div id="vehicle_fields" class="section hidden">
+                <label for="vehicle_initial_odometer">Initial Odometer Reading (Km or Miles)</label>
+                <input type="number" id="vehicle_initial_odometer" name="vehicle_initial_odometer">
+                
+                <label for="vehicle_maintenance_interval">Maintenance Interval (Km or Miles)</label>
+                <input type="number" id="vehicle_maintenance_interval" name="vehicle_maintenance_interval">
+            </div>
+
+            <!-- Equipment Tracked by Hours -->
+            <div id="hours_fields" class="section hidden">
+                <label for="initial_hours">Initial Hours of Operation</label>
+                <input type="number" id="initial_hours" name="initial_hours">
+                
+                <label for="maintenance_interval_hours">Maintenance Interval (Hours)</label>
+                <input type="number" id="maintenance_interval_hours" name="maintenance_interval_hours">
+            </div>
+
+            <!-- Equipment Tracked by Certification -->
+            <div id="certification_fields" class="section hidden">
+                <label for="certification_date">Last Certification Date</label>
+                <input type="date" id="certification_date" name="certification_date">
+                
+                <label for="recertification_interval">Recertification Interval (Months)</label>
+                <input type="number" id="recertification_interval" name="recertification_interval">
+            </div>
+
+            <!-- Equipment Tracked by Seasonal Maintenance -->
+            <div id="seasonal_fields" class="section hidden">
+                <label for="seasonal_maintenance">Seasonal Maintenance Description</label>
+                <textarea id="seasonal_maintenance" name="seasonal_maintenance" rows="4" placeholder="Describe the seasonal maintenance requirements"></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">Create Equipment</button>
+        </form>
+    </div>
+
+</body>
+</html>

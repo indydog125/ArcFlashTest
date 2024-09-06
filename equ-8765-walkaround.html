@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipment Walkaround Inspection Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"], input[type="number"], input[type="date"], textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 6px 0 12px 0;
+            box-sizing: border-box;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        .section-title {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            color: #555;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 5px;
+        }
+        .static-text {
+            padding: 8px;
+            background-color: #e9e9e9;
+            border: 1px solid #ccc;
+            margin: 6px 0 12px 0;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Equipment Walkaround Inspection Report</h2>
+        
+        <!-- Equipment Information Section -->
+        <div class="section">
+            <div class="section-title">Equipment Information</div>
+            <div class="equipment-info">
+                <div>
+                    <label for="equipment_name">Equipment Name:</label>
+                    <div class="static-text" id="equipment_name">Smith's Lawnmower</div>
+                </div>
+                <div>
+                    <label for="make_model">Make and Model:</label>
+                    <div class="static-text" id="make_model">Lawn Boy MOW123</div>
+                </div>
+                <div>
+                    <label for="license_plate">Serial Number:</label>
+                    <div class="static-text" id="license_plate">XYZ1234</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inspection Details Section -->
+        <div class="section">
+            <div class="section-title">Inspection Details</div>
+
+            <label for="inspection_date">Inspection Date:</label>
+            <input type="date" id="inspection_date" name="inspection_date">
+
+            <label for="inspector_name">Inspector's Name:</label>
+            <input type="text" id="inspector_name" name="inspector_name" placeholder="Enter Inspector's Name">
+        </div>
+
+        <!-- Exterior Check Section -->
+        <div class="section">
+            <div class="section-title">Exterior Check</div>
+            <label for="body_condition">Body Condition:</label>
+            <input type="text" id="body_condition" name="body_condition" placeholder="Describe Body Condition">
+
+            <label for="blade_condition">Blade Condition:</label>
+            <input type="text" id="blade_condition" name="blade_condition" placeholder="Describe Blade Condition">
+
+            <label for="wheels_condition">Wheels Condition:</label>
+            <input type="text" id="wheels_condition" name="wheels_condition" placeholder="Describe Wheels Condition">
+
+            <label for="handle_condition">Handle Condition:</label>
+            <input type="text" id="handle_condition" name="handle_condition" placeholder="Describe Handle Condition">
+
+            <label for="controls_condition">Controls Condition:</label>
+            <input type="text" id="controls_condition" name="controls_condition" placeholder="Describe Controls Condition">
+        </div>
+
+        <!-- Engine Check Section -->
+        <div class="section">
+            <div class="section-title">Engine Check</div>
+            <label for="oil_level">Oil Level:</label>
+            <input type="text" id="oil_level" name="oil_level" placeholder="Describe Oil Level">
+
+            <label for="air_filter_condition">Air Filter Condition:</label>
+            <input type="text" id="air_filter_condition" name="air_filter_condition" placeholder="Describe Air Filter Condition">
+
+            <label for="spark_plug_condition">Spark Plug Condition:</label>
+            <input type="text" id="spark_plug_condition" name="spark_plug_condition" placeholder="Describe Spark Plug Condition">
+
+            <label for="muffler_condition">Muffler Condition:</label>
+            <input type="text" id="muffler_condition" name="muffler_condition" placeholder="Describe Muffler Condition">
+        </div>
+
+        <!-- Operational Check Section -->
+        <div class="section">
+            <div class="section-title">Operational Check</div>
+            <label for="engine_start">Engine Start:</label>
+            <input type="text" id="engine_start" name="engine_start" placeholder="Describe Engine Start">
+
+            <label for="cutting_performance">Cutting Performance:</label>
+            <input type="text" id="cutting_performance" name="cutting_performance" placeholder="Describe Cutting Performance">
+
+            <label for="handle_vibration">Handle Vibration:</label>
+            <input type="text" id="handle_vibration" name="handle_vibration" placeholder="Describe Handle Vibration">
+
+            <label for="noise_level">Noise Level:</label>
+            <input type="text" id="noise_level" name="noise_level" placeholder="Describe Noise Level">
+        </div>
+
+        <!-- Additional Comments Section -->
+        <div class="section">
+            <div class="section-title">Additional Comments/Notes</div>
+            <textarea id="comments_notes" name="comments_notes" rows="4" placeholder="Enter any additional comments or notes"></textarea>
+        </div>
+
+        <!-- Inspector's Signature -->
+        <div class="section">
+            <div class="section-title">Inspector's Signature</div>
+            <input type="text" id="inspector_signature" name="inspector_signature" placeholder="Enter Inspector's Signature">
+        </div>
+
+    </div>
+
+</body>
+</html>

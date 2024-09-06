@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipment Maintenance History</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        .section-title {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            color: #555;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 5px;
+        }
+        .equipment-info div {
+            margin-bottom: 10px;
+        }
+        .static-text {
+            padding: 8px;
+            background-color: #e9e9e9;
+            border: 1px solid #ccc;
+            margin: 6px 0 12px 0;
+            box-sizing: border-box;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Equipment Maintenance History</h2>
+        
+        <!-- Equipment Information Section -->
+        <div class="section">
+            <div class="section-title">Equipment Information</div>
+            <div class="equipment-info">
+                <div>
+                    <label for="equipment_name">Equipment Name:</label>
+                    <div class="static-text" id="equipment_name">Meter #2354</div>
+                </div>
+                <div>
+                    <label for="make_model">Purchase Date:</label>
+                    <div class="static-text" id="make_model">Sep 3, 2021</div>
+                </div>
+                <div>
+                    <label for="vin">Equipment ID:</label>
+                    <div class="static-text" id="vin">N/A</div>
+                </div>
+                <div>
+                    <label for="make_model">Vitrek 4700 Precision High Voltage Meter:</label>
+                    <div class="static-text" id="make_model">Glove Model X123</div>
+                </div>
+                <div>
+                    <label for="license_plate">Serial Number:</label>
+                    <div class="static-text" id="license_plate">VTRK4700</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Maintenance History Section -->
+        <div class="section">
+            <div class="section-title">Maintenance History</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Service Performed</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Mar 21, 2024</td>
+                        <td>Recertification</td>
+                        <td>Changed oil for spring use</td>
+                    </tr>
+                    <tr>
+                        <td>Dec 21, 2023</td>
+                        <td>Material Reassessment</td>
+                        <td>Sharpened blades before winter storage</td>
+                    </tr>
+                    <tr>
+                        <td>Sep 21, 2023</td>
+                        <td>Elastic Band Replacement</td>
+                        <td>Replaced broken pull-cable</td>
+                    </tr>
+                    <tr>
+                        <td>Jun 21, 2023</td>
+                        <td>Stitching Reinforcement</td>
+                        <td>Replaced worn-out rear wheel</td>
+                    </tr>
+                    <tr>
+                        <td>Mar 21, 2023</td>
+                        <td>Insulation Reapplication</td>
+                        <td>Replaced damaged muffler</td>
+                    </tr>
+                    <tr>
+                        <td>Dec 21, 2022</td>
+                        <td>Material Reassessment</td>
+                        <td>Sharpened blades before winter storage</td>
+                    </tr>
+                    <tr>
+                        <td>Sep 21, 2022</td>
+                        <td>Recertification</td>
+                        <td>Changed oil for fall season</td>
+                    </tr>
+                    <tr>
+                        <td>Jun 21, 2022</td>
+                        <td>Insulation Reapplication</td>
+                        <td>Replaced muffler for summer season</td>
+                    </tr>
+                    <tr>
+                        <td>Mar 21, 2022</td>
+                        <td>Material Reassessment</td>
+                        <td>Sharpened blades for spring use</td>
+                    </tr>
+                    <tr>
+                        <td>Dec 21, 2021</td>
+                        <td>Recertification</td>
+                        <td>Changed oil before winter storage</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</body>
+</html>
