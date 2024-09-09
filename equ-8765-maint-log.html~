@@ -80,12 +80,16 @@
                     <div class="static-text" id="equipment_name">Smith's Lawnmower</div>
                 </div>
                 <div>
+                    <label for="make_model">Purchase Date:</label>
+                    <div class="static-text" id="make_model">Sep 3, 2021</div>
+                </div>
+                <div>
                     <label for="vin">Equipment ID:</label>
-                    <div class="static-text" id="vin">1HGCM82633A123456</div>
+                    <div class="static-text" id="vin">N/A</div>
                 </div>
                 <div>
                     <label for="make_model">Make and Model:</label>
-                    <div class="static-text" id="make_model">Honda HRX217</div>
+                    <div class="static-text" id="make_model">LawnBoy MOW123</div>
                 </div>
                 <div>
                     <label for="license_plate">Serial Number:</label>
@@ -107,54 +111,60 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>2024-03-21</td>
+                        <td>Mar 21, 2024</td>
                         <td>Oil Change</td>
                         <td>Changed oil for spring use</td>
                     </tr>
                     <tr>
-                        <td>2023-12-21</td>
+                        <td>Dec 21, 2023</td>
                         <td>Blade Sharpening</td>
                         <td>Sharpened blades before winter storage</td>
                     </tr>
                     <tr>
-                        <td>2023-09-21</td>
+                        <td>Sep 21, 2023</td>
                         <td>Pull-Cable Replacement</td>
                         <td>Replaced broken pull-cable</td>
                     </tr>
                     <tr>
-                        <td>2023-06-21</td>
+                        <td>Jun 21, 2023</td>
                         <td>Wheel Replacement</td>
                         <td>Replaced worn-out rear wheel</td>
                     </tr>
                     <tr>
-                        <td>2023-03-21</td>
+                        <td>Mar 21, 2023</td>
                         <td>Muffler Change</td>
                         <td>Replaced damaged muffler</td>
                     </tr>
                     <tr>
-                        <td>2022-12-21</td>
+                        <td>Dec 21, 2022</td>
                         <td>Blade Sharpening</td>
                         <td>Sharpened blades before winter storage</td>
                     </tr>
                     <tr>
-                        <td>2022-09-21</td>
+                        <td>Sep 21, 2022</td>
                         <td>Oil Change</td>
                         <td>Changed oil for fall season</td>
                     </tr>
                     <tr>
-                        <td>2022-06-21</td>
+                        <td>Jun 21, 2022</td>
                         <td>Muffler Change</td>
                         <td>Replaced muffler for summer season</td>
                     </tr>
                     <tr>
-                        <td>2022-03-21</td>
+                        <td>Mar 21, 2022</td>
                         <td>Blade Sharpening</td>
                         <td>Sharpened blades for spring use</td>
                     </tr>
                     <tr>
-                        <td>2021-12-21</td>
+                        <td>Dec 21, 2021</td>
                         <td>Oil Change</td>
                         <td>Changed oil before winter storage</td>
                     </tr>
                 </tbody>
-            </table
+            </table>
+        </div>
+
+    </div>
+
+</body>
+</html>

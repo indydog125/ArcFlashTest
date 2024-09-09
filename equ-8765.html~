@@ -99,9 +99,9 @@
 
         <!-- Buttons Section -->
         <div class="buttons">
-            <a href="walkaround.html">Perform Walkaround Report</a>
-            <a href="veh-maintenance-history.html">View Maintenance History</a>
-            <a href="veh-maintenance-entry.html">Add Maintenance Entry</a>
+            <a href="equ-8765-walkaround.html">Perform Walkaround Report</a>
+            <a href="equ-8765-maint-log.html">View Maintenance History</a>
+            <a href="equ-8765-add-maint.html">Add Maintenance Entry</a>
         </div>
 
     </div>

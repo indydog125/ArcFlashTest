@@ -58,7 +58,6 @@
     </style>
 </head>
 <body>
-<div class="container"><div style="float: left; margin-right: 10px;"><img alt="EquipTag Logo" src="EquipTag-logo.png" style="width: 140px; height: auto;"/></div>
 
     <div class="container">
         <h2>Equipment Walkaround Inspection Report</h2>
@@ -69,11 +68,11 @@
             <div class="equipment-info">
                 <div>
                     <label for="equipment_name">Equipment Name:</label>
-                    <div class="static-text" id="equipment_name">Sam's Gloves</div>
+                    <div class="static-text" id="equipment_name">Smith's Lawnmower</div>
                 </div>
                 <div>
                     <label for="make_model">Make and Model:</label>
-                    <div class="static-text" id="make_model">Glove Model X123</div>
+                    <div class="static-text" id="make_model">Lawn Boy MOW123</div>
                 </div>
                 <div>
                     <label for="license_plate">Serial Number:</label>
@@ -99,14 +98,14 @@
             <label for="body_condition">Body Condition:</label>
             <input type="text" id="body_condition" name="body_condition" placeholder="Describe Body Condition">
 
-            <label for="blade_condition">Stitching Condition:</label>
-            <input type="text" id="blade_condition" name="blade_condition" placeholder="Describe Stitching Condition">
+            <label for="blade_condition">Blade Condition:</label>
+            <input type="text" id="blade_condition" name="blade_condition" placeholder="Describe Blade Condition">
 
-            <label for="wheels_condition">Material Condition:</label>
-            <input type="text" id="wheels_condition" name="wheels_condition" placeholder="Describe Material Condition">
+            <label for="wheels_condition">Wheels Condition:</label>
+            <input type="text" id="wheels_condition" name="wheels_condition" placeholder="Describe Wheels Condition">
 
-            <label for="handle_condition">Elasticity Condition:</label>
-            <input type="text" id="handle_condition" name="handle_condition" placeholder="Describe Elasticity Condition">
+            <label for="handle_condition">Handle Condition:</label>
+            <input type="text" id="handle_condition" name="handle_condition" placeholder="Describe Handle Condition">
 
             <label for="controls_condition">Controls Condition:</label>
             <input type="text" id="controls_condition" name="controls_condition" placeholder="Describe Controls Condition">
@@ -115,33 +114,33 @@
         <!-- Engine Check Section -->
         <div class="section">
             <div class="section-title">Engine Check</div>
-            <label for="oil_level">Flexibility Check:</label>
-            <input type="text" id="oil_level" name="oil_level" placeholder="Describe Flexibility Check">
+            <label for="oil_level">Oil Level:</label>
+            <input type="text" id="oil_level" name="oil_level" placeholder="Describe Oil Level">
 
             <label for="air_filter_condition">Air Filter Condition:</label>
             <input type="text" id="air_filter_condition" name="air_filter_condition" placeholder="Describe Air Filter Condition">
 
-            <label for="spark_plug_condition">Grip Surface Condition:</label>
-            <input type="text" id="spark_plug_condition" name="spark_plug_condition" placeholder="Describe Grip Surface Condition">
+            <label for="spark_plug_condition">Spark Plug Condition:</label>
+            <input type="text" id="spark_plug_condition" name="spark_plug_condition" placeholder="Describe Spark Plug Condition">
 
-            <label for="muffler_condition">Insulation Integrity:</label>
-            <input type="text" id="muffler_condition" name="muffler_condition" placeholder="Describe Insulation Integrity">
+            <label for="muffler_condition">Muffler Condition:</label>
+            <input type="text" id="muffler_condition" name="muffler_condition" placeholder="Describe Muffler Condition">
         </div>
 
         <!-- Operational Check Section -->
         <div class="section">
             <div class="section-title">Operational Check</div>
-            <label for="engine_start">Overall Glove Condition:</label>
-            <input type="text" id="engine_start" name="engine_start" placeholder="Describe Overall Glove Condition">
+            <label for="engine_start">Engine Start:</label>
+            <input type="text" id="engine_start" name="engine_start" placeholder="Describe Engine Start">
 
-            <label for="cutting_performance">Grip Strength:</label>
-            <input type="text" id="cutting_performance" name="cutting_performance" placeholder="Describe Grip Strength">
+            <label for="cutting_performance">Cutting Performance:</label>
+            <input type="text" id="cutting_performance" name="cutting_performance" placeholder="Describe Cutting Performance">
 
-            <label for="handle_vibration">Comfort Assessment:</label>
-            <input type="text" id="handle_vibration" name="handle_vibration" placeholder="Describe Comfort Assessment">
+            <label for="handle_vibration">Handle Vibration:</label>
+            <input type="text" id="handle_vibration" name="handle_vibration" placeholder="Describe Handle Vibration">
 
-            <label for="noise_level">Dexterity Check:</label>
-            <input type="text" id="noise_level" name="noise_level" placeholder="Describe Dexterity Check">
+            <label for="noise_level">Noise Level:</label>
+            <input type="text" id="noise_level" name="noise_level" placeholder="Describe Noise Level">
         </div>
 
         <!-- Additional Comments Section -->

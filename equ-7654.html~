@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
- <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>
-   Vehicle Dashboard
-  </title>
-  <style>
-   body {
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Dashboard</title>
+    <style>
+        body {
             font-family: Arial, sans-serif;
             margin: 20px;
             background-color: #f4f4f4;
@@ -69,57 +67,44 @@
         .buttons a:hover {
             background-color: #0056b3;
         }
-  </style>
- </head>
- <body>
-<div class="container"><div style="float: left; margin-right: 10px;"><img alt="EquipTag Logo" src="EquipTag-logo.png" style="width: 140px; height: auto;"/></div>
-   
-  <div class="container">
-   <h2>
-    Equipment Dashboard
-   </h2>
-   <!-- Vehicle Information Section -->
-   <div class="section">
-    <div class="section-title">
-     Equipment Information
-    </div>
-    <div class="vehicle-info">
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Equipment Dashboard</h2>
+        
+        <!-- Vehicle Information Section -->
+        <div class="section">
+            <div class="section-title">Equipment Information</div>
+            <div class="vehicle-info">
                 <div>
-                    <label for="equipment_name">Equipment Name:</label>
-                    <div class="static-text" id="equipment_name">Meter #2354</div>
+                    <label for="vin">Equipment Name:</label>
+                    <div class="static-text" id="vin">Sam's Gloves</div>
                 </div>
                 <div>
                     <label for="make_model">Purchase Date:</label>
                     <div class="static-text" id="make_model">Sep 3, 2021</div>
                 </div>
                 <div>
-                    <label for="vin">Equipment ID:</label>
-                    <div class="static-text" id="vin">N/A</div>
-                </div>
-                <div>
-                    <label for="make_model">Make & Model:</label>
-                    <div class="static-text" id="make_model">Vitrek 4700 Precision High Voltage Meter</div>
+                    <label for="make_model">Make and Model:</label>
+                    <div class="static-text" id="make_model">Glove Model X123</div>
                 </div>
                 <div>
                     <label for="license_plate">Serial Number:</label>
-                    <div class="static-text" id="license_plate">VTRK4700</div>
+                    <div class="static-text" id="license_plate">XYZ1234</div>
                 </div>
-      </div>
-     </div>
+            </div>
+        </div>
+
+        <!-- Buttons Section -->
+        <div class="buttons">
+            <a href="equ-7654-walkaround.html">Perform Walkaround Report</a>
+            <a href="equ-7654-maint-log.html">View Maintenance History</a>
+            <a href="equ-7654-add-maint.html">Add Maintenance Entry</a>
+        </div>
+
     </div>
-    <!-- Buttons Section -->
-    <div class="buttons">
-     <a href="equ-6543-walkaround.html">
-      Perform Walkaround Report
-     </a>
-     <a href="equ-6543-maint-log.html">
-      View Maintenance History
-     </a>
-     <a href="equ-6543-add-maint.html">
-      Add Maintenance Entry
-     </a>
-    </div>
-   </div>
-  </div>
- </body>
+
+</body>
 </html>
