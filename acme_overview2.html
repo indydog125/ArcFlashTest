@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACME Equipment Overview</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        .section-title {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            color: #555;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 5px;
+        }
+	
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .dashboard {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+<div class="container"><div style="float: left; margin-right: 10px;"><img alt="EquipTag Logo" src="EquipTag-logo.png" style="width: 140px; height: auto;"/></div>
+
+    <div class="container">
+        <h2>ACME Equipment Overview</h2>
+
+        <!-- Equipment Categories Table -->
+<div class="section">
+<div class="section-title">Equipment Categories</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Equipment Category</th>
+                    <th>Count of Equipment</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Vehicles (Tracked by Km/Miles)</td>
+                    <td>5</td>
+                </tr>
+                <tr>
+                    <td>Operational Equipment (Tracked by Hours)</td>
+                    <td>8</td>
+                </tr>
+                <tr>
+                    <td>Test Equipment (Tracked by Certification)</td>
+                    <td>4</td>
+                </tr>
+                <tr>
+                    <td>Seasonal Equipment (Seasonal Maintenance)</td>
+                    <td>3</td>
+                </tr>
+            </tbody>
+        </table>
+</div>
+	<div class="section">
+<div class="section-title">Equipment List</div>
+	
+
+        <!-- Equipment Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Equipment ID</th>
+                    <th>Equipment Name</th>
+                    <th>Purchase Date</th>
+                    <th>Km/Hours at Last Maintenance</th>
+                    <th>Next Maintenance Date</th>
+                    <th>Expected Km/Hours for Next Maintenance</th>
+                    <th>Equipment Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>equ-8765</td>
+                    <td><a href="equ-8765.html">Smith's Lawnmower</a></td>
+                    <td>Mar 10, 2021</td>
+                    <td>350 hours</td>
+                    <td>Jun 21, 2024</td>
+                    <td>400 hours</td>
+                    <td>Operational</td>
+                </tr>
+                <tr>
+                    <td>equ-7654</td>
+                    <td><a href="equ-7654.html">ACME Forklift</a></td>
+                    <td>Sep 5, 2019</td>
+                    <td>5,200 hours</td>
+                    <td>Jul 15, 2024</td>
+                    <td>5,700 hours</td>
+                    <td>Operational</td>
+                </tr>
+                <tr>
+                    <td>equ-6543</td>
+                    <td><a href="equ-6543.html">ACME Generator</a></td>
+                    <td>Dec 12, 2018</td>
+                    <td>1,200 hours</td>
+                    <td>Aug 10, 2024</td>
+                    <td>1,400 hours</td>
+                    <td>Operational</td>
+                </tr>
+                <tr>
+                    <td>equ-1234</td>
+                    <td><a href="equ-1234.html">ACME Bulldozer</a></td>
+                    <td>Jan 15, 2020</td>
+                    <td>10,500 km</td>
+                    <td>Apr 20, 2024</td>
+                    <td>11,000 km</td>
+                    <td>Down for Maintenance</td>
+                </tr>
+            </tbody>
+        </table>
+</div>
+	<div class="section">
+<div class="section-title">Recently Reported Equipment Issues</div>
+
+        <!-- Recent Issues Reported Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Date of Report</th>
+                    <th>Equipment ID</th>
+                    <th>Equipment Name</th>
+                    <th>Issue Reported</th>
+                    <th>Reported By</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Mar 01, 2024</td>
+                    <td>equ-1234</td>
+                    <td><a href="equ-1234.html">ACME Bulldozer</a></td>
+                    <td>Oil leakage observed</td>
+                    <td>John Doe</td>
+                </tr>
+                <tr>
+                    <td>Feb 15, 2024</td>
+                    <td>equ-8765</td>
+                    <td><a href="equ-8765.html">Smith's Lawnmower</a></td>
+                    <td>Blade dull, needs sharpening</td>
+                    <td>Jane Smith</td>
+                </tr>
+                <tr>
+                    <td>Feb 10, 2024</td>
+                    <td>equ-7654</td>
+                    <td><a href="equ-7654.html">ACME Forklift</a></td>
+                    <td>Tire tread worn out</td>
+                    <td>Michael Johnson</td>
+                </tr>
+                <tr>
+                    <td>Jan 25, 2024</td>
+                    <td>equ-6543</td>
+                    <td><a href="equ-6543.html">ACME Generator</a></td>
+                    <td>Muffler noise unusually loud</td>
+                    <td>Emily Davis</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</body>
+</html>

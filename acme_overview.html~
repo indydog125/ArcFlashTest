@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACME Equipment Overview</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .dashboard {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+        }
+        .widget {
+            flex: 1 1 calc(50% - 40px);
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            min-width: 250px;
+        }
+        .widget h3 {
+            margin-top: 0;
+            font-size: 1.2em;
+            color: #007BFF;
+        }
+        .widget ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .widget li {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        .widget a {
+            text-decoration: none;
+            color: #007BFF;
+            font-weight: bold;
+        }
+        .widget a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>ACME Equipment Overview</h2>
+        
+        <div class="dashboard">
+
+            <!-- Widget for Equipment equ-1234 -->
+            <div class="widget">
+                <h3>Equipment ID: equ-1234</h3>
+                <p><strong>Equipment Name:</strong> ACME Bulldozer</p>
+                <ul>
+                    <li><strong>Maintenance Needed:</strong> Oil Change overdue by 500 km</li>
+                    <li><strong>Next Maintenance:</strong> Replace air filter in 100 km</li>
+                </ul>
+                <a href="equ-1234.html">View Full Report</a>
+            </div>
+
+            <!-- Widget for Equipment equ-8765 -->
+            <div class="widget">
+                <h3>Equipment ID: equ-8765</h3>
+                <p><strong>Equipment Name:</strong> Smith's Lawnmower</p>
+                <ul>
+                    <li><strong>Maintenance Needed:</strong> Blade sharpening required before next use</li>
+                    <li><strong>Next Maintenance:</strong> Oil change in 3 months</li>
+                </ul>
+                <a href="equ-8765.html">View Full Report</a>
+            </div>
+
+            <!-- Widget for Equipment equ-7654 -->
+            <div class="widget">
+                <h3>Equipment ID: equ-7654</h3>
+                <p><strong>Equipment Name:</strong> ACME Forklift</p>
+                <ul>
+                    <li><strong>Maintenance Needed:</strong> Tire replacement needed ASAP</li>
+                    <li><strong>Next Maintenance:</strong> Brake check in 500 hours</li>
+                </ul>
+                <a href="equ-7654.html">View Full Report</a>
+            </div>
+
+            <!-- Widget for Equipment equ-6543 -->
+            <div class="widget">
+                <h3>Equipment ID: equ-6543</h3>
+                <p><strong>Equipment Name:</strong> ACME Generator</p>
+                <ul>
+                    <li><strong>Maintenance Needed:</strong> Recertification overdue by 2 months</li>
+                    <li><strong>Next Maintenance:</strong> Replace spark plugs in 6 months</li>
+                </ul>
+                <a href="equ-6543.html">View Full Report</a>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
