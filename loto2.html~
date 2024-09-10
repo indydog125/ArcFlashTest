@@ -65,19 +65,19 @@
         </div>
         <div class="info">
             <div class="label">Plant Card ID:</div>
-            <div class="label">JA LOTO Tag1</div>
+            <div class="label">JA LOTO Tag2</div>
         </div>
         <div class="info">
             <div class="label">Date and Time of Application:</div>
-            <div class="label">2024-09-06 07:53</div>
+            <div class="label">2024-09-06 09:17</div>
         </div>
         <div class="info">
             <div class="label">Reason for Lockout:</div>
-            <div class="label">Working on EEJHA #98765</div>
+            <div class="label">Working on EEJHA #2468</div>
         </div>
         <div class="info">
             <div class="label">Equipment Identification:</div>
-            <div class="label">MCC-001, Serial No. 12345</div>
+            <div class="label">MCC-003, Serial No. 65432</div>
         </div>
         <div class="info">
             <div class="label">Contact Information:</div>
@@ -85,7 +85,7 @@
         </div>
         <div class="info">
             <div class="label">Expected Duration of Lockout:</div>
-            <div class="label">4 hours</div>
+            <div class="label">2 hours</div>
         </div>
         <div class="hazard">
             <div class="label">Hazard Identification:</div>

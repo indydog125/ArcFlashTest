@@ -61,23 +61,23 @@
         <h1>LOTO Tag Information</h1>
         <div class="info">
             <div class="label">Name of Authorized Person:</div>
-            <div class="label">Johnny Appleseed</div>
+            <input type="text" placeholder="Enter Authorized Person's Name" style="width: 100%; padding: 5px; margin-bottom: 15px; border-radius: 4px; border: 1px solid #ddd;">
         </div>
         <div class="info">
             <div class="label">Plant Card ID:</div>
-            <div class="label">JA LOTO Tag1</div>
+            <input type="text" placeholder="Enter Plant Card ID" style="width: 100%; padding: 5px; margin-bottom: 15px; border-radius: 4px; border: 1px solid #ddd;">
         </div>
         <div class="info">
             <div class="label">Date and Time of Application:</div>
-            <div class="label">2024-09-06 07:53</div>
+            <input type="text" placeholder="Enter Date and Time" style="width: 100%; padding: 5px; margin-bottom: 15px; border-radius: 4px; border: 1px solid #ddd;">
         </div>
         <div class="info">
             <div class="label">Reason for Lockout:</div>
-            <div class="label">Working on EEJHA #98765</div>
+            <input type="text" placeholder="Enter Reason for Lockout" style="width: 100%; padding: 5px; margin-bottom: 15px; border-radius: 4px; border: 1px solid #ddd;">
         </div>
         <div class="info">
             <div class="label">Equipment Identification:</div>
-            <div class="label">MCC-001, Serial No. 12345</div>
+            <input type="text" placeholder="Enter Equipment Identification" style="width: 100%; padding: 5px; margin-bottom: 15px; border-radius: 4px; border: 1px solid #ddd;">
         </div>
         <div class="info">
             <div class="label">Contact Information:</div>
@@ -85,30 +85,29 @@
         </div>
         <div class="info">
             <div class="label">Expected Duration of Lockout:</div>
-            <div class="label">4 hours</div>
+            <input type="text" placeholder="Enter Expected Duration" style="width: 100%; padding: 5px; margin-bottom: 15px; border-radius: 4px; border: 1px solid #ddd;">
         </div>
         <div class="hazard">
             <div class="label">Hazard Identification:</div>
-            <div class="label">High Voltage</div>
+            <input type="text" placeholder="Enter Hazard Identification" style="width: 100%; padding: 5px; margin-bottom: 15px; border-radius: 4px; border: 1px solid #ddd;">
         </div>
         <div class="info">
             <div class="label">Supervisor or Approver Name:</div>
-            <div class="label">Jane Smith</div>
+            <input type="text" placeholder="Enter Supervisor's Name" style="width: 100%; padding: 5px; margin-bottom: 15px; border-radius: 4px; border: 1px solid #ddd;">
         </div>
         <div class="info">
             <div class="label">Special Instructions or Notes:</div>
-            <div class="label">Ensure all tools are removed before re-energizing.</div>
+            <input type="text" placeholder="Enter Special Instructions" style="width: 100%; padding: 5px; margin-bottom: 15px; border-radius: 4px; border: 1px solid #ddd;">
         </div>
         <div class="footer">
-            This LOTO tag is to be removed only by Johnny Appleseed.
-        </div>
-    
+            This LOTO tag is currently not deployed. Please complete the information and click "Lock" to deploy the tag.
         <div style="text-align: center; margin-top: 20px;">
-            <button style="background-color: #eb5534; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">
-                Remove Lock
+            <button style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">
+                Lock
             </button>
         </div>
-
-</div>
+    
+        </div>
+    </div>
 </body>
 </html>
