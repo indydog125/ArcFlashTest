@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACME Equipment Overview</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .dashboard {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+        }
+        .widget {
+            flex: 1 1 calc(50% - 40px);
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            min-width: 250px;
+        }
+        .widget h3 {
+            margin-top: 0;
+            font-size: 1.2em;
+            color: #007BFF;
+        }
+        .widget ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .widget li {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        .widget a {
+            text-decoration: none;
+            color: #007BFF;
+            font-weight: bold;
+        }
+        .widget a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>ACME Equipment Overview</h2>
+
+        <!-- Equipment Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Equipment ID</th>
+                    <th>Equipment Name</th>
+                    <th>Purchase Date</th>
+                    <th>Km/Hours at Last Maintenance</th>
+                    <th>Next Maintenance Date</th>
+                    <th>Expected Km/Hours for Next Maintenance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>equ-1234</td>
+                    <td><a href="equ-1234.html">ACME Bulldozer</a></td>
+                    <td>Jan 15, 2020</td>
+                    <td>10,500 km</td>
+                    <td>Apr 20, 2024</td>
+                    <td>11,000 km</td>
+                </tr>
+                <tr>
+                    <td>equ-8765</td>
+                    <td><a href="equ-8765.html">Smith's Lawnmower</a></td>
+                    <td>Mar 10, 2021</td>
+                    <td>350 hours</td>
+                    <td>Jun 21, 2024</td>
+                    <td>400 hours</td>
+                </tr>
+                <tr>
+                    <td>equ-7654</td>
+                    <td><a href="equ-7654.html">ACME Forklift</a></td>
+                    <td>Sep 5, 2019</td>
+                    <td>5,200 hours</td>
+                    <td>Jul 15, 2024</td>
+                    <td>5,700 hours</td>
+                </tr>
+                <tr>
+                    <td>equ-6543</td>
+                    <td><a href="equ-6543.html">ACME Generator</a></td>
+                    <td>Dec 12, 2018</td>
+                    <td>1,200 hours</td>
+                    <td>Aug 10, 2024</td>
+                    <td>1,400 hours</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="dashboard">
+
+            <!-- Widget for Equipment equ-1234 -->
+            <div class="widget">
+                <h3>Equipment ID: equ-1234</h3>
+                <p><strong>Equipment Name:</strong> ACME Bulldozer</p>
+                <ul>
+                    <li><strong>Maintenance Needed:</strong> Oil Change overdue by 500 km</li>
+                    <li><strong>Next Maintenance:</strong> Replace air filter in 100 km</li>
+                </ul>
+                <a href="equ-1234.html">View Full Report</a>
+            </div>
+
+            <!-- Widget for Equipment equ-8765 -->
+            <div class="widget">
+                <h3>Equipment ID: equ-8765</h3>
+                <p><strong>Equipment Name:</strong> Smith's Lawnmower</p>
+                <ul>
+                    <li><strong>Maintenance Needed:</strong> Blade sharpening required before next use</li>
+                    <li><strong>Next Maintenance:</strong> Oil change in 3 months</li>
+                </ul>
+                <a href="equ-8765.html">View Full Report</a>
+            </div>
+
+            <!-- Widget for Equipment equ-7654 -->
+            <div class="widget">
+                <h3>Equipment ID: equ-7654</h3>
+                <p><strong>Equipment Name:</strong> ACME Forklift</p>
+                <ul>
+                    <li><strong>Maintenance Needed:</strong> Tire replacement needed ASAP</li>
+                    <li><strong>Next Maintenance:</strong> Brake check in 500 hours</li>
+                </ul>
+                <a href="equ-7654.html">View Full Report</a>
+            </div>
+
+            <!-- Widget for Equipment equ-6543 -->
+            <div class="widget">
+                <h3>Equipment ID: equ-6543</h3>
+                <p><strong>Equipment Name:</strong> ACME Generator</p>
+                <ul>
+                    <li><strong>Maintenance Needed:</strong> Recertification overdue by 2 months</li>
+                    <li><strong>Next Maintenance:</strong> Replace spark plugs in 6 months</li>
+                </ul>
+                <a href="equ-6543.html">View Full Report</a>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

@@ -12,8 +12,9 @@
             padding: 20px;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             height: 100vh;
+	    overflow-y:	auto;
         }
         .container {
             background-color: #ffffff;
@@ -40,6 +41,13 @@
             border-radius: 4px;
             border: 1px solid #ddd;
         }
+	.hazard {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #eb5534;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
         .footer {
             text-align: center;
             font-size: 12px;
@@ -52,48 +60,55 @@
     <div class="container">
         <h1>LOTO Tag Information</h1>
         <div class="info">
-            <div class="label">Name of Authorized Person:</div>
-            <div contenteditable="true">Johnny Appleseed</div>
+            <div class="label">Owner:</div>
+            <div class="label">Johnny Appleseed</div>
         </div>
         <div class="info">
             <div class="label">Plant Card ID:</div>
-            <div contenteditable="true">JA LOTO Tag2</div>
+            <div class="label">JA LOTO Tag2</div>
         </div>
         <div class="info">
             <div class="label">Date and Time of Application:</div>
-            <div contenteditable="true">2024-09-06 09:17</div>
+            <div class="label">2024-09-07 09:17</div>
         </div>
         <div class="info">
             <div class="label">Reason for Lockout:</div>
-            <div contenteditable="true">Working on EEJHA #2468</div>
+            <div class="label">Working on EEJHA #2468</div>
         </div>
         <div class="info">
             <div class="label">Equipment Identification:</div>
-            <div contenteditable="true">MCC-003, Serial No. 65432</div>
+            <div class="label">MCC-003, Serial No. 65432</div>
         </div>
         <div class="info">
             <div class="label">Contact Information:</div>
-            <div contenteditable="true">555-555-5555</div>
+            <div class="label">555-555-5555</div>
         </div>
         <div class="info">
             <div class="label">Expected Duration of Lockout:</div>
-            <div contenteditable="true">2 hours</div>
+            <div class="label">2 hours</div>
         </div>
-        <div class="info">
+        <div class="hazard">
             <div class="label">Hazard Identification:</div>
-            <div contenteditable="true">High Voltage</div>
+            <div class="label">High Voltage</div>
         </div>
         <div class="info">
             <div class="label">Supervisor or Approver Name:</div>
-            <div contenteditable="true">Jane Smith</div>
+            <div class="label">Jane Smith</div>
         </div>
         <div class="info">
             <div class="label">Special Instructions or Notes:</div>
-            <div contenteditable="true">Ensure all tools are removed before re-energizing.</div>
+            <div class="label">Ensure all tools are removed before re-energizing.</div>
         </div>
         <div class="footer">
             This LOTO tag is to be removed only by Johnny Appleseed.
         </div>
-    </div>
+    
+        <div style="text-align: center; margin-top: 20px;">
+            <button style="background-color: #eb5534; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">
+                Remove Lock
+            </button>
+        </div>
+
+</div>
 </body>
 </html>

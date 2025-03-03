@@ -88,8 +88,8 @@
                     <div class="static-text" id="vin">N/A</div>
                 </div>
                 <div>
-                    <label for="make_model">Vitrek 4700 Precision High Voltage Meter:</label>
-                    <div class="static-text" id="make_model">Glove Model X123</div>
+                    <label for="make_model">Make & Model:</label>
+                    <div class="static-text" id="make_model">Vitrek 4700 Precision High Voltage Meter</div>
                 </div>
                 <div>
                     <label for="license_plate">Serial Number:</label>

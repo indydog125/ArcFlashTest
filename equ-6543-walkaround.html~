@@ -70,26 +70,27 @@
      Equipment Information
     </div>
     <div class="equipment-info">
-     <div>
-      <label for="equipment_name">
-       Equipment Name:
-      </label>
-      <div class="static-text" id="equipment_name">
-       Meter #2354
-      </div>
+                <div>
+                    <label for="equipment_name">Equipment Name:</label>
+                    <div class="static-text" id="equipment_name">Meter #2354</div>
+                </div>
+                <div>
+                    <label for="make_model">Purchase Date:</label>
+                    <div class="static-text" id="make_model">Sep 3, 2021</div>
+                </div>
+                <div>
+                    <label for="vin">Equipment ID:</label>
+                    <div class="static-text" id="vin">N/A</div>
+                </div>
+                <div>
+                    <label for="make_model">Make & Model:</label>
+                    <div class="static-text" id="make_model">Vitrek 4700 Precision High Voltage Meter</div>
+                </div>
+                <div>
+                    <label for="license_plate">Serial Number:</label>
+                    <div class="static-text" id="license_plate">VTRK4700</div>
+                </div>
      </div>
-     <div>
-      Meter #2354
-     </div>
-     <div>
-      <label for="license_plate">
-       Serial Number:
-      </label>
-      <div class="static-text" id="license_plate">
-       XYZ1234
-      </div>
-     </div>
-    </div>
    </div>
    <!-- Inspection Details Section -->
    <div class="section">

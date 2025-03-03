@@ -60,24 +60,24 @@
     <div class="container">
         <h1>LOTO Tag Information</h1>
         <div class="info">
-            <div class="label">Owner:</div>
+            <div class="label">Name of Authorized Person:</div>
             <div class="label">Johnny Appleseed</div>
         </div>
         <div class="info">
             <div class="label">Plant Card ID:</div>
-            <div class="label">JA LOTO Tag3</div>
+            <div class="label">JA LOTO Tag1</div>
         </div>
         <div class="info">
             <div class="label">Date and Time of Application:</div>
-            <div class="label">2024-09-08 08:00</div>
+            <div class="label">2024-09-06 07:53</div>
         </div>
         <div class="info">
             <div class="label">Reason for Lockout:</div>
-            <div class="label">Working on EEJHA #12345</div>
+            <div class="label">Working on EEJHA #98765</div>
         </div>
         <div class="info">
             <div class="label">Equipment Identification:</div>
-            <div class="label">MCC-004, Serial No. 67890</div>
+            <div class="label">MCC-001, Serial No. 12345</div>
         </div>
         <div class="info">
             <div class="label">Contact Information:</div>
