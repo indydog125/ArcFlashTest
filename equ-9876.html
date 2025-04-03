@@ -72,12 +72,15 @@
     <script>
         function showEquipmentFields() {
             var equipmentType = document.getElementById('equipment_type').value;
+            document.getElementById('transmitter_fields').classList.add('hidden');
             document.getElementById('vehicle_fields').classList.add('hidden');
             document.getElementById('hours_fields').classList.add('hidden');
             document.getElementById('certification_fields').classList.add('hidden');
             document.getElementById('seasonal_fields').classList.add('hidden');
 
-            if (equipmentType === 'vehicle') {
+            if (equipmentType === 'transmitter') {
+                document.getElementById('transmitter_fields').classList.remove('hidden');
+	    } else if (equipmentType === 'vehicle') {
                 document.getElementById('vehicle_fields').classList.remove('hidden');
             } else if (equipmentType === 'hours') {
                 document.getElementById('hours_fields').classList.remove('hidden');
@@ -103,11 +106,21 @@
                 <label for="equipment_type">Select Equipment Type</label>
                 <select id="equipment_type" name="equipment_type" onchange="showEquipmentFields()" required>
                     <option value="">--Select Type--</option>
+                    <option value="transmitter">Transmitter</option>
                     <option value="vehicle">Vehicle (Tracked by Km/Miles)</option>
                     <option value="hours">Operational Equipment (Tracked by Hours)</option>
                     <option value="certification">Test Equipment (Tracked by Certification Dates)</option>
                     <option value="seasonal">Seasonal Equipment (Tracked by Seasonal Maintenance)</option>
                 </select>
+            </div>
+
+            <!-- Transmitter Fields -->
+            <div id="transmitter_fields" class="section hidden">
+                <label for="transmitter_template">Instrument Template</label>
+                <input type="text" id="transmitter_model" name="transmitter_template">
+                
+                <label for="model_number">Model #</label>
+                <input type="text" id="model_number" name="model_number">
             </div>
 
             <!-- Vehicle Fields -->

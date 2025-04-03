@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transmitter Calibration Report</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f4f4f4;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .section {
+      margin-bottom: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #fff;
+    }
+    .section-title {
+      font-size: 1.2em;
+      color: #444;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 5px;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 12px;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+    textarea {
+      resize: vertical;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div style="float: left; margin-right: 10px;">
+      <img alt="EquipTag Logo" src="EquipTag-logo.png" style="width: 140px; height: auto;" />
+    </div>
+
+    <h2>Transmitter Calibration Report</h2>
+
+    <!-- Equipment Info -->
+    <div class="section">
+      <div class="section-title">Equipment Information</div>
+      <label for="equipment_name">Equipment Name:</label>
+      <input type="text" id="equipment_name" value="RW-FL2444" />
+
+      <label for="equipment_model">Make & Model:</label>
+      <input type="text" id="equipment_model" value="FL4321" />
+
+      <label for="serial_number">Serial Number:</label>
+      <input type="text" id="serial_number" value="VTRK4700" />
+    </div>
+
+    <!-- Calibration Info -->
+    <div class="section">
+      <div class="section-title">Calibration Details</div>
+
+      <label for="calibration_date">Calibration Date:</label>
+      <input type="date" id="calibration_date" name="calibration_date" />
+
+      <label for="calibration_method">Calibration Method:</label>
+      <input type="text" id="calibration_method" placeholder="e.g. 3-point linearity, loop test, etc." />
+
+      <label for="input_range">Input Range:</label>
+      <input type="text" id="input_range" placeholder="e.g. 0–100 psi" />
+
+      <label for="output_range">Output Range:</label>
+      <input type="text" id="output_range" value="4–20 mA" />
+
+      <label for="as_found">As-Found Reading:</label>
+      <input type="text" id="as_found" placeholder="e.g. 4.98 mA" />
+
+      <label for="as_left">As-Left Reading:</label>
+      <input type="text" id="as_left" placeholder="e.g. 4.00 mA" />
+
+      <label for="tolerance">Acceptable Tolerance:</label>
+      <input type="text" id="tolerance" placeholder="e.g. ±0.1 mA" />
+
+      <label for="result">Result:</label>
+      <select id="result">
+        <option value="">--Select--</option>
+        <option value="pass">Pass</option>
+        <option value="fail">Fail</option>
+      </select>
+    </div>
+
+    <!-- Technician Info -->
+    <div class="section">
+      <div class="section-title">Technician Info</div>
+      <label for="inspector_name">Calibrated By:</label>
+      <input type="text" id="inspector_name" name="inspector_name" placeholder="Enter Technician Name" />
+    </div>
+
+    <!-- Comments -->
+    <div class="section">
+      <div class="section-title">Additional Notes</div>
+      <textarea id="comments_notes" name="comments_notes" rows="4" placeholder="Enter any additional notes or recommendations..."></textarea>
+    </div>
+  </div>
+
+</body>
+</html>
+
