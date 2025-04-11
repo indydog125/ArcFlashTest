@@ -1,0 +1,8 @@
+Field,Mar 20, 2020,Mar 25, 2022,Mar 28, 2024
+Technician,B. Chan,S. Rahal,J. Morgan
+Input Range,0–100 psi,0–100 psi,0–100 psi
+As-Found Reading,3.52 mA,3.98 mA,4.95 mA
+As-Left Reading,4.00 mA,4.00 mA,4.00 mA
+Tolerance,±0.10 mA,±0.10 mA,±0.10 mA
+Result,Fail,Pass,Pass
+

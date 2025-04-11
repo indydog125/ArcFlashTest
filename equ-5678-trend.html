@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RW-FL2444 — Calibration Trend</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f4f4f4;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .logo {
+      float: left;
+      margin-right: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background: #f0f0f0;
+    }
+    .sparkline {
+      height: 40px;
+      width: 100px;
+    }
+    canvas {
+      max-height: 40px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <img src="EquipTag-logo.png" alt="EquipTag Logo" style="width: 140px; height: auto;">
+    </div>
+    <h2>RW-FL2444 — Calibration Trend</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>2020-03-20</th>
+          <th>2022-03-25</th>
+          <th>2024-03-28</th>
+          <th>Unit</th>
+          <th>Trend</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Technician</td>
+          <td>B. Chan</td>
+          <td>S. Rahal</td>
+          <td>J. Morgan</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Input Range</td>
+          <td>100</td>
+          <td>100</td>
+          <td>100</td>
+          <td>psi</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>As-Found Reading</td>
+          <td>3.52</td>
+          <td>3.98</td>
+          <td>4.95</td>
+          <td>mA</td>
+          <td><canvas id="spark-asfound" class="sparkline"></canvas></td>
+        </tr>
+        <tr>
+          <td>As-Left Reading</td>
+          <td>4.00</td>
+          <td>4.00</td>
+          <td>4.00</td>
+          <td>mA</td>
+          <td><canvas id="spark-asleft" class="sparkline"></canvas></td>
+        </tr>
+        <tr>
+          <td>Tolerance</td>
+          <td>±0.10</td>
+          <td>±0.10</td>
+          <td>±0.10</td>
+          <td>mA</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Result</td>
+          <td>Fail</td>
+          <td>Pass</td>
+          <td>Pass</td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const sparkOptions = {
+      type: 'line',
+      options: {
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { display: false },
+          y: { display: false }
+        },
+        elements: {
+          line: { borderColor: '#007BFF', tension: 0.4, borderWidth: 2 },
+          point: { radius: 0 }
+        },
+      }
+    };
+
+    new Chart(document.getElementById('spark-asfound'), {
+      ...sparkOptions,
+      data: {
+        labels: ['2020', '2022', '2024'],
+        datasets: [{ data: [3.52, 3.98, 4.95] }]
+      }
+    });
+
+    new Chart(document.getElementById('spark-asleft'), {
+      ...sparkOptions,
+      data: {
+        labels: ['2020', '2022', '2024'],
+        datasets: [{ data: [4.00, 4.00, 4.00] }]
+      }
+    });
+  </script>
+</body>
+</html>
+
