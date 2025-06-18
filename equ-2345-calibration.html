@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Transmitter Calibration Report</title>
+  <title>Breaker Calibration Report</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -46,8 +46,7 @@
     input[type="text"],
     input[type="number"],
     input[type="date"],
-    textarea,
-    select {
+    textarea {
       width: 100%;
       padding: 8px;
       margin-top: 5px;
@@ -65,68 +64,82 @@
       <img alt="EquipTag Logo" src="EquipTag-logo.png" style="width: 140px; height: auto;" />
     </div>
 
-    <h2>Transmitter Calibration Report</h2>
+    <h2>Breaker Calibration Report</h2>
 
-    <!-- Equipment Info -->
+    <!-- Identification Section -->
     <div class="section">
-      <div class="section-title">Equipment Information</div>
-      <label for="equipment_name">Equipment Name:</label>
-      <input type="text" id="equipment_name" value="RW-FL2444" />
-
-      <label for="equipment_model">Make & Model:</label>
-      <input type="text" id="equipment_model" value="FL4321" />
-
-      <label for="serial_number">Serial Number:</label>
-      <input type="text" id="serial_number" value="VTRK4700" />
+      <div class="section-title">Breaker Identification</div>
+      <label>Equipment #:</label>
+      <input type="text" value="38064-HR91" readonly />
+      <label>Substation #:</label>
+      <input type="text" />
+      <label>Work Order #:</label>
+      <input type="text" />
+      <label>Date:</label>
+      <input type="date" id="calibrationDate" />
+      <label>Tested By:</label>
+      <input type="text" value="Technician Name" />
     </div>
 
-    <!-- Calibration Info -->
+    <!-- Nameplate Section -->
     <div class="section">
-      <div class="section-title">Calibration Details</div>
-
-      <label for="calibration_date">Calibration Date:</label>
-      <input type="date" id="calibration_date" name="calibration_date" />
-
-      <label for="calibration_method">Calibration Method:</label>
-      <input type="text" id="calibration_method" placeholder="e.g. 3-point linearity, loop test, etc." />
-
-      <label for="input_range">Input Range:</label>
-      <input type="text" id="input_range" placeholder="e.g. 0–100 psi" />
-
-      <label for="output_range">Output Range:</label>
-      <input type="text" id="output_range" value="4–20 mA" />
-
-      <label for="as_found">As-Found Reading:</label>
-      <input type="text" id="as_found" placeholder="e.g. 4.98 mA" />
-
-      <label for="as_left">As-Left Reading:</label>
-      <input type="text" id="as_left" placeholder="e.g. 4.00 mA" />
-
-      <label for="tolerance">Acceptable Tolerance:</label>
-      <input type="text" id="tolerance" placeholder="e.g. ±0.1 mA" />
-
-      <label for="result">Result:</label>
-      <select id="result">
-        <option value="">--Select--</option>
-        <option value="pass">Pass</option>
-        <option value="fail">Fail</option>
-      </select>
-    </div>
-
-    <!-- Technician Info -->
-    <div class="section">
-      <div class="section-title">Technician Info</div>
-      <label for="inspector_name">Calibrated By:</label>
-      <input type="text" id="inspector_name" name="inspector_name" value="Johnny Appleseed" />
+      <div class="section-title">Nameplate Data</div>
+      <label>Frequency:</label>
+      <input type="text" />
+      <label>Manufacturer:</label>
+      <input type="text" />
+      <label>BIL:</label>
+      <input type="text" />
+      <label>Type:</label>
+      <input type="text" />
+      <label>INT CAP (KA):</label>
+      <input type="text" />
+      <label>Serial Number:</label>
+      <input type="text" />
+      <label>Model Number:</label>
+      <input type="text" />
+      <label>Rated Amps:</label>
+      <input type="text" />
+      <label>Rated Volts:</label>
+      <input type="text" />
+      <label>Close Voltage:</label>
+      <input type="text" />
+      <label>Trip Voltage:</label>
+      <input type="text" />
+      <label>Op Counter (As Found):</label>
+      <input type="text" />
+      <label>Op Counter (As Left):</label>
+      <input type="text" />
     </div>
 
     <!-- Comments -->
     <div class="section">
-      <div class="section-title">Additional Notes</div>
-      <textarea id="comments_notes" name="comments_notes" rows="4" placeholder="Enter any additional notes or recommendations..."></textarea>
+      <div class="section-title">Final Comments</div>
+      <textarea rows="4" placeholder="Enter any additional notes or comments here..."></textarea>
+    </div>
+
+    <!-- Sign-Off Section -->
+    <div class="section">
+      <div class="section-title">Sign-Off</div>
+      <label>Tested By:</label>
+      <input type="text" value="Technician Name" />
+      <label>Witnessed By (Name):</label>
+      <input type="text" />
+      <label>Company:</label>
+      <input type="text" />
+      <label>Signature:</label>
+      <input type="text" />
+      <label>Date:</label>
+      <input type="date" id="signOffDate" />
     </div>
   </div>
 
+  <script>
+    // Auto-populate date fields with today's date
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('calibrationDate').value = today;
+    document.getElementById('signOffDate').value = today;
+  </script>
 </body>
 </html>
 
