@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PowlVac ARM-MV Maintenance Test Sheet</title>
+  <style>
+    :root {
+      --bg: #f4f4f4;
+      --card: #fff;
+      --border: #ccc;
+      --border2: #ddd;
+      --text: #333;
+      --muted: #444;
+      --accent: #2a2a2a;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: var(--bg);
+      line-height: 1.6;
+      color: var(--text);
+    }
+    .container {
+      max-width: 980px;
+      margin: auto;
+      padding: 20px;
+      background-color: var(--card);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    h2 {
+      text-align: center;
+      color: var(--text);
+      margin: 10px 0 20px;
+    }
+    .section {
+      margin-bottom: 20px;
+      padding: 15px;
+      border: 1px solid var(--border2);
+      border-radius: 5px;
+      background-color: var(--card);
+    }
+    .section-title {
+      font-size: 1.2em;
+      color: var(--muted);
+      margin-bottom: 10px;
+      border-bottom: 2px solid var(--border2);
+      padding-bottom: 5px;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 12px;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    input[type="time"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+    textarea { resize: vertical; }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 16px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px 16px;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px 16px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+    }
+    th, td {
+      border: 1px solid var(--border2);
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: middle;
+    }
+    th {
+      background: #fafafa;
+      font-weight: bold;
+    }
+    .status-cells {
+      text-align: center;
+      white-space: nowrap;
+      width: 64px;
+    }
+    .muted {
+      color: #666;
+      font-size: 0.95em;
+    }
+    .controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    button {
+      padding: 8px 12px;
+      border: 1px solid var(--border2);
+      border-radius: 4px;
+      background: white;
+      cursor: pointer;
+    }
+    button:hover { background: #f3f3f3; }
+    .note {
+      background: #fffbe6;
+      border: 1px solid #f0e6a6;
+      border-radius: 4px;
+      padding: 8px 10px;
+      margin-top: 8px;
+      font-size: 0.92em;
+    }
+    @media print {
+      body { background: white; }
+      .container { border: none; }
+      .controls { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom: 6px;">
+      <img alt="EquipTag Logo" src="EquipTag-logo.png" style="width: 140px; height: auto;" />
+      <div style="flex:1"></div>
+      <div class="muted" style="text-align:right;">
+        <div><strong>Form:</strong> ARM-MV Maint Test Sheet</div>
+        <div><strong>Rev:</strong> 1.0</div>
+      </div>
+    </div>
+
+    <h2>PowlVac ARM-MV Maintenance Test Sheet</h2>
+
+    <!-- Identification Section -->
+    <div class="section">
+      <div class="section-title">Breaker Identification</div>
+      <div class="grid-2">
+        <div>
+          <label>Equipment #</label>
+          <input name="equip_no" type="text" value="PV-15-3KA-07" />
+        </div>
+        <div>
+          <label>Date</label>
+          <input name="date" type="date" id="date" />
+        </div>
+        <div>
+          <label>Substation #</label>
+          <input name="substation_no" type="text" value="SS-BR-02" />
+        </div>
+        <div>
+          <label>Work Order #</label>
+          <input name="work_order_no" type="text" value="WO-45721" />
+        </div>
+        <div>
+          <label>Tested By (Name)</label>
+          <input name="tested_by" type="text" value="A. Technician" />
+        </div>
+        <div>
+          <label>Witnessed By (Name)</label>
+          <input name="witnessed_by" type="text" value="B. Supervisor" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Nameplate / As Found -->
+    <div class="section">
+      <div class="section-title">Nameplate Data</div>
+      <div class="grid-3">
+        <div><label>Manufacturer</label><input name="mfg" type="text" value="Powell" /></div>
+        <div><label>Type</label><input name="type" type="text" value="PowlVac ARM-MV" /></div>
+        <div><label>Model Number</label><input name="model_no" type="text" value="ARM-MV-15kV" /></div>
+        <div><label>Serial Number</label><input name="serial_no" type="text" value="PVARM-15-00123" /></div>
+        <div><label>Rated Volts (kV)</label><input name="rated_volts" type="text" value="15" /></div>
+        <div><label>Rated Amps (A)</label><input name="rated_amps" type="text" value="2000" /></div>
+        <div><label>INT CAP (kA)</label><input name="int_cap" type="text" value="40" /></div>
+        <div><label>BIL (kV)</label><input name="bil" type="text" value="95" /></div>
+        <div><label>Frequency (Hz)</label><input name="frequency" type="text" value="60" /></div>
+        <div><label>Close Voltage (V)</label><input name="close_voltage" type="text" value="125 VDC" /></div>
+        <div><label>Trip Voltage (V)</label><input name="trip_voltage" type="text" value="125 VDC" /></div>
+        <div><label>Operation Counter (As Found)</label><input name="op_counter_found" type="text" value="00456" /></div>
+        <div><label>Operation Counter (As Left)</label><input name="op_counter_left" type="text" value="00460" /></div>
+      </div>
+    </div>
+
+    <!-- Inspections -->
+    <div class="section">
+      <div class="section-title">Inspections (OK / N-OK / C / NA)</div>
+      <div class="note">Mark each item with <strong>OK</strong>, <strong>N-OK</strong> (not acceptable), <strong>C</strong> (corrected), or <strong>NA</strong>. Add comments below if N-OK or C.</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th class="status-cells">OK</th>
+            <th class="status-cells">N-OK</th>
+            <th class="status-cells">C</th>
+            <th class="status-cells">NA</th>
+          </tr>
+        </thead>
+        <tbody id="inspection-body">
+          <!-- Core indicators -->
+          <tr data-status-name="insp_open_closed"><td>Breaker Open/Closed Indication</td></tr>
+          <tr data-status-name="insp_position"><td>Breaker Position Indication</td></tr>
+          <tr data-status-name="insp_spring_ind"><td>Spring Charged/Discharged Indication</td></tr>
+          <!-- Physical condition -->
+          <tr data-status-name="insp_front_cover"><td>Front Cover</td></tr>
+          <tr data-status-name="insp_barriers"><td>Inter-Phase Barrier Assembly</td></tr>
+          <tr data-status-name="insp_bushings"><td>Primary Disconnect Bushings</td></tr>
+          <tr data-status-name="insp_supports"><td>Supports and Insulators</td></tr>
+          <tr data-status-name="insp_fingers"><td>Primary Disconnect Fingers</td></tr>
+          <tr data-status-name="insp_ccp"><td>Current Carrying Parts</td></tr>
+          <tr data-status-name="insp_sec_plug"><td>Secondary Disconnect Plug</td></tr>
+          <tr data-status-name="insp_ground_shoe"><td>Ground Shoe</td></tr>
+          <tr data-status-name="insp_aux_contacts"><td>Breaker Auxiliary Contacts</td></tr>
+          <!-- Erosion / wipe indicators -->
+          <tr data-status-name="insp_erosion_a"><td>Phase A Contact Erosion Indicator</td></tr>
+          <tr data-status-name="insp_wipe_a"><td>Phase A Contact Wipe Indicator</td></tr>
+          <tr data-status-name="insp_erosion_b"><td>Phase B Contact Erosion Indicator</td></tr>
+          <tr data-status-name="insp_wipe_b"><td>Phase B Contact Wipe Indicator</td></tr>
+          <tr data-status-name="insp_erosion_c"><td>Phase C Contact Erosion Indicator</td></tr>
+          <tr data-status-name="insp_wipe_c"><td>Phase C Contact Wipe Indicator</td></tr>
+          <!-- Interlocks -->
+          <tr data-status-name="insp_key_interlock"><td>Key Interlock</td></tr>
+          <tr data-status-name="insp_mech_interlocks"><td>Mechanical Interlocks</td></tr>
+          <tr data-status-name="insp_elec_interlocks"><td>Electrical Interlocks</td></tr>
+          <!-- Cleanliness / condition -->
+          <tr data-status-name="insp_clean"><td>Cleanliness</td></tr>
+          <tr data-status-name="insp_corona"><td>Evidence of Corona</td></tr>
+          <tr data-status-name="insp_rust"><td>Rust or Corrosion</td></tr>
+          <!-- Added: maintenance items -->
+          <tr data-status-name="insp_mech_condition"><td>Mechanism General Condition (no loose/worn parts)</td></tr>
+          <tr data-status-name="insp_lubrication"><td>Lubrication Completed (per procedure)</td></tr>
+        </tbody>
+      </table>
+      <label>Inspection / Repair Comments</label>
+      <textarea name="inspection_comments" rows="4" placeholder="Describe any N-OK/C items and corrective actions..."></textarea>
+    </div>
+
+    <!-- Functional Tests -->
+    <div class="section">
+      <div class="section-title">Functional Tests (OK / N-OK / C / NA)</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Test</th>
+            <th class="status-cells">OK</th>
+            <th class="status-cells">N-OK</th>
+            <th class="status-cells">C</th>
+            <th class="status-cells">NA</th>
+          </tr>
+        </thead>
+        <tbody id="functional-body">
+          <tr data-status-name="func_spring_charge"><td>Spring Charging</td></tr>
+          <tr data-status-name="func_e_close"><td>Electric Close</td></tr>
+          <tr data-status-name="func_m_close"><td>Manual Close</td></tr>
+          <tr data-status-name="func_e_trip"><td>Electric Trip</td></tr>
+          <tr data-status-name="func_m_trip"><td>Manual Trip</td></tr>
+          <tr data-status-name="func_antipump"><td>Anti-Pump</td></tr>
+          <tr data-status-name="func_tripfree"><td>Trip-Free</td></tr>
+          <tr data-status-name="func_op_counter"><td>Operations Counter Advance</td></tr>
+          <tr data-status-name="func_arm_racking"><td>Automatic Racking Mechanism (ARM) Operation</td></tr>
+          <tr data-status-name="func_uv_trip"><td>Undervoltage Trip (if equipped)</td></tr>
+          <tr data-status-name="func_shunt_trip"><td>Secondary Shunt Trip (if equipped)</td></tr>
+          <tr data-status-name="func_aux_contacts"><td>Auxiliary Contacts Functional</td></tr>
+        </tbody>
+      </table>
+      <div class="grid-3" style="margin-top:10px;">
+        <div><label>Control Power Used (V)</label><input name="control_power" type="text" value="125 VDC" /></div>
+        <div><label>Close Coil Min-Voltage Test Performed</label>
+          <select name="min_close_test"><option selected>NA</option><option>Yes</option><option>No</option></select>
+        </div>
+        <div><label>Trip Coil Min-Voltage Test Performed</label>
+          <select name="min_trip_test"><option selected>NA</option><option>Yes</option><option>No</option></select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Measurements: Contact Resistance -->
+    <div class="section">
+      <div class="section-title">Contact Resistance Test</div>
+      <div class="grid-3">
+        <div><label>Equipment Log / Asset ID</label><input name="cr_log" type="text" value="LOG-CR-001" /></div>
+        <div><label>Test Current (A)</label><input name="cr_test_current" type="number" step="1" value="100" /></div>
+        <div><label>Temperature (°C) (optional)</label><input name="cr_temp" type="number" step="0.1" value="22.0" /></div>
+      </div>
+      <div class="grid-3">
+        <div><label>Phase A (μΩ)</label><input name="cr_phase_a" type="number" step="0.1" value="42.3" /></div>
+        <div><label>Phase B (μΩ)</label><input name="cr_phase_b" type="number" step="0.1" value="40.8" /></div>
+        <div><label>Phase C (μΩ)</label><input name="cr_phase_c" type="number" step="0.1" value="41.6" /></div>
+      </div>
+      <div class="muted">Test from line-side primary contact to load-side primary contact.</div>
+    </div>
+
+    <!-- Measurements: Insulation Resistance (Megger) -->
+    <div class="section">
+      <div class="section-title">Insulation Resistance (Megger) – Prior to Hipot</div>
+      <div class="grid-3">
+        <div><label>Equipment Log / Asset ID</label><input name="ir_log" type="text" value="LOG-IR-001" /></div>
+        <div><label>Test Voltage (kV DC)</label><input name="ir_test_kv" type="number" step="0.1" value="5" /></div>
+        <div><label>Test Duration (s)</label><input name="ir_duration" type="number" step="1" value="60" /></div>
+      </div>
+      <div class="grid-3">
+        <div><label>PH A to B+C+Ground (MΩ)</label><input name="ir_a_to_bc_g" type="number" step="0.1" value="2500" /></div>
+        <div><label>PH B to C+A+Ground (MΩ)</label><input name="ir_b_to_ca_g" type="number" step="0.1" value="2440" /></div>
+        <div><label>PH C to A+B+Ground (MΩ)</label><input name="ir_c_to_ab_g" type="number" step="0.1" value="2475" /></div>
+      </div>
+    </div>
+
+    <!-- Measurements: Insulation Overpotential (Hipot) -->
+    <div class="section">
+      <div class="section-title">Insulation Test (Overpotential / Hipot) – Breaker Closed</div>
+      <div class="grid-3">
+        <div><label>Equipment Log / Asset ID</label><input name="hipot_log" type="text" value="LOG-HI-001" /></div>
+        <div><label>Test Potential (kV)</label><input name="hipot_kv" type="number" step="0.1" value="37" /></div>
+        <div><label>Duration (s)</label><input name="hipot_duration" type="number" step="1" value="60" /></div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Path</th>
+            <th>Leakage (mA)</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>PH A to B+C+Ground</td>
+            <td><input name="hipot_leak_a" type="number" step="0.01" value="1.2" /></td>
+            <td><select name="hipot_res_a"><option>Pass</option><option>Fail</option></select></td>
+          </tr>
+          <tr>
+            <td>PH B to C+A+Ground</td>
+            <td><input name="hipot_leak_b" type="number" step="0.01" value="1.1" /></td>
+            <td><select name="hipot_res_b"><option>Pass</option><option>Fail</option></select></td>
+          </tr>
+          <tr>
+            <td>PH C to A+B+Ground</td>
+            <td><input name="hipot_leak_c" type="number" step="0.01" value="1.2" /></td>
+            <td><select name="hipot_res_c"><option>Pass</option><option>Fail</option></select></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="muted">Maintain test potential for 1 minute; record leakage in mA.</div>
+    </div>
+
+    <!-- Measurements: Vacuum Integrity -->
+    <div class="section">
+      <div class="section-title">Vacuum Integrity Test – Across Open Contacts</div>
+      <div class="grid-3">
+        <div><label>Equipment Log / Asset ID</label><input name="vac_log" type="text" value="LOG-VI-001" /></div>
+        <div><label>Test Potential (kV AC)</label><input name="vac_kv" type="number" step="0.1" value="25" /></div>
+        <div><label>Duration (s)</label><input name="vac_duration" type="number" step="1" value="60" /></div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Phase</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Phase A</td>
+            <td><select name="vac_res_a"><option>Pass</option><option>Fail</option></select></td>
+          </tr>
+          <tr>
+            <td>Phase B</td>
+            <td><select name="vac_res_b"><option>Pass</option><option>Fail</option></select></td>
+          </tr>
+          <tr>
+            <td>Phase C</td>
+            <td><select name="vac_res_c"><option>Pass</option><option>Fail</option></select></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="muted">Test with breaker open; record Pass/Fail for each vacuum bottle.</div>
+    </div>
+
+    <!-- Operating Times -->
+    <div class="section">
+      <div class="section-title">Operating Times (if performed)</div>
+      <div class="grid-3">
+        <div><label>Opening Time (ms)</label><input name="time_open_ms" type="number" step="1" value="38" /></div>
+        <div><label>Closing Time (ms)</label><input name="time_close_ms" type="number" step="1" value="85" /></div>
+        <div><label>Timing Method / Instrument</label><input name="time_method" type="text" value="Doble TDR" /></div>
+      </div>
+    </div>
+
+    <!-- Maximum Test Potentials table -->
+    <div class="section">
+      <div class="section-title">Maximum Test Potentials for Overpotential (Hipot) Tests</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Breaker Voltage Rating</th>
+            <th colspan="2">AC</th>
+            <th colspan="2">DC</th>
+          </tr>
+          <tr>
+            <th></th>
+            <th>Insulation Test</th>
+            <th>Vacuum Integrity Test</th>
+            <th>Insulation Test</th>
+            <th>Vacuum Integrity Test</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>5 kV</td>
+            <td>NA</td>
+            <td>NA</td>
+            <td>20 kV</td>
+            <td>37 kV</td>
+          </tr>
+          <tr>
+            <td>13.8 kV</td>
+            <td>NA</td>
+            <td>NA</td>
+            <td>37 kV</td>
+            <td>37 kV</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Completion Checklist -->
+    <div class="section">
+      <div class="section-title">Maintenance Procedure Completion Checklist</div>
+      <label><input name="chk_assembly_complete" type="checkbox" /> Assembly is complete including covers, barriers, flash shields, etc.</label>
+      <label><input name="chk_tools_accounted" type="checkbox" /> All tools and jumpers are accounted for.</label>
+      <label><input name="chk_left_open_spring_dis" type="checkbox" /> Breaker is left in the OPEN position with the closing spring discharged.</label>
+    </div>
+
+    <!-- Final Comments -->
+    <div class="section">
+      <div class="section-title">Final Comments</div>
+      <textarea name="final_comments" rows="4" placeholder="Enter any additional notes or comments here..."></textarea>
+    </div>
+
+    <!-- Sign-Off -->
+    <div class="section">
+      <div class="section-title">Sign-Off</div>
+      <div class="grid-2">
+        <div><label>Tested By (Name)</label><input name="sign_tested_by" type="text" value="A. Technician" /></div>
+        <div><label>Witnessed By (Name)</label><input name="sign_witnessed_by" type="text" value="B. Supervisor" /></div>
+        <div><label>Company</label><input name="sign_company" type="text" value="Aasgard / Spieker Point" /></div>
+        <div><label>Signature</label><input name="sign_signature" type="text" value="A. Technician" /></div>
+        <div><label>Date</label><input name="sign_date" type="date" id="sign_date" /></div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <button type="button" onclick="exportJSON()">Export JSON</button>
+      <button type="button" onclick="window.print()">Print</button>
+      <button type="button" onclick="if(confirm('Clear all fields?')) window.location.reload()">Reset</button>
+      <span class="muted">Export will download a JSON snapshot of this sheet.</span>
+    </div>
+  </div>
+
+  <script>
+    // Render radio status cells
+    function statusCells(name) {
+      return `
+        <td class="status-cells"><input type="radio" name="${name}" value="OK"></td>
+        <td class="status-cells"><input type="radio" name="${name}" value="N-OK"></td>
+        <td class="status-cells"><input type="radio" name="${name}" value="C"></td>
+        <td class="status-cells"><input type="radio" name="${name}" value="NA"></td>
+      `;
+    }
+
+    // Replace all ${statusCells('...')} placeholders within the two TBODY sections
+    
+    function hydratePlaceholders() {
+      const tables = ['inspection-body', 'functional-body'];
+      tables.forEach(id => {
+        const tbody = document.getElementById(id);
+        if (!tbody) return;
+
+        const rows = tbody.querySelectorAll('tr[data-status-name]');
+        rows.forEach(row => {
+          const name = row.getAttribute('data-status-name');
+          const labelCell = row.children[0];
+          row.innerHTML = '';
+          row.appendChild(labelCell);
+          row.insertAdjacentHTML('beforeend', statusCells(name));
+        });
+      });
+    }
+
+    // Set default dates & hydrate on DOM ready
+    document.addEventListener('DOMContentLoaded', function() {
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('date').value = today;
+      document.getElementById('sign_date').value = today;
+      hydratePlaceholders();
+    });
+
+    // Export JSON of all inputs
+    function exportJSON() {
+      const data = {};
+      const els = document.querySelectorAll('input, textarea, select');
+      const radioGroups = new Set();
+
+      els.forEach(el => {
+        if (el.type === 'radio') {
+          radioGroups.add(el.name);
+        } else if (el.type === 'checkbox') {
+          data[el.name] = el.checked;
+        } else {
+          data[el.name] = el.value;
+        }
+      });
+
+      // Resolve radio groups
+      radioGroups.forEach(name => {
+        const checked = document.querySelector(`input[name="${name}"]:checked`);
+        data[name] = checked ? checked.value : '';
+      });
+
+      const today = new Date().toISOString().split('T')[0];
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ARM-MV-test-sheet-${today}.json`;
+      document.body.appendChild(a);
+      a.click();
+      URL.revokeObjectURL(url);
+      a.remove();
+    }
+  </script>
+</body>
+</html>
