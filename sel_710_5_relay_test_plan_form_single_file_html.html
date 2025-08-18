@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SEL‑710‑5 Relay — Test Plan / Form Viewer</title>
+  <style>
+    :root { --bg:#0b0c0f; --panel:#111318; --muted:#a0a4ac; --text:#e8e9ec; --brand:#3b82f6; }
+    *{box-sizing:border-box}
+    body{margin:0;font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans";background:var(--bg);color:var(--text)}
+    .topbar{position:sticky;top:0;z-index:10;backdrop-filter:blur(6px);background:rgba(17,19,24,.8);border-bottom:1px solid #1e2430}
+    .container{max-width:1100px;margin:0 auto;padding:16px}
+    .row{display:flex;align-items:center;gap:10px}
+    .spacer{flex:1}
+    .btn{appearance:none;border:1px solid #2a3242;background:#161a22;color:var(--text);padding:10px 14px;border-radius:12px;cursor:pointer}
+    .btn:hover{background:#1a1f29}
+    .btn.primary{border-color:transparent;background:var(--brand);color:#fff}
+    .btn.primary:hover{filter:brightness(.95)}
+    .btn.toggled{background:#1f2633;border-color:#3a4458}
+    .panel{background:var(--panel);border:1px solid #1e2430;border-radius:16px;padding:20px;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+    .hidden{display:none}
+    h1,h2,h3{line-height:1.2}
+    h1{font-size:28px;margin:8px 0 16px}
+    h2{font-size:20px;margin:20px 0 8px;border-bottom:1px solid #1f2430;padding-bottom:6px}
+    h3{font-size:16px;margin:16px 0 6px}
+    p{margin:10px 0}
+    code,pre{background:#0f1217;border:1px solid #1f2633;border-radius:8px;padding:2px 6px}
+    pre{padding:12px;overflow:auto}
+    ul{margin:8px 0 8px 22px}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px}
+    .label{font-size:12px;color:var(--muted)}
+    .input,select,textarea{background:#0f1217;color:var(--text);border:1px solid #293042;border-radius:10px;padding:9px 10px}
+    textarea{min-height:90px}
+    .section{margin-bottom:18px}
+    .section-header{display:flex;align-items:baseline;gap:10px}
+    .section-title{font-weight:700;font-size:16px}
+    .section-desc{color:var(--muted);font-size:12px}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:8px;border-top:1px solid #1e2430}
+    th{text-align:left;font-weight:600;color:var(--muted)}
+    td.center{text-align:center}
+    .group{border:1px dashed #2f3747;border-radius:14px;padding:12px;margin-top:6px}
+    .group-title{font-weight:600;margin-bottom:8px}
+    .footer{color:var(--muted);font-size:12px;margin:20px 0 40px}
+    .pill{padding:2px 8px;font-size:11px;border:1px solid #2a3242;border-radius:999px;color:var(--muted)}
+    .meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+  <div class="topbar">
+    <div class="container">
+      <div class="row">
+        <div style="font-weight:700">SEL‑710‑5 Relay Spec Viewer</div>
+        <div class="pill" id="specMeta">loading…</div>
+        <div class="spacer"></div>
+        <button id="btnPlan" class="btn toggled">Test Plan</button>
+        <button id="btnForm" class="btn">Show Form</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="margin-top:16px">
+    <!-- Plan -->
+    <div id="planView" class="panel"><div id="markdown"></div></div>
+
+    <!-- Form -->
+    <div id="formView" class="panel hidden">
+      <div class="meta" style="margin-bottom:10px">
+        <div class="pill" id="specTitle"></div>
+        <div class="pill" id="specId"></div>
+        <div class="pill" id="specVer"></div>
+        <div class="spacer"></div>
+        <button id="exportBtn" class="btn primary">Export Filled JSON</button>
+      </div>
+      <div id="formRoot"></div>
+    </div>
+
+    <div class="footer">Rendered locally from embedded DECK spec. Follow site PPE/LOTO & arc‑flash procedures.</div>
+  </div>
+
+  <script>
+    // ---------------- Embedded SPEC: SEL‑710‑5 (relay-only; no breaker tests) ----------------
+    const SPEC = {
+      test_plan_markdown: `# Commissioning & Maintenance Test Plan — SEL-710-5 Motor Protection Relay\n\n## 1) Overview & Scope\nThis procedure is for **shutdown/turnaround maintenance** and **commissioning verification** of a **SEL-710-5 motor protection relay** in MCC/switchgear service. Work includes visual inspection, wiring/polarity checks, **secondary injection** to verify metering and protective elements, I/O functional checks, trip‐circuit simulation, communications and time-sync verification, records management (settings file/CRC), and final sign-off.  \n**Note:** The SEL-710-5 is a **relay**, not a circuit breaker. Breaker-specific tests (contact resistance, vacuum integrity, racking, coil min-voltage, etc.) are **not applicable** and are intentionally **omitted** from this plan and the accompanying test sheet.\n\n## 2) Safety, Hazards & PPE\n- **LOTO:** De-energize and lock out control power, associated trip circuits/test switches, and the motor feeder as required. Verify **absence of voltage** before touching conductors.  \n- **Arc-flash:** Establish boundaries and wear PPE per the site study/NFPA 70E. Prefer remote tripping during element tests.  \n- **CTs:** **Never open-circuit** energized CT secondaries. Use shorting/test blocks correctly.  \n- **PTs:** Treat PT circuits as live until proven de-energized.  \n- **DC control power:** Shock/arc risk when manipulating jumpers/test leads and output contacts.  \n- **Process impact:** Prevent inadvertent motor starts/stops. Isolate trip outputs or place feeder out of service before tests.  \n- **ESD:** Use ESD precautions when handling cards/modules.\n\n## 3) Prerequisites\n- **Documents:** One-line diagram, control schematics, motor data sheet (FLA, HP/kW), settings file (**.SEL**), prior test records.  \n- **Tools (calibrated):** 3-phase secondary injection set (current/voltage), DMM, laptop with **AcSELerator QuickSet/Compass**, IRIG-B or SNTP source (if used), Ethernet/serial cables, test switch or isolation plug for trip circuit, labels.  \n- **Environment:** Clean/dry panel, network access (if verifying comms).  \n- **Device state:** Trip outputs isolated or downstream breaker disabled; relay in **TEST**/safe state where applicable.\n\n## 4) Visual & Wiring Inspection\n1. Confirm nameplate/model **SEL-710-5**, serial number, installed I/O/option cards.  \n2. Front panel/HMI/LEDs intact; no physical damage.  \n3. Verify terminal IDs, ferrules, wire dressing; torque field terminals per drawing.  \n4. **CT wiring & polarity** (H1→K) correct; shorting block positions verified.  \n5. **PT wiring** (if used) correct; fusing present per drawings.  \n6. Relay chassis **ground bond** verified.  \n7. General **cleanliness**; ventilation clear.  \n8. Settings label/tag matches intended revision.\n\n## 5) Functional Checks (I/O & Basic Operation)\n1. **Power-up & self-test:** Apply control power; verify no self-test errors. Record **firmware** and **settings CRC/hash**.  \n2. **Metering sanity:** With no injection, phase currents/voltages near zero (de-energized) or as expected (energized).  \n3. **Digital inputs (DI):** Drive each DI; confirm indication in HMI/QuickSet.  \n4. **Outputs (DO/relay):** Command each DO; verify pick-up/drop-out and intended target (lamp/simulator). If a trip output is wired to a breaker, keep the trip path isolated for bench tests.  \n5. **Security & HMI:** Verify roles/passwords, local/remote setting, and targets reset.  \n6. **Trip circuit continuity (if measured):** With simulator, verify trip path continuity without energizing downstream device.\n\n## 6) Protection Element Verification (Secondary Injection)\n> Use the **as-left** settings. Test **one element at a time**; disable others or set margins to avoid overlap.\n- **49 Thermal Overload:** Initialize thermal state near 0%. Inject ≥ FLA to prove thermal model accumulation/trip and verify reset (manual/auto).  \n- **50/51 Phase Overcurrent:** Verify pickup at set **A(sec)** and time delay per curve. Test at ~1.05× pickup (pickup/no trip) and at a higher multiple (e.g., 2–4×) for timing.  \n- **46 Negative-sequence / Unbalance (if used):** Inject unbalance; confirm pickup at %I2/I1 setpoint.  \n- **50G/51G / 50N/51N Ground Fault (if used):** Test residual (ΣIa+Ib+Ic) or core-balance input; verify pickup/time.  \n- **27/59 Under/Overvoltage (if PTs used):** Inject VLN/VLL; confirm pickup/restore and hysteresis.  \n- **81U/81O Under/Overfrequency (if used):** Sweep frequency and verify pickup/restore and timing.  \n- **48/14/66 Start/Locked-rotor/Stall (if used):** Simulate start/stall profile or equivalent fixed injection to prove inhibits and trip.  \n- **37 Undercurrent / load loss (if used):** Reduce current; verify pickup and timing.\n\n**Acceptance (practical):** Metering typically within a few **percent** of injected values. Inverse-time elements typically within **±(tens of ms)** of calculated test-point time depending on curve/multiple. Record exact values and compare to prior baseline.\n\n## 7) Communications & Time Sync\n- **Ethernet/Serial:** Verify link up, addressing, and protocol (DNP3/Modbus/IEC 61850 if equipped). Read points or issue a benign command.  \n- **Time sync:** Verify **IRIG-B** or **SNTP**; target time **offset ≤ ~5 ms** for coordinated event records.  \n- **Event/SER:** Trigger a test trip; pull **event report** and **SER**; confirm timestamps and element bits.\n\n## 8) Measurements to Record (on Test Sheet)\n- Injection levels (A/V), measured metering, pickups, and **trip times (ms)** for each tested element.  \n- Communications/time-sync **offset (ms)** and source.  \n- Any DI thresholds if characterized.\n\n## 9) Completion Checklist\n- Restore CT shorting links/test switches to **normal**.  \n- Remove jumpers/simulators; restore trip path as designed.  \n- Save and archive **as-left settings** and event reports; record firmware and settings **CRC/hash**.  \n- Update device labels as needed.  \n- Remove LOTO per energization plan.\n\n## 10) References (generic)\n- IEC 60255 (measuring relays & protection equipment)  \n- IEEE C37.90 (relays and relay systems)  \n- NFPA 70E (electrical safety)  \n- SEL-710-5 instruction manual/application guide\n`,
+      form_spec: {
+        spec_id: "sel-710-5-relay-maintenance-v2",
+        version: "2025-08-18T00:00:00Z",
+        title: "SEL-710-5 Motor Protection Relay — Commissioning/Maintenance Test Sheet",
+        status_enum: ["OK","N-OK","C","NA"],
+        sections: [
+          {
+            key: "device_identification",
+            title: "Device Identification",
+            instructions: "Record asset and job identifiers. Date defaults to today.",
+            fields: [
+              { key: "equip_no", label: "Equipment No.", type: "text", required: true },
+              { key: "date", label: "Date", type: "date", default: "today", required: true },
+              { key: "substation_no", label: "Substation / Lineup", type: "text" },
+              { key: "feeder_cubicle", label: "Feeder / Cubicle", type: "text" },
+              { key: "work_order_no", label: "Work Order / WO#", type: "text" },
+              { key: "tested_by", label: "Tested By", type: "text", required: true },
+              { key: "witnessed_by", label: "Witnessed By", type: "text" }
+            ],
+            comments_field: { key: "device_identification_comments", label: "Comments", type: "textarea" }
+          },
+          {
+            key: "nameplate_data",
+            title: "Nameplate & Configuration",
+            instructions: "Capture key device data and scaling used for testing.",
+            fields: [
+              { key: "manufacturer", label: "Manufacturer", type: "text", default: "SEL" },
+              { key: "type", label: "Type", type: "text", default: "SEL-710-5" },
+              { key: "model_no", label: "Model / Option Code", type: "text" },
+              { key: "serial_no", label: "Serial No.", type: "text" },
+              { key: "aux_power_v", label: "Aux Power (V)", type: "number", min: 18, max: 250, step: 1, default: 125 },
+              { key: "aux_power_type", label: "Aux Power Type", type: "select", options: ["DC","AC"], default: "DC" },
+              { key: "system_frequency_hz", label: "System Frequency (Hz)", type: "number", min: 0, max: 60, step: 1, default: 60 },
+              { key: "motor_fla_a", label: "Associated Motor FLA (A)", type: "number", min: 0, step: 0.1 },
+              { key: "ct_ratio_pri_a", label: "CT Ratio — Primary (A)", type: "number", min: 1, step: 1 },
+              { key: "ct_ratio_sec_a", label: "CT Ratio — Secondary (A)", type: "number", min: 1, step: 1, default: 5 },
+              { key: "pt_ratio_pri_v", label: "PT Ratio — Primary (V) (if used)", type: "number", min: 0, step: 1 },
+              { key: "pt_ratio_sec_v", label: "PT Ratio — Secondary (V) (if used)", type: "number", min: 0, step: 1 },
+              { key: "firmware_version", label: "Firmware Version", type: "text" },
+              { key: "settings_crc", label: "Settings CRC / Hash", type: "text" },
+              { key: "eth_mac1", label: "Ethernet MAC 1", type: "text" },
+              { key: "eth_mac2", label: "Ethernet MAC 2 (if equipped)", type: "text" },
+              { key: "ip_address", label: "IP Address (if used)", type: "text" },
+              { key: "time_sync_config", label: "Time Sync (IRIG-B/SNTP/None)", type: "text" }
+            ],
+            comments_field: { key: "nameplate_data_comments", label: "Comments", type: "textarea" }
+          },
+          {
+            key: "inspections",
+            title: "Inspections (Visual & Wiring)",
+            instructions: "Panel de-energized; trip outputs isolated/secured. Confirm torque and wiring per drawings.",
+            items: [
+              { key: "front_hmi_condition", label: "Front panel / HMI / LEDs condition" },
+              { key: "terminal_blocks_secure", label: "Terminal blocks / plug-in connectors secure" },
+              { key: "labels_markings", label: "Labeling & terminal markings legible" },
+              { key: "ct_wiring_polarity", label: "CT wiring & polarity correct; shorting links safe" },
+              { key: "pt_wiring_ok", label: "PT wiring/fusing correct (if used)" },
+              { key: "chassis_ground", label: "Chassis ground bond verified" },
+              { key: "cleanliness", label: "Cleanliness (dust/debris removed)" },
+              { key: "corrosion", label: "No corrosion/contamination observed" },
+              { key: "terminal_torque", label: "Field terminals torqued per spec" }
+            ],
+            comments_field: { key: "inspections_comments", label: "Inspection Comments / Defects Found", type: "textarea" }
+          },
+          {
+            key: "functional_tests",
+            title: "Functional Tests",
+            instructions: "Trip outputs isolated or feeder out of service. Record status for each item.",
+            items: [
+              { key: "self_test_ok", label: "Power-up self-test passes; no errors" },
+              { key: "metering_idle_sane", label: "Metering sane at idle (no injection)" },
+              { key: "di_points_ok", label: "Digital Inputs operate & indicate correctly" },
+              { key: "do_points_ok", label: "Outputs (relay/solid-state) operate as commanded" },
+              { key: "trip_circuit_simulated", label: "Trip circuit simulated/isolated for bench tests" },
+              { key: "targets_reset", label: "Targets reset and HMI LEDs functional" },
+              { key: "security_roles_ok", label: "Security roles/passwords verified" },
+              { key: "event_ser_captured", label: "Event report & SER captured for a test trip" },
+              { key: "elem_49_overload", label: "49 Thermal Overload proven" },
+              { key: "elem_50_51_phase_oc", label: "50/51 Phase Overcurrent proven" },
+              { key: "elem_46_unbalance", label: "46 Negative-sequence / Unbalance (if used)" },
+              { key: "elem_50g_51g_ground", label: "50/51G or 50/51N Ground Fault (if used)" },
+              { key: "elem_27_59_voltage", label: "27/59 Under/Overvoltage (if PTs used)" },
+              { key: "elem_81_freq", label: "81U/O Frequency (if used)" },
+              { key: "elem_48_14_66_start_stall", label: "48/14/66 Start / Locked-rotor / Stall (if used)" },
+              { key: "elem_37_undercurrent", label: "37 Undercurrent / Load loss (if used)" },
+              { key: "comms_eth1_ok", label: "Comms: Ethernet Port 1 online (ping/points)" },
+              { key: "comms_eth2_ok", label: "Comms: Ethernet Port 2 online (if equipped)" },
+              { key: "comms_serial_ok", label: "Comms: Serial link ok (if equipped)" },
+              { key: "time_sync_ok", label: "Time sync (IRIG-B/SNTP) locked within tolerance" }
+            ],
+            extra_fields: [
+              { key: "control_power", label: "Control Power (V & source)", type: "text", default: "125 VDC" },
+              { key: "notes_isolation", label: "Trip Path Isolation Method (test switch/simulator)", type: "text" }
+            ],
+            comments_field: { key: "functional_tests_comments", label: "Functional Test Comments", type: "textarea" }
+          },
+          {
+            key: "communications",
+            title: "Communications & Time Sync",
+            instructions: "Verify data paths and time sync source.",
+            items: [
+              { key: "dnp3_points_ok", label: "DNP3 points read/write OK (if used)" },
+              { key: "modbus_points_ok", label: "Modbus points read/write OK (if used)" },
+              { key: "iec61850_ok", label: "IEC 61850 MMS/GOOSE (if used)" }
+            ],
+            groups: [
+              { key: "time_sync_measure", title: "Time Sync Measurement", fields: [
+                  { key: "time_source", label: "Time Source (IRIG-B/SNTP/None)", type: "text" },
+                  { key: "time_offset_ms", label: "Measured Time Offset (ms)", type: "number", min: -1000, max: 1000, step: 0.1 }
+                ] }
+            ],
+            comments_field: { key: "communications_comments", label: "Comms/Time Sync Comments", type: "textarea" }
+          },
+          {
+            key: "measurements",
+            title: "Measurements — Secondary Injection & Metering",
+            instructions: "Record injection levels, measured metering, element pickups, and trip times.",
+            groups: [
+              { key: "secondary_injection", title: "Injection Levels & Metering", fields: [
+                  { key: "test_set", label: "Test Set / Instrument", type: "text" },
+                  { key: "ct_ratio_pri_a_meas", label: "CT Ratio Primary (A) — used", type: "number", min: 1, step: 1 },
+                  { key: "ct_ratio_sec_a_meas", label: "CT Ratio Secondary (A) — used", type: "number", min: 1, step: 1, default: 5 },
+                  { key: "pt_ratio_pri_v_meas", label: "PT Ratio Primary (V) — used (if any)", type: "number", min: 0, step: 1 },
+                  { key: "pt_ratio_sec_v_meas", label: "PT Ratio Secondary (V) — used (if any)", type: "number", min: 0, step: 1 },
+                  { key: "inj_ia_a", label: "Injected IA (A sec)", type: "number", min: 0, step: 0.01 },
+                  { key: "meas_ia_a", label: "Metered IA (A)", type: "number", min: 0, step: 0.01 },
+                  { key: "inj_ib_a", label: "Injected IB (A sec)", type: "number", min: 0, step: 0.01 },
+                  { key: "meas_ib_a", label: "Metered IB (A)", type: "number", min: 0, step: 0.01 },
+                  { key: "inj_ic_a", label: "Injected IC (A sec)", type: "number", min: 0, step: 0.01 },
+                  { key: "meas_ic_a", label: "Metered IC (A)", type: "number", min: 0, step: 0.01 },
+                  { key: "inj_va_v", label: "Injected VA (V sec, if used)", type: "number", min: 0, step: 0.1 },
+                  { key: "meas_va_v", label: "Metered VA (V)", type: "number", min: 0, step: 0.1 },
+                  { key: "inj_vb_v", label: "Injected VB (V sec, if used)", type: "number", min: 0, step: 0.1 },
+                  { key: "meas_vb_v", label: "Metered VB (V)", type: "number", min: 0, step: 0.1 },
+                  { key: "inj_vc_v", label: "Injected VC (V sec, if used)", type: "number", min: 0, step: 0.1 },
+                  { key: "meas_vc_v", label: "Metered VC (V)", type: "number", min: 0, step: 0.1 },
+                  { key: "meas_freq_hz", label: "Metered Frequency (Hz)", type: "number", min: 0, max: 70, step: 0.01 }
+                ] },
+              { key: "element_results", title: "Element Pickups & Timing", fields: [
+                  { key: "pickup_phase_oc_set_a", label: "50/51 Phase OC Pickup — Set (A sec)", type: "number", min: 0, step: 0.01 },
+                  { key: "pickup_phase_oc_meas_a", label: "50/51 Phase OC Pickup — Measured (A sec)", type: "number", min: 0, step: 0.01 },
+                  { key: "time_phase_oc_multx", label: "50/51 Test Multiplier (× pickup)", type: "number", min: 1, step: 0.01 },
+                  { key: "time_phase_oc_ms", label: "50/51 Trip Time (ms)", type: "number", min: 0, step: 1 },
+                  { key: "pickup_gf_set_a", label: "50/51G or 50/51N Pickup — Set (A sec)", type: "number", min: 0, step: 0.01 },
+                  { key: "pickup_gf_meas_a", label: "50/51G or 50/51N Pickup — Measured (A sec)", type: "number", min: 0, step: 0.01 },
+                  { key: "time_gf_multx", label: "GF Test Multiplier (× pickup)", type: "number", min: 1, step: 0.01 },
+                  { key: "time_gf_ms", label: "GF Trip Time (ms)", type: "number", min: 0, step: 1 },
+                  { key: "pickup_unbalance_set_pct", label: "46 Unbalance Pickup — Set (%I2/I1)", type: "number", min: 0, step: 0.1 },
+                  { key: "pickup_unbalance_meas_pct", label: "46 Unbalance Pickup — Measured (%)", type: "number", min: 0, step: 0.1 },
+                  { key: "overload_trip_time_s", label: "49 Overload Trip Time at Test Current (s)", type: "number", min: 0, step: 0.01 }
+                ] }
+            ],
+            comments_field: { key: "measurements_comments", label: "Measurements Comments / Notes", type: "textarea" }
+          },
+          {
+            key: "completion_checklist",
+            title: "Completion Checklist",
+            instructions: "Restore all CT shorting links/test switches. Archive as-left settings and events.",
+            fields: [
+              { key: "assembly_complete", label: "Assembly Complete", type: "select", options: ["Yes","No"], default: "Yes" },
+              { key: "tools_accounted", label: "All Tools & Materials Accounted For", type: "select", options: ["Yes","No"], default: "Yes" },
+              { key: "trip_path_restored", label: "Trip Path Restored to Normal", type: "select", options: ["Yes","No"], default: "Yes" },
+              { key: "settings_archived", label: "As-Left Settings & Events Archived", type: "select", options: ["Yes","No"], default: "Yes" }
+            ],
+            comments_field: { key: "completion_comments", label: "Completion Comments", type: "textarea" }
+          },
+          { key: "final_comments", title: "Final Comments", fields: [ { key: "final_comments_text", label: "Final Comments / Defects & Corrective Actions", type: "textarea" } ] },
+          { key: "sign_off", title: "Sign-Off", fields: [
+              { key: "so_tested_by", label: "Tested By", type: "text", required: true },
+              { key: "so_witnessed_by", label: "Witnessed By", type: "text" },
+              { key: "so_company", label: "Company", type: "text" },
+              { key: "so_signature", label: "Signature (typed)", type: "text" },
+              { key: "so_date", label: "Date", type: "date", default: "today" }
+            ] }
+        ]
+      }
+    };
+
+    // ---------------- Toggle UI ----------------
+    const btnPlan = document.getElementById('btnPlan');
+    const btnForm = document.getElementById('btnForm');
+    const planView = document.getElementById('planView');
+    const formView = document.getElementById('formView');
+    btnPlan.addEventListener('click', () => showView('plan'));
+    btnForm.addEventListener('click', () => showView('form'));
+    function showView(which){
+      if(which==='plan'){ planView.classList.remove('hidden'); formView.classList.add('hidden'); btnPlan.classList.add('toggled'); btnForm.classList.remove('toggled'); }
+      else{ formView.classList.remove('hidden'); planView.classList.add('hidden'); btnForm.classList.add('toggled'); btnPlan.classList.remove('toggled'); }
+    }
+
+    // ---------------- Meta & Markdown ----------------
+    document.getElementById('specMeta').textContent = SPEC.form_spec.title;
+    document.getElementById('specTitle').textContent = SPEC.form_spec.title;
+    document.getElementById('specId').textContent = 'spec_id: ' + SPEC.form_spec.spec_id;
+    document.getElementById('specVer').textContent = 'version: ' + SPEC.form_spec.version;
+    document.getElementById('markdown').innerHTML = marked.parse(SPEC.test_plan_markdown);
+
+    // ---------------- Form Renderer ----------------
+    const root = document.getElementById('formRoot');
+    const statusEnum = SPEC.form_spec.status_enum || ["OK","N-OK","C","NA"];
+    const state = buildInitialState(SPEC.form_spec);
+
+    SPEC.form_spec.sections.forEach(section => {
+      const secEl = document.createElement('div'); secEl.className='section'; secEl.dataset.sectionKey=section.key;
+      const header = document.createElement('div'); header.className='section-header';
+      header.innerHTML = `<div class="section-title">${escapeHTML(section.title)}</div>` + (section.instructions ? ` <div class="section-desc">${escapeHTML(section.instructions)}</div>` : '');
+      secEl.appendChild(header);
+
+      // Simple fields
+      if(section.fields && section.fields.length){
+        const grid = document.createElement('div'); grid.className='grid';
+        section.fields.forEach(f => grid.appendChild(renderField('field', section.key, f, state)));
+        secEl.appendChild(grid);
+      }
+
+      // Status items
+      if(section.items && section.items.length){
+        const table = document.createElement('table');
+        const thead = document.createElement('thead'); const trh = document.createElement('tr');
+        const th0 = document.createElement('th'); th0.textContent='Item'; trh.appendChild(th0);
+        statusEnum.forEach(s => { const th = document.createElement('th'); th.textContent=s; th.className='center'; trh.appendChild(th); });
+        thead.appendChild(trh); table.appendChild(thead);
+        const tbody = document.createElement('tbody');
+        section.items.forEach(it => {
+          const tr = document.createElement('tr');
+          const tdLab = document.createElement('td'); tdLab.textContent = it.label; tr.appendChild(tdLab);
+          statusEnum.forEach(s => {
+            const td = document.createElement('td'); td.className='center';
+            const id = `${section.key}__${it.key}__${s}`;
+            const input = document.createElement('input'); input.type='radio'; input.name=`${section.key}__${it.key}`; input.value=s; input.id=id;
+            input.addEventListener('change', () => { state[section.key].items[it.key] = s; });
+            td.appendChild(input); tr.appendChild(td);
+          });
+          tbody.appendChild(tr);
+        });
+        table.appendChild(tbody); secEl.appendChild(table);
+      }
+
+      // Extra fields
+      if(section.extra_fields && section.extra_fields.length){
+        const grid = document.createElement('div'); grid.className='grid';
+        section.extra_fields.forEach(f => grid.appendChild(renderField('extra', section.key, f, state)));
+        secEl.appendChild(grid);
+      }
+
+      // Groups
+      if(section.groups && section.groups.length){
+        section.groups.forEach(g => {
+          const grp = document.createElement('div'); grp.className='group'; grp.dataset.groupKey=g.key;
+          const title = document.createElement('div'); title.className='group-title'; title.textContent = g.title; grp.appendChild(title);
+          const grid = document.createElement('div'); grid.className='grid';
+          g.fields.forEach(f => grid.appendChild(renderField('group', section.key, f, state, g.key)));
+          grp.appendChild(grid); secEl.appendChild(grp);
+        });
+      }
+
+      // Comments
+      if(section.comments_field){
+        const wrap = document.createElement('div'); wrap.className='field';
+        const lbl = document.createElement('label'); lbl.className='label'; lbl.textContent = section.comments_field.label; wrap.appendChild(lbl);
+        const ta = document.createElement('textarea'); ta.addEventListener('input', () => { state[section.key].comments = ta.value; });
+        wrap.appendChild(ta); secEl.appendChild(wrap);
+      }
+
+      root.appendChild(secEl);
+    });
+
+    // ---------------- Helpers ----------------
+    function renderField(scope, sectionKey, field, stateObj, groupKey){
+      const wrap = document.createElement('div'); wrap.className='field';
+      const id = `${sectionKey}__${groupKey?groupKey+'__':''}${field.key}`;
+      const lbl = document.createElement('label'); lbl.className='label'; lbl.setAttribute('for', id); lbl.textContent = field.label; wrap.appendChild(lbl);
+
+      const setVal = (val) => {
+        if(scope==='field') stateObj[sectionKey].fields[field.key] = val;
+        else if(scope==='extra') stateObj[sectionKey].extra_fields[field.key] = val;
+        else if(scope==='group') { stateObj[sectionKey].groups[groupKey] = stateObj[sectionKey].groups[groupKey] || {}; stateObj[sectionKey].groups[groupKey][field.key] = val; }
+      };
+
+      const def = defaultFor(field); setVal(def);
+
+      if(field.type==='textarea'){
+        const ta = document.createElement('textarea'); ta.className='input'; ta.id=id; ta.value = def || '';
+        ta.addEventListener('input', () => setVal(ta.value)); wrap.appendChild(ta); return wrap;
+      }
+      if(field.type==='select'){
+        const sel = document.createElement('select'); sel.className='input'; sel.id=id;
+        const opt0 = document.createElement('option'); opt0.value=''; opt0.textContent='Select…'; opt0.disabled=true; sel.appendChild(opt0);
+        (field.options||[]).forEach(o => { const op=document.createElement('option'); op.value=o; op.textContent=o; sel.appendChild(op); });
+        sel.value = def || '';
+        sel.addEventListener('change', () => setVal(sel.value)); wrap.appendChild(sel); return wrap;
+      }
+      if(field.type==='date'){
+        const inp = document.createElement('input'); inp.type='date'; inp.className='input'; inp.id=id; inp.value = def || '';
+        inp.addEventListener('input', () => setVal(inp.value)); wrap.appendChild(inp); return wrap;
+      }
+      if(field.type==='number'){
+        const inp = document.createElement('input'); inp.type='number'; inp.className='input'; inp.id=id; inp.value = (def ?? '') + '';
+        if(field.min!==undefined) inp.min = field.min; if(field.max!==undefined) inp.max = field.max; if(field.step!==undefined) inp.step = field.step;
+        inp.addEventListener('input', () => setVal(inp.value === '' ? '' : Number(inp.value))); wrap.appendChild(inp); return wrap;
+      }
+      const inp = document.createElement('input'); inp.type='text'; inp.className='input'; inp.id=id; inp.value = def ?? '';
+      inp.addEventListener('input', () => setVal(inp.value)); wrap.appendChild(inp); return wrap;
+    }
+
+    function defaultFor(field){
+      if(field.type==='date' && field.default==='today') return todayISO();
+      return field.default !== undefined ? field.default : '';
+    }
+
+    function todayISO(){
+      const d = new Date(); const tz = d.getTimezoneOffset(); const local = new Date(d.getTime() - tz*60000); return local.toISOString().slice(0,10);
+    }
+
+    function escapeHTML(s){ return s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+
+    function buildInitialState(formSpec){
+      const state = {}; (formSpec.sections||[]).forEach(s => {
+        const sec = { fields:{}, items:{}, groups:{}, extra_fields:{}, comments:"" };
+        (s.fields||[]).forEach(f => { sec.fields[f.key] = (f.type==='date' && f.default==='today') ? todayISO() : (f.default!==undefined ? f.default : ''); });
+        (s.items||[]).forEach(it => { sec.items[it.key] = ""; });
+        (s.extra_fields||[]).forEach(f => { sec.extra_fields[f.key] = (f.type==='date' && f.default==='today') ? todayISO() : (f.default!==undefined ? f.default : ''); });
+        (s.groups||[]).forEach(g => { const gobj={}; (g.fields||[]).forEach(f => { gobj[f.key] = (f.type==='date' && f.default==='today') ? todayISO() : (f.default!==undefined ? f.default : ''); }); sec.groups[g.key]=gobj; });
+        if(s.comments_field) sec.comments=""; state[s.key]=sec; });
+      return state;
+    }
+
+    // ---------------- Export filled JSON ----------------
+    document.getElementById('exportBtn').addEventListener('click', () => {
+      const out = { spec_meta: { spec_id: SPEC.form_spec.spec_id, title: SPEC.form_spec.title, version: SPEC.form_spec.version, exported_at: new Date().toISOString() }, data: state };
+      const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href=url; a.download = `${SPEC.form_spec.spec_id}-filled.json`; a.click(); URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
