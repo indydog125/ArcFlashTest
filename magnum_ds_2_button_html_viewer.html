@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Magnum DS Spec — Test Plan / Form Viewer</title>
+  <style>
+    :root {
+      --bg: #0b0c0f;
+      --panel: #111318;
+      --muted: #a0a4ac;
+      --text: #e8e9ec;
+      --brand: #3b82f6;
+      --ok: #10b981; --warn: #f59e0b; --bad: #ef4444;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 14px/1.5 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji"; background: var(--bg); color: var(--text); }
+    a { color: var(--brand); }
+    .topbar { position: sticky; top: 0; z-index: 10; backdrop-filter: blur(6px); background: rgba(17,19,24,0.8); border-bottom: 1px solid #1e2430; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 16px; }
+    .row { display: flex; align-items: center; gap: 10px; }
+    .spacer { flex: 1; }
+    .btn { appearance: none; border: 1px solid #2a3242; background: #161a22; color: var(--text); padding: 10px 14px; border-radius: 12px; cursor: pointer; }
+    .btn:hover { background: #1a1f29; }
+    .btn.primary { border-color: transparent; background: var(--brand); color: white; }
+    .btn.primary:hover { filter: brightness(0.95); }
+    .btn.toggled { background: #1f2633; border-color: #3a4458; }
+
+    .panel { background: var(--panel); border: 1px solid #1e2430; border-radius: 16px; padding: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+    .hidden { display: none; }
+
+    h1,h2,h3 { line-height: 1.2; }
+    h1 { font-size: 28px; margin: 8px 0 16px; }
+    h2 { font-size: 20px; margin: 20px 0 8px; border-bottom: 1px solid #1f2430; padding-bottom: 6px; }
+    h3 { font-size: 16px; margin: 16px 0 6px; }
+    p { margin: 10px 0; }
+    code, pre { background: #0f1217; border: 1px solid #1f2633; border-radius: 8px; padding: 2px 6px; }
+    pre { padding: 12px; overflow: auto; }
+    ul { margin: 8px 0 8px 22px; }
+
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .label { font-size: 12px; color: var(--muted); }
+    .input, select, textarea { background: #0f1217; color: var(--text); border: 1px solid #293042; border-radius: 10px; padding: 9px 10px; }
+    textarea { min-height: 90px; }
+
+    .section { margin-bottom: 18px; }
+    .section-header { display:flex; align-items: baseline; gap: 10px; }
+    .section-title { font-weight: 700; font-size: 16px; }
+    .section-desc { color: var(--muted); font-size: 12px; }
+
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 8px; border-top: 1px solid #1e2430; }
+    th { text-align: left; font-weight: 600; color: var(--muted); }
+    td.center { text-align: center; }
+
+    .group { border: 1px dashed #2f3747; border-radius: 14px; padding: 12px; margin-top: 6px; }
+    .group-title { font-weight: 600; margin-bottom: 8px; }
+
+    .footer { color: var(--muted); font-size: 12px; margin: 20px 0 40px; }
+    .pill { padding: 2px 8px; font-size: 11px; border:1px solid #2a3242; border-radius: 999px; color: var(--muted); }
+    .meta { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+  <div class="topbar">
+    <div class="container">
+      <div class="row">
+        <div style="font-weight:700">Magnum DS Spec Viewer</div>
+        <div class="pill" id="specMeta">loading…</div>
+        <div class="spacer"></div>
+        <button id="btnPlan" class="btn toggled">Test Plan</button>
+        <button id="btnForm" class="btn">Show Form</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="margin-top: 16px;">
+    <div id="planView" class="panel">
+      <div id="markdown"></div>
+    </div>
+
+    <div id="formView" class="panel hidden">
+      <div class="meta" style="margin-bottom:10px">
+        <div class="pill" id="specTitle"></div>
+        <div class="pill" id="specId"></div>
+        <div class="pill" id="specVer"></div>
+        <div class="spacer"></div>
+        <button id="exportBtn" class="btn primary">Export Filled JSON</button>
+      </div>
+      <div id="formRoot"></div>
+    </div>
+
+    <div class="footer">Rendered locally from embedded DECK spec. Follow site PPE/LOTO & arc‑flash procedures.</div>
+  </div>
+
+  <script>
+    // --- Embedded SPEC (from our Magnum DS deliverable) ---
+    const SPEC = {
+      test_plan_markdown: `# Maintenance & Test Plan — Eaton Magnum DS Low-Voltage Power Circuit Breaker
+
+## 1) Overview & Scope
+This procedure covers shutdown/turnaround maintenance and testing for **Eaton Magnum DS** drawout low-voltage power circuit breakers (800–6000 A frames, 50/60 Hz). It guides inspection, functional checks (manual/electric close & trip, anti-pump, trip-free, aux contacts), interlocks and shutters, optional **Automatic Racking Mechanism (ARM)** checks, and electrical measurements (contact resistance, insulation resistance, optional overpotential/hipot, operating times). Record all results on the paired DECK test sheet.
+
+> **Applicability note:** Magnum DS is an **air circuit breaker**. "Vacuum Integrity" tests are **not applicable** and should be marked **NA** unless a special accessory requires it.
+
+## 2) Safety, Hazards & PPE
+- **LOTO:** Apply facility lockout/tagout to all sources: primary conductors, control power (AC/DC), closing/tripping energy, and any auto-racking power. 
+- **Absence of Voltage:** Verify with a properly rated meter at the **cell stabs** and **control circuits** before touching. 
+- **Arc-Flash:** Establish arc-flash boundary; wear PPE per study/NFPA 70E (arc-rated clothing, gloves, face shield/hood, hearing protection). Use remote operations where available. 
+- **Stored Energy:** Discharge closing and opening springs before removal or handling. Treat charged mechanisms as **energized**.
+- **Mechanical Hazards:** Pinch/crush points during racking; keep hands clear. Use lifting aids for large frames.
+
+## 3) Prerequisites
+- **Documents:** One-line, control schematics, OEM manual, prior test history/baseline. 
+- **Tools (calibrated):** Micro-ohmmeter (≥100 A), insulation tester (typically 1 kV DC), AC dielectric/hipot set (if performed), event timer/timing kit, variable DC supply for coil minimum-voltage checks (if performed), digital multimeter, torque wrench, cleaning materials (lint-free wipes, vacuum), feeler gauges as needed. 
+- **Environment:** Clean, dry; humidity controlled for IR/hipot. 
+- **Breaker Condition:** Withdrawn to a safe work area or test bench; **springs discharged**; secondary disconnected. 
+
+## 4) Mechanical Inspection
+1. Verify nameplate matches asset record (rating, voltage, interrupting class). 
+2. Inspect front cover, escutcheon, and mechanism compartment.
+3. Check **inter-phase barriers** and arc chutes for cracks/distress. 
+4. Inspect **primary disconnect fingers/bushings**, line/load stabs for wear/burns; finger springs even and adequate force. 
+5. Check **supports & insulators**; no tracking. 
+6. Examine **secondary disconnect plug**, keys, and alignment; pins not bent. 
+7. Verify **ground shoe** contact integrity. 
+8. Inspect **auxiliary contacts** block; tight hardware and correct labeling. 
+9. General **cleanliness**; remove dust/debris. 
+10. Look for **evidence of corona/partial discharge** (rare at LV, but note tracking/residue). 
+11. Check for **rust/corrosion**; treat as per facility practice. 
+12. **Mechanism condition:** Worn links, broken springs, loose fasteners. 
+13. **Lubrication:** Clean and apply OEM-approved lubricant sparingly; do **not** over-lubricate contact/finger interfaces.
+
+## 5) Functional Tests
+> **Setup:** Connect control power on a test bench or in the cell **TEST** position with secondary engaged. Keep breaker unloaded. Confirm springs discharged before each configuration change.
+
+1. **Spring Charging**  
+   - Verify **motor charging** to charged indication; motor stops automatically.  
+   - Verify **manual charging** handle operates smoothly.  
+   - Acceptance: Charges within normal time; motor does not stall or hunt.
+
+2. **Manual Close / Manual Trip**  
+   - With springs charged, **manual close**. Verify main contacts close, closing latch holds, and **operations counter** advances.  
+   - **Manual trip** and verify full opening.
+
+3. **Electric Close / Electric Trip**  
+   - Energize **close coil** at rated control voltage; verify close.  
+   - Energize **trip (shunt trip)**; verify open.  
+   - Acceptance: Positive operation without hesitation; coil inrush audible but brief.
+
+4. **Anti-Pump Check**  
+   - Hold close command; issue trip then release close. Breaker must **not** reclose until close signal is removed and re-applied.
+
+5. **Trip-Free Check**  
+   - Apply simultaneous close and trip: breaker must **not latch closed** (opens immediately). 
+
+6. **Auxiliary Contacts**  
+   - Verify 52a/52b change state correctly; confirm wiring vs drawings.
+
+7. **Operations Counter Advance**  
+   - Confirm increments on each successful close.
+
+8. **Coil Minimum-Voltage (if performed)**  
+   - With a variable DC/AC supply, slowly reduce voltage to determine **close coil pickup** and **trip coil pickup**.  
+   - Practical guidance: Close coil typically picks up at ~70–85% of nominal; trip coil at ~55–70%. Record values and compare to previous/baseline.
+
+## 6) Interlocks, Shutters & Racking
+1. **Racking Interlocks**  
+   - Verify **cannot rack** with breaker **closed**; verify **cannot close** while between defined positions. 
+2. **Shutters**  
+   - In cell TEST/DISCONNECTED positions, operate racking to confirm **shutters open/close** fully and evenly; manual shutter tool (if applicable) functions. 
+3. **Door-Closed Racking Logic** (switchgear dependent)  
+   - If equipped, verify door-closed racking system functions and stops on obstructions. 
+4. **Truck Position Switches**  
+   - Verify position indication (CONNECTED / TEST / DISCONNECTED / WITHDRAWN) and any permissives interlocked to these states.
+
+### Automatic Racking Mechanism (ARM) — if applicable
+- Inspect device mounting and torque. 
+- Perform **rack-out** and **rack-in** cycles under supervision; stop function works; auto-return/limit switches operate; no binding. 
+- Keep personnel outside arc-flash boundary during automatic motion.
+
+## 7) Electrical Measurements
+> **General:** Perform after cleaning and drying. Disconnect surge suppressors/electronics as needed for IR/hipot. Temperature-correct or trend to previous values when possible.
+
+1. **Contact Resistance (per phase, closed breaker)**  
+   - Test current: ≥100 A DC recommended.  
+   - Measure **Phase A/B/C** in **µΩ**.  
+   - Acceptance: Values should be **low, stable**, and **balanced** between phases. Investigate any phase \n     >25–50% higher than the lowest or any absolute rise vs baseline beyond site limits.
+
+2. **Insulation Resistance (Megger)**  
+   - Typical test: **1.0 kV DC**, 60 s.  
+   - Measure: **A → (B+C+G)**, **B → (C+A+G)**, **C → (A+B+G)** in **MΩ** with breaker **open** and shutters closed/isolated.  
+   - Acceptance: Readings generally **>100 MΩ** for clean, dry LV breakers; values should rise with time (polarization). Dry/clean if low; re-test.
+
+3. **Overpotential / Hipot (optional field test)**  
+   - If performed per site policy/OEM, apply appropriate **AC test potential** (e.g., ~2 kV AC for 600 V class) for **60 s** across each phase to ground/other phases with breaker open.  
+   - Monitor **leakage (mA)**; acceptance is **no breakdown/flashover**, **stable leakage** not trending upward.
+
+4. **Vacuum Integrity**  
+   - **Not applicable** to Magnum DS (air breaker). Mark **NA**.
+
+5. **Operating Times (if performed)**  
+   - Using a timer or secondary injection/timing kit: record **Open (ms)** and **Close (ms)**.  
+   - Practical ranges (for reference only): open often **30–60 ms**, close often **50–100 ms**. Compare with OEM data and prior history.
+
+## 8) Completion & Return to Service
+1. Reassemble covers; verify all hardware torqued. 
+2. Confirm tools/materials accounted for; area clean. 
+3. In the cell, verify secondary plug fully seated; rack to **TEST**; perform electric close/trip and aux checks. 
+4. Leave breaker **OPEN** with **springs discharged** unless instructed otherwise. 
+5. Remove LOTO only per permit/energization plan. 
+6. Update asset history with results, variances, and corrective actions.
+
+## 9) References (generic)
+- IEEE C37 series for LV power circuit breakers (e.g., C37.13, C37.16, C37.50). 
+- IEC 60947-2 (LV circuit breakers). 
+- NFPA 70E (electrical safety in the workplace). 
+
+---
+**Technician tip:** For contact resistance on drawout ACBs, gently exercise the breaker (3–5 operations) before measuring to stabilize interfaces.
+`,
+      form_spec: {
+        spec_id: "magnum-ds-shutdown-maint-v1",
+        version: "2025-08-18T00:00:00-06:00",
+        title: "Eaton Magnum DS — Shutdown/Turnaround Maintenance Test Sheet",
+        status_enum: ["OK", "N-OK", "C", "NA"],
+        sections: [
+          {
+            key: "breaker_identification",
+            title: "Breaker Identification",
+            instructions: "Record asset and job identifiers. Use equipment tags from the one-line. Date defaults to today.",
+            fields: [
+              { key: "equip_no", label: "Equipment No.", type: "text", required: true },
+              { key: "date", label: "Date", type: "date", default: "today", required: true },
+              { key: "substation_no", label: "Substation / Lineup", type: "text" },
+              { key: "work_order_no", label: "Work Order / WO#", type: "text" },
+              { key: "tested_by", label: "Tested By", type: "text", required: true },
+              { key: "witnessed_by", label: "Witnessed By", type: "text" }
+            ],
+            comments_field: { key: "breaker_identification_comments", label: "Comments", type: "textarea" }
+          },
+          {
+            key: "nameplate_data",
+            title: "Nameplate Data",
+            instructions: "Capture core ratings from the nameplate and control schematic.",
+            fields: [
+              { key: "manufacturer", label: "Manufacturer", type: "text", default: "Eaton" },
+              { key: "type", label: "Type", type: "text", default: "Magnum DS" },
+              { key: "model_no", label: "Model No.", type: "text" },
+              { key: "serial_no", label: "Serial No.", type: "text" },
+              { key: "rated_volts_kv", label: "Rated Voltage (kV)", type: "number", min: 0, max: 1, step: 0.001, default: 0.6 },
+              { key: "rated_amps_a", label: "Rated Current (A)", type: "number", min: 0, step: 1 },
+              { key: "int_cap_ka", label: "Interrupting Capacity (kA)", type: "number", min: 0, step: 1 },
+              { key: "bil_kv", label: "BIL (kV)", type: "number", min: 0, step: 1 },
+              { key: "frequency_hz", label: "Frequency (Hz)", type: "number", min: 0, max: 60, step: 1, default: 60 },
+              { key: "close_voltage", label: "Close Coil Voltage (V)", type: "number", min: 0, step: 1, default: 125 },
+              { key: "trip_voltage", label: "Trip/Shunt Trip Voltage (V)", type: "number", min: 0, step: 1, default: 125 },
+              { key: "operation_counter_as_found", label: "Operation Counter — As Found", type: "number", min: 0, step: 1 },
+              { key: "operation_counter_as_left", label: "Operation Counter — As Left", type: "number", min: 0, step: 1 }
+            ],
+            comments_field: { key: "nameplate_data_comments", label: "Comments", type: "textarea" }
+          },
+          {
+            key: "inspections",
+            title: "Inspections (Visual & Mechanical)",
+            instructions: "Breaker withdrawn, springs discharged. Clean before measurement. Note any defects and corrective actions.",
+            items: [
+              { key: "front_cover", label: "Front cover / escutcheon condition" },
+              { key: "interphase_barriers", label: "Inter-phase barriers & arc chutes" },
+              { key: "primary_disconnect_fingers_bushings", label: "Primary disconnect fingers & bushings" },
+              { key: "supports_insulators", label: "Supports & insulators" },
+              { key: "secondary_plug", label: "Secondary plug / alignment" },
+              { key: "ground_shoe", label: "Ground shoe contact" },
+              { key: "aux_contacts", label: "Auxiliary contacts block" },
+              { key: "cleanliness", label: "Cleanliness (dust/debris removed)" },
+              { key: "evidence_of_corona", label: "Evidence of corona/tracking" },
+              { key: "rust_corrosion", label: "Rust/corrosion" },
+              { key: "mechanism_general_condition", label: "Mechanism general condition" },
+              { key: "lubrication_completed", label: "Lubrication completed (OEM approved)" }
+            ],
+            comments_field: { key: "inspections_comments", label: "Inspection Comments / Defects Found", type: "textarea" }
+          },
+          {
+            key: "functional_tests",
+            title: "Functional Tests",
+            instructions: "Engage secondary in TEST or on bench kit. Verify LOTO on primary. Record status for each function.",
+            items: [
+              { key: "spring_charging", label: "Spring charging (motor/manual)" },
+              { key: "electric_close", label: "Electric close" },
+              { key: "manual_close", label: "Manual close" },
+              { key: "electric_trip", label: "Electric trip (shunt trip)" },
+              { key: "manual_trip", label: "Manual trip" },
+              { key: "anti_pump", label: "Anti-pump logic" },
+              { key: "trip_free", label: "Trip-free operation" },
+              { key: "ops_counter_advance", label: "Operations counter advances" },
+              { key: "automatic_racking", label: "Automatic racking (ARM) — in/out & stop (if applicable)" },
+              { key: "undervoltage_trip", label: "Undervoltage trip (UVR) — (if equipped)" },
+              { key: "secondary_shunt_trip", label: "Secondary shunt trip — (if equipped)" },
+              { key: "aux_contacts_functional", label: "Auxiliary contacts functional (52a/52b)" }
+            ],
+            extra_fields: [
+              { key: "control_power", label: "Control Power (V & source)", type: "text", default: "125 VDC" },
+              { key: "close_coil_min_voltage_test", label: "Close Coil Min-Voltage Test Performed", type: "select", options: ["Yes", "No"], default: "No" },
+              { key: "trip_coil_min_voltage_test", label: "Trip Coil Min-Voltage Test Performed", type: "select", options: ["Yes", "No"], default: "No" }
+            ],
+            comments_field: { key: "functional_tests_comments", label: "Functional Test Comments", type: "textarea" }
+          },
+          {
+            key: "interlocks_shutters_racking",
+            title: "Interlocks, Shutters & Racking",
+            instructions: "Breaker in TEST/DISCONNECTED position as required. Verify each interlock prevents unsafe states.",
+            items: [
+              { key: "racking_with_breaker_closed_prevented", label: "Racking prevented when breaker is closed" },
+              { key: "closing_between_positions_prevented", label: "Closing prevented between racking positions" },
+              { key: "door_closed_racking_logic", label: "Door-closed racking logic (if applicable)" },
+              { key: "truck_position_switches", label: "Truck position switches indicate correctly (CONNECTED/TEST/DISCONNECTED)" },
+              { key: "shutters_operation", label: "Shutters open/close fully and evenly" },
+              { key: "spring_charged_racking_interlock", label: "Interlock behavior with springs charged (no unsafe condition)" }
+            ],
+            comments_field: { key: "interlocks_comments", label: "Interlocks/Shutters/Racking Comments", type: "textarea" }
+          },
+          {
+            key: "measurements",
+            title: "Measurements",
+            instructions: "Perform after cleaning and drying. Disconnect sensitive electronics for IR/hipot as needed. Record temperature when available.",
+            groups: [
+              {
+                key: "contact_resistance",
+                title: "Contact Resistance",
+                fields: [
+                  { key: "cr_test_current_a", label: "Test Current (A)", type: "number", min: 50, max: 600, step: 10, default: 100 },
+                  { key: "cr_phase_a_uohm", label: "Phase A (µΩ)", type: "number", min: 0, step: 1 },
+                  { key: "cr_phase_b_uohm", label: "Phase B (µΩ)", type: "number", min: 0, step: 1 },
+                  { key: "cr_phase_c_uohm", label: "Phase C (µΩ)", type: "number", min: 0, step: 1 },
+                  { key: "cr_ambient_temp_c", label: "Ambient Temp (°C) — optional", type: "number", min: -20, max: 60, step: 0.5 }
+                ]
+              },
+              {
+                key: "insulation_resistance",
+                title: "Insulation Resistance (Megger)",
+                fields: [
+                  { key: "ir_test_voltage_kv_dc", label: "Test Voltage (kV DC)", type: "number", min: 0.25, max: 5, step: 0.01, default: 1.0 },
+                  { key: "ir_duration_s", label: "Duration (s)", type: "number", min: 10, max: 600, step: 1, default: 60 },
+                  { key: "ir_a_to_bcg_mohm", label: "A → (B+C+G) (MΩ)", type: "number", min: 0, step: 1 },
+                  { key: "ir_b_to_cag_mohm", label: "B → (C+A+G) (MΩ)", type: "number", min: 0, step: 1 },
+                  { key: "ir_c_to_abg_mohm", label: "C → (A+B+G) (MΩ)", type: "number", min: 0, step: 1 }
+                ]
+              },
+              {
+                key: "hipot_overpotential",
+                title: "Hipot (Overpotential) — if performed",
+                fields: [
+                  { key: "hipot_test_potential_kv", label: "Test Potential (kV AC)", type: "number", min: 0.5, max: 5, step: 0.1, default: 2.0 },
+                  { key: "hipot_duration_s", label: "Duration (s)", type: "number", min: 10, max: 120, step: 1, default: 60 },
+                  { key: "hipot_leakage_a_ma", label: "Leakage (mA) — Phase A", type: "number", min: 0, step: 0.1 },
+                  { key: "hipot_leakage_b_ma", label: "Leakage (mA) — Phase B", type: "number", min: 0, step: 0.1 },
+                  { key: "hipot_leakage_c_ma", label: "Leakage (mA) — Phase C", type: "number", min: 0, step: 0.1 },
+                  { key: "hipot_pass_a", label: "Result — Phase A", type: "select", options: ["Pass", "Fail"] },
+                  { key: "hipot_pass_b", label: "Result — Phase B", type: "select", options: ["Pass", "Fail"] },
+                  { key: "hipot_pass_c", label: "Result — Phase C", type: "select", options: ["Pass", "Fail"] }
+                ]
+              },
+              {
+                key: "vacuum_integrity",
+                title: "Vacuum Integrity — not applicable to air CB (mark NA)",
+                fields: [
+                  { key: "vac_test_potential_kv_ac", label: "Test Potential (kV AC)", type: "number", min: 0, max: 30, step: 0.1 },
+                  { key: "vac_duration_s", label: "Duration (s)", type: "number", min: 0, max: 120, step: 1 },
+                  { key: "vac_pass_a", label: "Result — Phase A", type: "select", options: ["Pass", "Fail"] },
+                  { key: "vac_pass_b", label: "Result — Phase B", type: "select", options: ["Pass", "Fail"] },
+                  { key: "vac_pass_c", label: "Result — Phase C", type: "select", options: ["Pass", "Fail"] }
+                ]
+              },
+              {
+                key: "operating_times",
+                title: "Operating Times — if performed",
+                fields: [
+                  { key: "ot_open_ms", label: "Open Time (ms)", type: "number", min: 0, max: 500, step: 1 },
+                  { key: "ot_close_ms", label: "Close Time (ms)", type: "number", min: 0, max: 500, step: 1 },
+                  { key: "ot_method", label: "Timing Method / Instrument", type: "text" }
+                ]
+              }
+            ],
+            comments_field: { key: "measurements_comments", label: "Measurements Comments / Notes", type: "textarea" }
+          },
+          {
+            key: "completion_checklist",
+            title: "Completion Checklist",
+            instructions: "Verify all items prior to returning the breaker to service.",
+            fields: [
+              { key: "assembly_complete", label: "Assembly Complete", type: "select", options: ["Yes", "No"], default: "Yes" },
+              { key: "tools_accounted", label: "All Tools & Materials Accounted For", type: "select", options: ["Yes", "No"], default: "Yes" },
+              { key: "left_open_springs_discharged", label: "Left OPEN & Springs Discharged", type: "select", options: ["Yes", "No"], default: "Yes" }
+            ],
+            comments_field: { key: "completion_comments", label: "Completion Comments", type: "textarea" }
+          },
+          {
+            key: "final_comments",
+            title: "Final Comments",
+            fields: [
+              { key: "final_comments_text", label: "Final Comments / Defects & Corrective Actions", type: "textarea" }
+            ]
+          },
+          {
+            key: "sign_off",
+            title: "Sign-Off",
+            fields: [
+              { key: "so_tested_by", label: "Tested By", type: "text", required: true },
+              { key: "so_witnessed_by", label: "Witnessed By", type: "text" },
+              { key: "so_company", label: "Company", type: "text" },
+              { key: "so_signature", label: "Signature (typed)", type: "text" },
+              { key: "so_date", label: "Date", type: "date", default: "today" }
+            ]
+          }
+        ]
+      }
+    };
+
+    // --- UI wiring ---
+    const btnPlan = document.getElementById('btnPlan');
+    const btnForm = document.getElementById('btnForm');
+    const planView = document.getElementById('planView');
+    const formView = document.getElementById('formView');
+
+    btnPlan.addEventListener('click', () => showView('plan'));
+    btnForm.addEventListener('click', () => showView('form'));
+
+    function showView(which) {
+      if (which === 'plan') {
+        planView.classList.remove('hidden');
+        formView.classList.add('hidden');
+        btnPlan.classList.add('toggled');
+        btnForm.classList.remove('toggled');
+      } else {
+        formView.classList.remove('hidden');
+        planView.classList.add('hidden');
+        btnForm.classList.add('toggled');
+        btnPlan.classList.remove('toggled');
+      }
+    }
+
+    // Populate meta
+    document.getElementById('specMeta').textContent = SPEC.form_spec.title;
+    document.getElementById('specTitle').textContent = SPEC.form_spec.title;
+    document.getElementById('specId').textContent = 'spec_id: ' + SPEC.form_spec.spec_id;
+    document.getElementById('specVer').textContent = 'version: ' + SPEC.form_spec.version;
+
+    // Render markdown
+    document.getElementById('markdown').innerHTML = marked.parse(SPEC.test_plan_markdown);
+
+    // Render form
+    const root = document.getElementById('formRoot');
+    const statusEnum = SPEC.form_spec.status_enum || ["OK","N-OK","C","NA"];
+
+    const state = buildInitialState(SPEC.form_spec);
+
+    SPEC.form_spec.sections.forEach(section => {
+      const secEl = document.createElement('div');
+      secEl.className = 'section';
+      secEl.dataset.sectionKey = section.key;
+      
+      const header = document.createElement('div');
+      header.className = 'section-header';
+      header.innerHTML = `<div class="section-title">${escapeHTML(section.title)}</div>` + (section.instructions ? `<div class="section-desc">${escapeHTML(section.instructions)}</div>` : '');
+      secEl.appendChild(header);
+
+      // Fields
+      if (section.fields && section.fields.length) {
+        const grid = document.createElement('div');
+        grid.className = 'grid';
+        section.fields.forEach(f => grid.appendChild(renderField('field', section.key, f, state)));
+        secEl.appendChild(grid);
+      }
+
+      // Status items
+      if (section.items && section.items.length) {
+        const table = document.createElement('table');
+        const thead = document.createElement('thead');
+        const trh = document.createElement('tr');
+        const thItem = document.createElement('th'); thItem.textContent = 'Item'; trh.appendChild(thItem);
+        statusEnum.forEach(s => { const th = document.createElement('th'); th.textContent = s; th.className='center'; trh.appendChild(th); });
+        thead.appendChild(trh); table.appendChild(thead);
+        const tbody = document.createElement('tbody');
+        section.items.forEach(it => {
+          const tr = document.createElement('tr');
+          const td0 = document.createElement('td'); td0.textContent = it.label; tr.appendChild(td0);
+          statusEnum.forEach(s => {
+            const td = document.createElement('td'); td.className='center';
+            const id = `${section.key}__${it.key}__${s}`;
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = `${section.key}__${it.key}`;
+            input.value = s;
+            input.id = id;
+            input.checked = false;
+            input.addEventListener('change', () => {
+              state[section.key].items[it.key] = s;
+            });
+            td.appendChild(input);
+            tr.appendChild(td);
+          });
+          tbody.appendChild(tr);
+        });
+        table.appendChild(tbody);
+        secEl.appendChild(table);
+      }
+
+      // Extra fields
+      if (section.extra_fields && section.extra_fields.length) {
+        const grid = document.createElement('div');
+        grid.className = 'grid';
+        section.extra_fields.forEach(f => grid.appendChild(renderField('extra', section.key, f, state)));
+        secEl.appendChild(grid);
+      }
+
+      // Groups
+      if (section.groups && section.groups.length) {
+        section.groups.forEach(g => {
+          const grp = document.createElement('div');
+          grp.className = 'group';
+          grp.dataset.groupKey = g.key;
+          const title = document.createElement('div'); title.className = 'group-title'; title.textContent = g.title; grp.appendChild(title);
+          const grid = document.createElement('div'); grid.className = 'grid';
+          g.fields.forEach(f => grid.appendChild(renderField('group', section.key, f, state, g.key)));
+          grp.appendChild(grid);
+          secEl.appendChild(grp);
+        });
+      }
+
+      // Comments
+      if (section.comments_field) {
+        const wrap = document.createElement('div'); wrap.className = 'field';
+        const lbl = document.createElement('label'); lbl.className='label'; lbl.textContent = section.comments_field.label; wrap.appendChild(lbl);
+        const ta = document.createElement('textarea');
+        ta.dataset.role = 'comments';
+        ta.addEventListener('input', () => { state[section.key].comments = ta.value; });
+        wrap.appendChild(ta); secEl.appendChild(wrap);
+      }
+
+      root.appendChild(secEl);
+    });
+
+    function renderField(scope, sectionKey, field, stateObj, groupKey) {
+      const wrap = document.createElement('div'); wrap.className='field';
+      const id = `${sectionKey}__${groupKey?groupKey+'__':''}${field.key}`;
+      const lbl = document.createElement('label'); lbl.className='label'; lbl.setAttribute('for', id); lbl.textContent = field.label; wrap.appendChild(lbl);
+
+      const setVal = (val) => {
+        if (scope === 'field') stateObj[sectionKey].fields[field.key] = val;
+        else if (scope === 'extra') stateObj[sectionKey].extra_fields[field.key] = val;
+        else if (scope === 'group') {
+          stateObj[sectionKey].groups[groupKey] = stateObj[sectionKey].groups[groupKey] || {};
+          stateObj[sectionKey].groups[groupKey][field.key] = val;
+        }
+      };
+
+      const def = defaultFor(field);
+      setVal(def);
+
+      if (field.type === 'textarea') {
+        const ta = document.createElement('textarea'); ta.className='input'; ta.id = id; ta.value = def || '';
+        ta.addEventListener('input', () => setVal(ta.value)); wrap.appendChild(ta); return wrap;
+      }
+      if (field.type === 'select') {
+        const sel = document.createElement('select'); sel.className='input'; sel.id = id;
+        const opt0 = document.createElement('option'); opt0.value=''; opt0.textContent='Select…'; opt0.disabled=true; sel.appendChild(opt0);
+        (field.options||[]).forEach(o => { const op=document.createElement('option'); op.value=o; op.textContent=o; sel.appendChild(op); });
+        sel.value = def || '';
+        sel.addEventListener('change', () => setVal(sel.value)); wrap.appendChild(sel); return wrap;
+      }
+      if (field.type === 'date') {
+        const inp = document.createElement('input'); inp.type='date'; inp.className='input'; inp.id=id; inp.value = def || '';
+        inp.addEventListener('input', () => setVal(inp.value)); wrap.appendChild(inp); return wrap;
+      }
+      if (field.type === 'number') {
+        const inp = document.createElement('input'); inp.type='number'; inp.className='input'; inp.id=id; inp.value = def ?? '';
+        if (field.min !== undefined) inp.min = field.min; if (field.max !== undefined) inp.max = field.max; if (field.step !== undefined) inp.step = field.step;
+        inp.addEventListener('input', () => setVal(inp.value === '' ? '' : Number(inp.value))); wrap.appendChild(inp); return wrap;
+      }
+      // text
+      const inp = document.createElement('input'); inp.type='text'; inp.className='input'; inp.id=id; inp.value = def ?? '';
+      inp.addEventListener('input', () => setVal(inp.value)); wrap.appendChild(inp); return wrap;
+    }
+
+    function defaultFor(field) {
+      if (field.type === 'date' && field.default === 'today') return todayISO();
+      return field.default !== undefined ? field.default : '';
+    }
+
+    function todayISO() {
+      const d = new Date();
+      const tz = d.getTimezoneOffset();
+      const local = new Date(d.getTime() - tz * 60000);
+      return local.toISOString().slice(0,10);
+    }
+
+    function escapeHTML(s) { return s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+
+    // Build initial state for all sections/fields
+    function buildInitialState(formSpec) {
+      const state = {};
+      (formSpec.sections || []).forEach(s => {
+        const sec = { fields: {}, items: {}, groups: {}, extra_fields: {}, comments: "" };
+        // simple fields
+        (s.fields || []).forEach(f => {
+          let def = (f.type === 'date' && f.default === 'today') ? todayISO() : (f.default !== undefined ? f.default : '');
+          sec.fields[f.key] = def;
+        });
+        // status items
+        (s.items || []).forEach(it => { sec.items[it.key] = ""; });
+        // extra fields
+        (s.extra_fields || []).forEach(f => {
+          let def = (f.type === 'date' && f.default === 'today') ? todayISO() : (f.default !== undefined ? f.default : '');
+          sec.extra_fields[f.key] = def;
+        });
+        // grouped fields
+        (s.groups || []).forEach(g => {
+          const gobj = {};
+          (g.fields || []).forEach(f => {
+            let def = (f.type === 'date' && f.default === 'today') ? todayISO() : (f.default !== undefined ? f.default : '');
+            gobj[f.key] = def;
+          });
+          sec.groups[g.key] = gobj;
+        });
+        // comments preset
+        if (s.comments_field) sec.comments = "";
+        state[s.key] = sec;
+      });
+      return state;
+    }
+
+    // Export
+    document.getElementById('exportBtn').addEventListener('click', () => {
+      const out = { spec_meta: { spec_id: SPEC.form_spec.spec_id, title: SPEC.form_spec.title, version: SPEC.form_spec.version, exported_at: new Date().toISOString() }, data: state };
+      const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `${SPEC.form_spec.spec_id}-filled.json`; a.click(); URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
