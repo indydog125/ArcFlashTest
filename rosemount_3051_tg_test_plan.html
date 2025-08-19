@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rosemount 3051TG — Test Plan / Form Viewer</title>
+  <style>
+    :root { --bg:#0b0c0f; --panel:#111318; --muted:#a0a4ac; --text:#e8e9ec; --brand:#3b82f6; }
+    *{box-sizing:border-box}
+    body{margin:0;font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans";background:var(--bg);color:var(--text)}
+    .topbar{position:sticky;top:0;z-index:10;backdrop-filter:blur(6px);background:rgba(17,19,24,.8);border-bottom:1px solid #1e2430}
+    .container{max-width:1100px;margin:0 auto;padding:16px}
+    .row{display:flex;align-items:center;gap:10px}
+    .spacer{flex:1}
+    .btn{appearance:none;border:1px solid #2a3242;background:#161a22;color:var(--text);padding:10px 14px;border-radius:12px;cursor:pointer}
+    .btn:hover{background:#1a1f29}
+    .btn.primary{border-color:transparent;background:var(--brand);color:#fff}
+    .btn.primary:hover{filter:brightness(.95)}
+    .btn.toggled{background:#1f2633;border-color:#3a4458}
+    .panel{background:var(--panel);border:1px solid #1e2430;border-radius:16px;padding:20px;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+    .hidden{display:none}
+    h1,h2,h3{line-height:1.2}
+    h1{font-size:28px;margin:8px 0 16px}
+    h2{font-size:20px;margin:20px 0 8px;border-bottom:1px solid #1f2430;padding-bottom:6px}
+    h3{font-size:16px;margin:16px 0 6px}
+    p{margin:10px 0}
+    code,pre{background:#0f1217;border:1px solid #1f2633;border-radius:8px;padding:2px 6px}
+    pre{padding:12px;overflow:auto}
+    ul{margin:8px 0 8px 22px}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px}
+    .label{font-size:12px;color:var(--muted)}
+    .input,select,textarea{background:#0f1217;color:var(--text);border:1px solid #293042;border-radius:10px;padding:9px 10px}
+    textarea{min-height:90px}
+    .section{margin-bottom:18px}
+    .section-header{display:flex;align-items:baseline;gap:10px}
+    .section-title{font-weight:700;font-size:16px}
+    .section-desc{color:var(--muted);font-size:12px}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:8px;border-top:1px solid #1e2430}
+    th{text-align:left;font-weight:600;color:var(--muted)}
+    td.center{text-align:center}
+    .group{border:1px dashed #2f3747;border-radius:14px;padding:12px;margin-top:6px}
+    .group-title{font-weight:600;margin-bottom:8px}
+    .footer{color:var(--muted);font-size:12px;margin:20px 0 40px}
+    .pill{padding:2px 8px;font-size:11px;border:1px solid #2a3242;border-radius:999px;color:var(--muted)}
+    .meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+  <div class="topbar">
+    <div class="container">
+      <div class="row">
+        <div style="font-weight:700">Rosemount 3051TG Spec Viewer</div>
+        <div class="pill" id="specMeta">loading…</div>
+        <div class="spacer"></div>
+        <button id="btnPlan" class="btn toggled">Test Plan</button>
+        <button id="btnForm" class="btn">Show Form</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="margin-top:16px">
+    <!-- Plan -->
+    <div id="planView" class="panel"><div id="markdown"></div></div>
+
+    <!-- Form -->
+    <div id="formView" class="panel hidden">
+      <div class="meta" style="margin-bottom:10px">
+        <div class="pill" id="specTitle"></div>
+        <div class="pill" id="specId"></div>
+        <div class="pill" id="specVer"></div>
+        <div class="spacer"></div>
+        <button id="exportBtn" class="btn primary">Export Filled JSON</button>
+      </div>
+      <div id="formRoot"></div>
+    </div>
+
+    <div class="footer">Rendered locally from embedded DECK spec. Follow site PPE/LOTO & process safety procedures.</div>
+  </div>
+
+  <script>
+    // ---------------- Embedded SPEC: Rosemount 3051TG (single-head gauge transmitter) ----------------
+    const SPEC = {
+      test_plan_markdown: `# Maintenance & Calibration Test Plan — Rosemount 3051TG (Single-Head Gauge Pressure Transmitter)
+
+**Applies to model code:** 3051TG3A2B21AS1B4C6Q4Q8 (functionally: single-head, gauge pressure).  
+**Use case:** shutdown/turnaround maintenance and bench/field calibration.
+
+---
+## 1) Overview & Scope
+This plan guides safe isolation, inspection, functional checks, and calibration of a Rosemount 3051TG gauge pressure transmitter. Tasks include: process isolation and de-pressurization; visual checks of the transmitter head, process connection and manifold; wiring and loop sanity; HART® communication and configuration verification (tag, LRV/URV, units, damping, alarm direction); **as-found** 5-point calibration; trim (if performed); **as-left** 5-point verification; alarm and upscale/downscale tests; leak check; and sign-off.  
+**Note:** Breaker-specific tasks (racking/close/trip/hipot/contact resistance/vacuum integrity) are **Not Applicable (NA)** to transmitters and are recorded as NA on the sheet where listed for completeness.
+
+---
+## 2) Hazards, PPE & LOTO
+- **Process pressure/contents:** Isolate using the proper valve/manifold procedure; **vent to a safe location** and verify zero pressure before breaking any connection. Consider chemical exposure (e.g., hydrocarbons, H₂S, solvents, steam). Use compatible gaskets and thread sealants only.  
+- **Stored energy:** Trapped pressure can remain in impulse lines; crack vents slowly and position body away from ports.  
+- **Electrical (24 VDC loop):** Shock/short hazard; avoid live wiring changes; verify polarity.  
+- **Hazardous area:** Confirm work permit and gas test as required; maintain enclosure integrity and gland seals; use **intrinsically safe** or appropriately rated test gear where applicable.  
+- **PPE:** Safety glasses/face shield where venting, chemical gloves, FR clothing as per site, hearing protection if in high-noise areas.  
+- **LOTO:** Apply mechanical isolation and electrical LOTO for the loop power if required by the site procedure; place the control system in maintenance/bypass to prevent spurious trips.
+
+---
+## 3) Prerequisites
+- **Documents:** P&ID / loop diagram, instrument index, cause & effects, calibration datasheet (LRV/URV, units, damping, alarm direction), hazardous-area classification, previous calibration records.  
+- **Tools (calibrated):** Pressure source (hand pump/deadweight tester) with fine adjust and vent, reference gauge/indicator with suitable accuracy, HART communicator or DCS/AMS, 24 VDC loop supply or loop calibrator, precision mA meter, test hoses/fittings rated for pressure and media, leak-check solution, digital thermometer (ambient).  
+- **Device condition:** Clean external surfaces; ensure manifold or isolation valve(s) are accessible; confirm any capillary/remote seal (if equipped) condition.  
+- **Environment:** Dry area for bench work; protect vents from contamination; prevent ingress when covers are open.
+
+---
+## 4) Isolation & Preparation
+1. Inform Control Room; place loop on **maintenance**/override.  
+2. **Isolate** the transmitter using valve/manifold: close block valve(s); open test/vent to depressurize safely; verify **0 pressure** on reference gauge.  
+3. Verify **no process leaks**; cap/plug lines as needed.  
+4. For bench calibration, disconnect the transmitter and mount to a calibration stand using proper adapters; for in-situ calibration, connect pressure hose to the test port/manifold.
+
+---
+## 5) Visual Inspection (record status)
+- Transmitter housing and conduit entries free of damage/corrosion; cover gasket intact; nameplate legible.  
+- Process connection/manifold condition; threads/studs intact; correct orientation; no contamination in ports.  
+- Wiring: correct gauge and polarity, proper shielding/grounding; glands sealed; no moisture in enclosure.  
+- Hazardous-area markings suit installation; enclosure fasteners present and tight; breather/drain (if any) oriented correctly.  
+- Tags/labels present (Tag, Service, P&ID No.).
+
+---
+## 6) Functional Checks (record status)
+- **HART communication** online; device, sensor and DD revisions read; tag/long tag/descriptor verified.  
+- **Range & Units:** LRV/URV and engineering units match datasheet; damping as specified.  
+- **Output mode:** Linear (or square root if configured for flow with orifice taps—rare for TG).  
+- **Alarm direction:** Upscale/Downscale per plant standard (e.g., NAMUR NE43).  
+- **Loop sanity:** Loop supply ~24 VDC within device limits; polarity correct; load within transmitter drive capability; PV status = GOOD; no active device diagnostics.  
+- Local display (if fitted) matches PV units and value.
+
+---
+## 7) Calibration & Trim
+> Perform with a traceable reference. Unless a trim is needed, prefer **output trim** (D/A) for loop matching, not sensor trim.  
+**As-Found 5-point check:** Apply 0/25/50/75/100 % span; record applied pressure, indicated pressure and output (mA).  
+**Adjustment (if required):** Set LRV/URV to datasheet; adjust damping; set alarm direction; perform **output trim** to match reference meter. If linearity error persists and is outside acceptance, consider **sensor trim** per manufacturer guidance.  
+**As-Left 5-point verification:** Repeat points; confirm within tolerance.
+
+**Practical acceptance guidance (typical):** total error within **±0.25 % of span** (or per site), output error within **±0.05 mA** at 4/20 mA, with no excessive hysteresis. Record actual tolerances used.
+
+---
+## 8) Leak & Functional Safety Checks
+- With the process isolated, pressurize to ~**90–100 % span** and hold for a defined time (e.g., ≥5 min): observe for pressure decay and external leaks (soap test).  
+- Verify manifold/test equipment are returned to **normal** (block open to process, vent closed).  
+- Restore the loop; confirm DCS reading tracks applied test pressure; remove overrides.
+
+---
+## 9) Not Applicable Items (record NA on sheet)
+- Automatic racking mechanism, mechanical/electrical interlocks, shutters (breaker features).  
+- Contact resistance, insulation resistance (Megger), hipot, vacuum integrity, breaker operating times.
+
+---
+## 10) Completion Checklist
+- All connections re-made to torque; process isolation returned to **service** configuration; protective caps re-installed.  
+- Enclosure covers closed; seals/glands intact; hazardous-area integrity restored.  
+- Loop returned to service; alarms/overrides cleared; DCS value reasonable.  
+- **As-left** calibration results saved; configuration (LRV/URV/units/damping/alarm) documented.  
+- Work area clean; tools accounted; LOTO removed per procedure.
+
+---
+## 11) References (generic)
+- IEC/EN 61298 (Process measurement/control devices—performance tests)  
+- IEC 60770-1 (Transmitters for use in industrial-process control systems)  
+- NAMUR NE43 (Fail-safe signal levels for 4–20 mA)  
+- ISA 5.1 (Instrumentation symbols)  
+- Manufacturer instruction manual for Rosemount 3051TG
+`,
+      form_spec: {
+        spec_id: "rosemount-3051tg3a2b21as1b4c6q4q8-maint-v1",
+        version: "2025-08-19T00:00:00Z",
+        title: "Rosemount 3051TG — Maintenance & Calibration Test Sheet (Single-Head Gauge Pressure)",
+        status_enum: ["OK","N-OK","C","NA"],
+        sections: [
+          {
+            key: "breaker_identification",
+            title: "Equipment Identification (Transmitter)",
+            instructions: "Record asset and job identifiers. Date defaults to today.",
+            fields: [
+              { key: "equip_no", label: "Instrument Tag / Equipment No.", type: "text", required: true },
+              { key: "date", label: "Date", type: "date", default: "today", required: true },
+              { key: "substation_no", label: "Unit / Area / Substation", type: "text" },
+              { key: "work_order_no", label: "Work Order / WO#", type: "text" },
+              { key: "tested_by", label: "Tested By", type: "text", required: true },
+              { key: "witnessed_by", label: "Witnessed By", type: "text" }
+            ],
+            comments_field: { key: "equipment_identification_comments", label: "Comments", type: "textarea" }
+          },
+          {
+            key: "nameplate_data",
+            title: "Nameplate & Configuration",
+            instructions: "Capture device and configuration details. Fields unrelated to transmitters may be left NA.",
+            fields: [
+              { key: "manufacturer", label: "Manufacturer", type: "text", default: "Rosemount" },
+              { key: "type", label: "Type", type: "text", default: "3051TG (Gauge Pressure)" },
+              { key: "model_no", label: "Model Code", type: "text", default: "3051TG3A2B21AS1B4C6Q4Q8" },
+              { key: "serial_no", label: "Serial No.", type: "text" },
+
+              { key: "rated_volts_kv", label: "Rated Voltage (kV) — NA for 2-wire loop", type: "number", min: 0, max: 1, step: 0.001 },
+              { key: "rated_amps_a", label: "Rated Amps (A) — NA", type: "number", min: 0, step: 0.001 },
+              { key: "int_cap_ka", label: "Interrupting Capacity (kA) — NA", type: "number", min: 0, step: 1 },
+              { key: "bil_kv", label: "BIL (kV) — NA", type: "number", min: 0, step: 1 },
+              { key: "frequency_hz", label: "System Frequency (Hz) — NA", type: "number", min: 0, max: 60, step: 1 },
+
+              { key: "close_voltage", label: "Close Coil Voltage (V) — NA", type: "number", min: 0, step: 1 },
+              { key: "trip_voltage", label: "Trip/Shunt Voltage (V) — NA", type: "number", min: 0, step: 1 },
+              { key: "operation_counter_as_found", label: "Operation Counter — As Found (NA)", type: "number", min: 0, step: 1 },
+              { key: "operation_counter_as_left", label: "Operation Counter — As Left (NA)", type: "number", min: 0, step: 1 },
+
+              { key: "loop_supply_vdc", label: "Loop Supply (VDC)", type: "number", min: 10, max: 42, step: 0.1, default: 24 },
+              { key: "output_signal", label: "Output Signal", type: "select", options: ["4–20 mA HART","4–20 mA","Wireless/Other"], default: "4–20 mA HART" },
+              { key: "pressure_units", label: "Engineering Units (e.g., kPa, psi, bar)", type: "text", default: "kPa(g)" },
+              { key: "lrv", label: "LRV (Lower Range Value, eng units)", type: "number", min: -1000000, max: 1000000, step: 0.001 },
+              { key: "urv", label: "URV (Upper Range Value, eng units)", type: "number", min: -1000000, max: 1000000, step: 0.001 },
+              { key: "damping_s", label: "Damping (s)", type: "number", min: 0, max: 60, step: 0.1, default: 1.0 },
+              { key: "alarm_direction", label: "Alarm Direction (NE43)", type: "select", options: ["Upscale (~21 mA)","Downscale (~3.6 mA)"], default: "Upscale (~21 mA)" },
+              { key: "display_present", label: "Local Display Installed", type: "select", options: ["Yes","No"], default: "Yes" },
+              { key: "hart_rev", label: "HART Revision (if known)", type: "text" },
+              { key: "device_rev", label: "Device / Sensor Rev", type: "text" }
+            ],
+            comments_field: { key: "nameplate_comments", label: "Comments", type: "textarea" }
+          },
+          {
+            key: "inspections",
+            title: "Inspections — Visual & Mechanical",
+            instructions: "Process isolated and vented. Verify enclosure integrity and wiring.",
+            items: [
+              { key: "housing_condition", label: "Transmitter housing & cover gasket in good condition" },
+              { key: "conduit_glands", label: "Conduit entries/glands sealed; no moisture ingress" },
+              { key: "nameplate_legible", label: "Nameplate legible; model/serial readable" },
+              { key: "process_connection", label: "Process connection/manifold condition (threads/studs/gasket surfaces)" },
+              { key: "orientation_mounting", label: "Orientation/mounting per design; no mechanical stress on case" },
+              { key: "wiring_polarity", label: "Wiring correct; polarity verified; shields terminated as per standard" },
+              { key: "haz_area_markings", label: "Hazardous-area markings suitable; enclosure integrity maintained" },
+              { key: "leak_free", label: "No evidence of leaks at ports/manifold" },
+              { key: "tags_labels", label: "Instrument tag/labels present and accurate" }
+            ],
+            comments_field: { key: "inspections_comments", label: "Inspection Comments / Defects Found", type: "textarea" }
+          },
+          {
+            key: "functional_tests",
+            title: "Functional Tests",
+            instructions: "Record status. Mark breaker-specific items NA.",
+            items: [
+              { key: "hart_online", label: "HART communication online; device/ DD read OK" },
+              { key: "tag_verified", label: "Tag/Long Tag/Descriptor verified" },
+              { key: "range_units_ok", label: "LRV/URV & engineering units match datasheet" },
+              { key: "damping_set", label: "Damping set as specified" },
+              { key: "alarm_dir_ok", label: "Alarm direction (NE43) configured per site" },
+              { key: "loop_supply_ok", label: "Loop supply within limits; polarity correct" },
+              { key: "display_ok", label: "Local display (if present) matches PV & units" },
+              { key: "diagnostics_clear", label: "No active device diagnostics; PV status GOOD" },
+              { key: "loop_check_4mA", label: "Loop check at 4.000 mA reads correct in DCS" },
+              { key: "loop_check_20mA", label: "Loop check at 20.000 mA reads correct in DCS" },
+
+              { key: "spring_charging", label: "Spring charging (breaker) — NA" },
+              { key: "electric_close", label: "Electric close (breaker) — NA" },
+              { key: "manual_close", label: "Manual close (breaker) — NA" },
+              { key: "electric_trip", label: "Electric trip (breaker) — NA" },
+              { key: "manual_trip", label: "Manual trip (breaker) — NA" },
+              { key: "anti_pump", label: "Anti-pump logic (breaker) — NA" },
+              { key: "trip_free", label: "Trip-free (breaker) — NA" },
+              { key: "ops_counter_advance", label: "Operations counter advance (breaker) — NA" },
+              { key: "automatic_racking", label: "Automatic racking (ARM) — NA" },
+              { key: "undervoltage_trip", label: "Undervoltage trip UVR (breaker) — NA" },
+              { key: "secondary_shunt_trip", label: "Secondary shunt trip (breaker) — NA" },
+              { key: "aux_contacts_functional", label: "Aux contacts functional (breaker) — NA" }
+            ],
+            extra_fields: [
+              { key: "control_power", label: "Loop Supply (VDC)", type: "number", min: 10, max: 42, step: 0.1, default: 24 },
+              { key: "close_coil_min_voltage_test", label: "Close Coil Min-Voltage Test Performed (breaker)", type: "select", options: ["Yes","No"], default: "No" },
+              { key: "trip_coil_min_voltage_test", label: "Trip Coil Min-Voltage Test Performed (breaker)", type: "select", options: ["Yes","No"], default: "No" }
+            ],
+            comments_field: { key: "functional_comments", label: "Functional Test Comments", type: "textarea" }
+          },
+          {
+            key: "measurements",
+            title: "Measurements",
+            instructions: "Record calibration data and related measurements. Mark non-applicable breaker tests as NA.",
+            groups: [
+              {
+                key: "as_found",
+                title: "Calibration — As Found (5-Point)",
+                fields: [
+                  { key: "af_units", label: "Units (e.g., kPa, psi, bar)", type: "text", default: "kPa(g)" },
+                  { key: "af_ambient_c", label: "Ambient Temp (°C)", type: "number", min: -40, max: 80, step: 0.1 },
+                  { key: "af_0_applied", label: "0% Applied (eng units)", type: "number", min: -1e9, max: 1e9, step: 0.001 },
+                  { key: "af_0_indicated", label: "0% Indicated (eng units)", type: "number", min: -1e9, max: 1e9, step: 0.001 },
+                  { key: "af_0_mA", label: "0% Output (mA)", type: "number", min: 0, max: 25, step: 0.001 },
+                  { key: "af_25_applied", label: "25% Applied (eng units)", type: "number", min: -1e9, max: 1e9, step: 0.001 },
+                  { key: "af_25_indicated", label: "25% Indicated (eng units)", type: "number", min: -1e9, max: 1e9, step: 0.001 },
+                  { key: "af_25_mA", label: "25% Output (mA)", type: "number", min: 0, max: 25, step: 0.001 },
+                  { key: "af_50_applied", label: "50% Applied (eng units)", type: "number", min: -1e9, max: 1e9, step: 0.001 },
+                  { key: "af_50_indicated", label: "50% Indicated (eng units)", type: "number", min: -1e9, max: 1e9, step: 0.001 },
+                  { key: "af_50_mA", label: "50% Output (mA)", type: "number", min: 0, max: 25, step: 0.001 },
+                  { key: "af_75_applied", label: "75% Applied (eng units)", type: "number", min: -1e9, max: 1e9, step: 0.001 },
+                  { key: "af_75_indicated", label: "75% Indicated (eng units)", type: "number", min: -1e9, max: 1e9, step: 0.001 },
+                  { key: "af_75_mA", label: "75% Output (mA)", type: "number", min: 0, max: 25, step: 0.001 },
+                  { key: "af_100_applied", label: "100% Applied (eng units)", type: "number", min: -1e9, max: 1e9, step: 0.001 },
+                  { key: "af_100_indicated", label: "100% Indicated (eng units)", type: "number", min: -1e9, max: 1e9, step: 0.001 },
+                  { key: "af_100_mA", label: "100% Output (mA)", type: "number", min: 0, max: 25, step: 0.001 },
+                  { key: "af_error_notes", label: "As Found Notes / Errors", type: "textarea" }
+                ]
+              },
+              {
+                key: "adjustments",
+                title: "Adjustments Performed",
+                fields: [
+                  { key: "adj_lrv_set", label: "LRV Set (eng units)", type: "number", min: -1e9, max: 1e9, step: 0.001 },
+                  { key: "adj_urv_set", label: "URV Set (eng units)", type: "number", min: -1e9, max: 1e9, step: 0.001 },
+                  { key: "adj_damping_s", label: "Damping Set (s)", type: "number", min: 0, max: 60, step: 0.1 },
+                  { key: "adj_alarm_direction", label: "Alarm Direction Set (NE43)", type: "select", options: ["Upscale (~21 mA)","Downscale (~3.6 mA)"] },
+                  { key: "adj_output_trim", label: "Output Trim Performed", type: "select", options: ["Yes","No"], default: "No" },
+                  { key: "adj_sensor_trim", label: "Sensor Trim Performed", type: "select", options: ["Yes","No"], default: "No" }
+                ]
+              },
+              {
+                key: "as_left",
+                title: "Calibration — As Left (5-Point)",
+                fields: [
+                  { key: "al_units", label: "Units (e.g., kPa, psi, bar)", type: "text", default: "kPa(g)" },
+                  { key: "al_ambient_c", label: "Ambient Temp (°C)", type: "number", min: -40, max: 80, step: 0.1 },
+                  { key: "al_0_applied", label: "0% Applied (eng units)", type: "number", min: -1e9, max: 1e9, step: 0.001 },
+                  { key: "al_0_indicated", label: "0% Indicated (eng units)", type: "number", min: -1e9, max: 1e9, step: 0.001 },
+                  { key: "al_0_mA", label: "0% Output (mA)", type: "number", min: 0, max: 25, step: 0.001 },
+                  { key: "al_25_applied", label: "25% Applied (eng units)", type: "number", min: -1e9, max: 1e9, step: 0.001 },
+                  { key: "al_25_indicated", label: "25% Indicated (eng units)", type: "number", min: -1e9, max: 1e9, step: 0.001 },
+                  { key: "al_25_mA", label: "25% Output (mA)", type: "number", min: 0, max: 25, step: 0.001 },
+                  { key: "al_50_applied", label: "50% Applied (eng units)", type: "number", min: -1e9, max: 1e9, step: 0.001 },
+                  { key: "al_50_indicated", label: "50% Indicated (eng units)", type: "number", min: -1e9, max: 1e9, step: 0.001 },
+                  { key: "al_50_mA", label: "50% Output (mA)", type: "number", min: 0, max: 25, step: 0.001 },
+                  { key: "al_75_applied", label: "75% Applied (eng units)", type: "number", min: -1e9, max: 1e9, step: 0.001 },
+                  { key: "al_75_indicated", label: "75% Indicated (eng units)", type: "number", min: -1e9, max: 1e9, step: 0.001 },
+                  { key: "al_75_mA", label: "75% Output (mA)", type: "number", min: 0, max: 25, step: 0.001 },
+                  { key: "al_100_applied", label: "100% Applied (eng units)", type: "number", min: -1e9, max: 1e9, step: 0.001 },
+                  { key: "al_100_indicated", label: "100% Indicated (eng units)", type: "number", min: -1e9, max: 1e9, step: 0.001 },
+                  { key: "al_100_mA", label: "100% Output (mA)", type: "number", min: 0, max: 25, step: 0.001 },
+                  { key: "al_acceptance", label: "As Left Acceptance (e.g., ±0.25% span, ±0.05 mA)", type: "text" }
+                ]
+              },
+              {
+                key: "loop_tests",
+                title: "Loop & Alarm Tests",
+                fields: [
+                  { key: "supply_vdc", label: "Measured Loop Supply at TX (VDC)", type: "number", min: 10, max: 42, step: 0.1 },
+                  { key: "loop_load_ohm", label: "Estimated Loop Load (Ω)", type: "number", min: 0, max: 2000, step: 1 },
+                  { key: "alarm_low_mA", label: "Downscale Alarm Measured (mA)", type: "number", min: 0, max: 8, step: 0.001 },
+                  { key: "alarm_high_mA", label: "Upscale Alarm Measured (mA)", type: "number", min: 18, max: 25, step: 0.001 }
+                ]
+              },
+              {
+                key: "leak_test",
+                title: "Leak Test",
+                fields: [
+                  { key: "leak_hold_pressure", label: "Hold Pressure (eng units)", type: "number", min: 0, max: 1e9, step: 0.001 },
+                  { key: "leak_hold_time_min", label: "Hold Time (min)", type: "number", min: 1, max: 120, step: 1 },
+                  { key: "leak_observed", label: "Leak Observed", type: "select", options: ["No","Yes"], default: "No" }
+                ]
+              },
+
+              {
+                key: "contact_resistance",
+                title: "Contact Resistance — Not Applicable (mark NA)",
+                fields: [
+                  { key: "cr_test_current_a", label: "Test Current (A)", type: "number", min: 50, max: 600, step: 10 },
+                  { key: "cr_phase_a_uohm", label: "Phase A (µΩ)", type: "number", min: 0, step: 1 },
+                  { key: "cr_phase_b_uohm", label: "Phase B (µΩ)", type: "number", min: 0, step: 1 },
+                  { key: "cr_phase_c_uohm", label: "Phase C (µΩ)", type: "number", min: 0, step: 1 }
+                ]
+              },
+              {
+                key: "insulation_resistance",
+                title: "Insulation Resistance (Megger) — Not Typical (mark NA unless specified)",
+                fields: [
+                  { key: "ir_test_voltage_kv_dc", label: "Test Voltage (kV DC)", type: "number", min: 0.25, max: 5, step: 0.01 },
+                  { key: "ir_duration_s", label: "Duration (s)", type: "number", min: 10, max: 600, step: 1 },
+                  { key: "ir_megohm", label: "Measured Insulation (MΩ)", type: "number", min: 0, max: 100000, step: 1 }
+                ]
+              },
+              {
+                key: "hipot_overpotential",
+                title: "Hipot (Overpotential) — Not Applicable (mark NA)",
+                fields: [
+                  { key: "hipot_test_potential_kv", label: "Test Potential (kV AC)", type: "number", min: 0.5, max: 5, step: 0.1 },
+                  { key: "hipot_duration_s", label: "Duration (s)", type: "number", min: 10, max: 120, step: 1 },
+                  { key: "hipot_result", label: "Result", type: "select", options: ["Pass","Fail"], default: "Pass" }
+                ]
+              },
+              {
+                key: "vacuum_integrity",
+                title: "Vacuum Integrity — Not Applicable (mark NA)",
+                fields: [
+                  { key: "vac_test_potential_kv_ac", label: "Test Potential (kV AC)", type: "number", min: 0, max: 30, step: 0.1 },
+                  { key: "vac_duration_s", label: "Duration (s)", type: "number", min: 0, max: 120, step: 1 },
+                  { key: "vac_result", label: "Result", type: "select", options: ["Pass","Fail"], default: "Pass" }
+                ]
+              },
+              {
+                key: "operating_times",
+                title: "Operating Times — Not Applicable (mark NA)",
+                fields: [
+                  { key: "ot_open_ms", label: "Open Time (ms)", type: "number", min: 0, max: 500, step: 1 },
+                  { key: "ot_close_ms", label: "Close Time (ms)", type: "number", min: 0, max: 500, step: 1 },
+                  { key: "ot_method", label: "Timing Method / Instrument", type: "text" }
+                ]
+              }
+            ],
+            comments_field: { key: "measurements_comments", label: "Measurements Comments / Notes", type: "textarea" }
+          },
+          {
+            key: "completion_checklist",
+            title: "Completion Checklist",
+            instructions: "Restore to normal and document final condition.",
+            fields: [
+              { key: "assembly_complete", label: "Assembly Complete (covers on, glands sealed)", type: "select", options: ["Yes","No"], default: "Yes" },
+              { key: "tools_accounted", label: "All Tools & Materials Accounted For", type: "select", options: ["Yes","No"], default: "Yes" },
+              { key: "process_restored", label: "Process Isolation Restored to Service (block open, vent closed)", type: "select", options: ["Yes","No"], default: "Yes" },
+              { key: "loop_restored", label: "Loop Restored; Overrides Cleared; DCS Reading Reasonable", type: "select", options: ["Yes","No"], default: "Yes" }
+            ],
+            comments_field: { key: "completion_comments", label: "Completion Comments", type: "textarea" }
+          },
+          {
+            key: "final_comments",
+            title: "Final Comments",
+            fields: [ { key: "final_comments_text", label: "Final Comments / Defects & Corrective Actions", type: "textarea" } ]
+          },
+          {
+            key: "sign_off",
+            title: "Sign-Off",
+            fields: [
+              { key: "so_tested_by", label: "Tested By", type: "text", required: true },
+              { key: "so_witnessed_by", label: "Witnessed By", type: "text" },
+              { key: "so_company", label: "Company", type: "text" },
+              { key: "so_signature", label: "Signature (typed)", type: "text" },
+              { key: "so_date", label: "Date", type: "date", default: "today" }
+            ]
+          }
+        ]
+      }
+    };
+
+    // ---------------- Toggle UI ----------------
+    const btnPlan = document.getElementById('btnPlan');
+    const btnForm = document.getElementById('btnForm');
+    const planView = document.getElementById('planView');
+    const formView = document.getElementById('formView');
+    btnPlan.addEventListener('click', () => showView('plan'));
+    btnForm.addEventListener('click', () => showView('form'));
+    function showView(which){
+      if(which==='plan'){ planView.classList.remove('hidden'); formView.classList.add('hidden'); btnPlan.classList.add('toggled'); btnForm.classList.remove('toggled'); }
+      else{ formView.classList.remove('hidden'); planView.classList.add('hidden'); btnForm.classList.add('toggled'); btnPlan.classList.remove('toggled'); }
+    }
+
+    // ---------------- Meta & Markdown ----------------
+    document.getElementById('specMeta').textContent = SPEC.form_spec.title;
+    document.getElementById('specTitle').textContent = SPEC.form_spec.title;
+    document.getElementById('specId').textContent = 'spec_id: ' + SPEC.form_spec.spec_id;
+    document.getElementById('specVer').textContent = 'version: ' + SPEC.form_spec.version;
+    document.getElementById('markdown').innerHTML = marked.parse(SPEC.test_plan_markdown);
+
+    // ---------------- Form Renderer ----------------
+    const root = document.getElementById('formRoot');
+    const statusEnum = SPEC.form_spec.status_enum || ["OK","N-OK","C","NA"];
+    const state = buildInitialState(SPEC.form_spec);
+
+    SPEC.form_spec.sections.forEach(section => {
+      const secEl = document.createElement('div'); secEl.className='section'; secEl.dataset.sectionKey=section.key;
+      const header = document.createElement('div'); header.className='section-header';
+      header.innerHTML = `<div class="section-title">${escapeHTML(section.title)}</div>` + (section.instructions ? ` <div class="section-desc">${escapeHTML(section.instructions)}</div>` : '');
+      secEl.appendChild(header);
+
+      // Simple fields
+      if(section.fields && section.fields.length){
+        const grid = document.createElement('div'); grid.className='grid';
+        section.fields.forEach(f => grid.appendChild(renderField('field', section.key, f, state)));
+        secEl.appendChild(grid);
+      }
+
+      // Status items
+      if(section.items && section.items.length){
+        const table = document.createElement('table');
+        const thead = document.createElement('thead'); const trh = document.createElement('tr');
+        const th0 = document.createElement('th'); th0.textContent='Item'; trh.appendChild(th0);
+        statusEnum.forEach(s => { const th = document.createElement('th'); th.textContent=s; th.className='center'; trh.appendChild(th); });
+        thead.appendChild(trh); table.appendChild(thead);
+        const tbody = document.createElement('tbody');
+        section.items.forEach(it => {
+          const tr = document.createElement('tr');
+          const tdLab = document.createElement('td'); tdLab.textContent = it.label; tr.appendChild(tdLab);
+          statusEnum.forEach(s => {
+            const td = document.createElement('td'); td.className='center';
+            const id = `${section.key}__${it.key}__${s}`;
+            const input = document.createElement('input'); input.type='radio'; input.name=`${section.key}__${it.key}`; input.value=s; input.id=id;
+            input.addEventListener('change', () => { state[section.key].items[it.key] = s; });
+            td.appendChild(input); tr.appendChild(td);
+          });
+          tbody.appendChild(tr);
+        });
+        table.appendChild(tbody); secEl.appendChild(table);
+      }
+
+      // Extra fields
+      if(section.extra_fields && section.extra_fields.length){
+        const grid = document.createElement('div'); grid.className='grid';
+        section.extra_fields.forEach(f => grid.appendChild(renderField('extra', section.key, f, state)));
+        secEl.appendChild(grid);
+      }
+
+      // Groups
+      if(section.groups && section.groups.length){
+        section.groups.forEach(g => {
+          const grp = document.createElement('div'); grp.className='group'; grp.dataset.groupKey=g.key;
+          const title = document.createElement('div'); title.className='group-title'; title.textContent = g.title; grp.appendChild(title);
+          const grid = document.createElement('div'); grid.className='grid';
+          g.fields.forEach(f => grid.appendChild(renderField('group', section.key, f, state, g.key)));
+          grp.appendChild(grid); secEl.appendChild(grp);
+        });
+      }
+
+      // Comments
+      if(section.comments_field){
+        const wrap = document.createElement('div'); wrap.className='field';
+        const lbl = document.createElement('label'); lbl.className='label'; lbl.textContent = section.comments_field.label; wrap.appendChild(lbl);
+        const ta = document.createElement('textarea'); ta.addEventListener('input', () => { state[section.key].comments = ta.value; });
+        wrap.appendChild(ta); secEl.appendChild(wrap);
+      }
+
+      root.appendChild(secEl);
+    });
+
+    // ---------------- Helpers ----------------
+    function renderField(scope, sectionKey, field, stateObj, groupKey){
+      const wrap = document.createElement('div'); wrap.className='field';
+      const id = `${sectionKey}__${groupKey?groupKey+'__':''}${field.key}`;
+      const lbl = document.createElement('label'); lbl.className='label'; lbl.setAttribute('for', id); lbl.textContent = field.label; wrap.appendChild(lbl);
+
+      const setVal = (val) => {
+        if(scope==='field') stateObj[sectionKey].fields[field.key] = val;
+        else if(scope==='extra') stateObj[sectionKey].extra_fields[field.key] = val;
+        else if(scope==='group') { stateObj[sectionKey].groups[groupKey] = stateObj[sectionKey].groups[groupKey] || {}; stateObj[sectionKey].groups[groupKey][field.key] = val; }
+      };
+
+      const def = defaultFor(field); setVal(def);
+
+      if(field.type==='textarea'){
+        const ta = document.createElement('textarea'); ta.className='input'; ta.id=id; ta.value = def || '';
+        ta.addEventListener('input', () => setVal(ta.value)); wrap.appendChild(ta); return wrap;
+      }
+      if(field.type==='select'){
+        const sel = document.createElement('select'); sel.className='input'; sel.id=id;
+        const opt0 = document.createElement('option'); opt0.value=''; opt0.textContent='Select…'; opt0.disabled=true; sel.appendChild(opt0);
+        (field.options||[]).forEach(o => { const op=document.createElement('option'); op.value=o; op.textContent=o; sel.appendChild(op); });
+        sel.value = def || '';
+        sel.addEventListener('change', () => setVal(sel.value)); wrap.appendChild(sel); return wrap;
+      }
+      if(field.type==='date'){
+        const inp = document.createElement('input'); inp.type='date'; inp.className='input'; inp.id=id; inp.value = def || '';
+        inp.addEventListener('input', () => setVal(inp.value)); wrap.appendChild(inp); return wrap;
+      }
+      if(field.type==='number'){
+        const inp = document.createElement('input'); inp.type='number'; inp.className='input'; inp.id=id; inp.value = (def ?? '') + '';
+        if(field.min!==undefined) inp.min = field.min; if(field.max!==undefined) inp.max = field.max; if(field.step!==undefined) inp.step = field.step;
+        inp.addEventListener('input', () => setVal(inp.value === '' ? '' : Number(inp.value))); wrap.appendChild(inp); return wrap;
+      }
+      const inp = document.createElement('input'); inp.type='text'; inp.className='input'; inp.id=id; inp.value = def ?? '';
+      inp.addEventListener('input', () => setVal(inp.value)); wrap.appendChild(inp); return wrap;
+    }
+
+    function defaultFor(field){
+      if(field.type==='date' && field.default==='today') return todayISO();
+      return field.default !== undefined ? field.default : '';
+    }
+
+    function todayISO(){
+      const d = new Date(); const tz = d.getTimezoneOffset(); const local = new Date(d.getTime() - tz*60000); return local.toISOString().slice(0,10);
+    }
+
+    function escapeHTML(s){ return s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+
+    function buildInitialState(formSpec){
+      const state = {}; (formSpec.sections||[]).forEach(s => {
+        const sec = { fields:{}, items:{}, groups:{}, extra_fields:{}, comments:"" };
+        (s.fields||[]).forEach(f => { sec.fields[f.key] = (f.type==='date' && f.default==='today') ? todayISO() : (f.default!==undefined ? f.default : ''); });
+        (s.items||[]).forEach(it => { sec.items[it.key] = ""; });
+        (s.extra_fields||[]).forEach(f => { sec.extra_fields[f.key] = (f.type==='date' && f.default==='today') ? todayISO() : (f.default!==undefined ? f.default : ''); });
+        (s.groups||[]).forEach(g => { const gobj={}; (g.fields||[]).forEach(f => { gobj[f.key] = (f.type==='date' && f.default==='today') ? todayISO() : (f.default!==undefined ? f.default : ''); }); sec.groups[g.key]=gobj; });
+        if(s.comments_field) sec.comments=""; state[s.key]=sec; });
+      return state;
+    }
+
+    // ---------------- Export filled JSON ----------------
+    document.getElementById('exportBtn').addEventListener('click', () => {
+      const out = { spec_meta: { spec_id: SPEC.form_spec.spec_id, title: SPEC.form_spec.title, version: SPEC.form_spec.version, exported_at: new Date().toISOString() }, data: state };
+      const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href=url; a.download = `${SPEC.form_spec.spec_id}-filled.json`; a.click(); URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
