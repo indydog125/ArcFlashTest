@@ -243,9 +243,7 @@ This plan guides safe isolation, inspection, functional checks, and calibration 
 
             ],
             extra_fields: [
-              { key: "control_power", label: "Loop Supply (VDC)", type: "number", min: 10, max: 42, step: 0.1, default: 24 },
-              { key: "close_coil_min_voltage_test", label: "Close Coil Min-Voltage Test Performed (breaker)", type: "select", options: ["Yes","No"], default: "No" },
-              { key: "trip_coil_min_voltage_test", label: "Trip Coil Min-Voltage Test Performed (breaker)", type: "select", options: ["Yes","No"], default: "No" }
+              { key: "control_power", label: "Loop Supply (VDC)", type: "number", min: 10, max: 42, step: 0.1, default: 24 }
             ],
             comments_field: { key: "functional_comments", label: "Functional Test Comments", type: "textarea" }
           },
@@ -332,54 +330,8 @@ This plan guides safe isolation, inspection, functional checks, and calibration 
                   { key: "leak_hold_time_min", label: "Hold Time (min)", type: "number", min: 1, max: 120, step: 1 },
                   { key: "leak_observed", label: "Leak Observed", type: "select", options: ["No","Yes"], default: "No" }
                 ]
-              },
-
-              {
-                key: "contact_resistance",
-                title: "Contact Resistance — Not Applicable (mark NA)",
-                fields: [
-                  { key: "cr_test_current_a", label: "Test Current (A)", type: "number", min: 50, max: 600, step: 10 },
-                  { key: "cr_phase_a_uohm", label: "Phase A (µΩ)", type: "number", min: 0, step: 1 },
-                  { key: "cr_phase_b_uohm", label: "Phase B (µΩ)", type: "number", min: 0, step: 1 },
-                  { key: "cr_phase_c_uohm", label: "Phase C (µΩ)", type: "number", min: 0, step: 1 }
-                ]
-              },
-              {
-                key: "insulation_resistance",
-                title: "Insulation Resistance (Megger) — Not Typical (mark NA unless specified)",
-                fields: [
-                  { key: "ir_test_voltage_kv_dc", label: "Test Voltage (kV DC)", type: "number", min: 0.25, max: 5, step: 0.01 },
-                  { key: "ir_duration_s", label: "Duration (s)", type: "number", min: 10, max: 600, step: 1 },
-                  { key: "ir_megohm", label: "Measured Insulation (MΩ)", type: "number", min: 0, max: 100000, step: 1 }
-                ]
-              },
-              {
-                key: "hipot_overpotential",
-                title: "Hipot (Overpotential) — Not Applicable (mark NA)",
-                fields: [
-                  { key: "hipot_test_potential_kv", label: "Test Potential (kV AC)", type: "number", min: 0.5, max: 5, step: 0.1 },
-                  { key: "hipot_duration_s", label: "Duration (s)", type: "number", min: 10, max: 120, step: 1 },
-                  { key: "hipot_result", label: "Result", type: "select", options: ["Pass","Fail"], default: "Pass" }
-                ]
-              },
-              {
-                key: "vacuum_integrity",
-                title: "Vacuum Integrity — Not Applicable (mark NA)",
-                fields: [
-                  { key: "vac_test_potential_kv_ac", label: "Test Potential (kV AC)", type: "number", min: 0, max: 30, step: 0.1 },
-                  { key: "vac_duration_s", label: "Duration (s)", type: "number", min: 0, max: 120, step: 1 },
-                  { key: "vac_result", label: "Result", type: "select", options: ["Pass","Fail"], default: "Pass" }
-                ]
-              },
-              {
-                key: "operating_times",
-                title: "Operating Times — Not Applicable (mark NA)",
-                fields: [
-                  { key: "ot_open_ms", label: "Open Time (ms)", type: "number", min: 0, max: 500, step: 1 },
-                  { key: "ot_close_ms", label: "Close Time (ms)", type: "number", min: 0, max: 500, step: 1 },
-                  { key: "ot_method", label: "Timing Method / Instrument", type: "text" }
-                ]
               }
+
             ],
             comments_field: { key: "measurements_comments", label: "Measurements Comments / Notes", type: "textarea" }
           },
