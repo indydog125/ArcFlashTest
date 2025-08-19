@@ -149,11 +149,6 @@ This plan guides safe isolation, inspection, functional checks, and calibration 
 - Restore the loop; confirm DCS reading tracks applied test pressure; remove overrides.
 
 ---
-## 9) Not Applicable Items (record NA on sheet)
-- Automatic racking mechanism, mechanical/electrical interlocks, shutters (breaker features).  
-- Contact resistance, insulation resistance (Megger), hipot, vacuum integrity, breaker operating times.
-
----
 ## 10) Completion Checklist
 - All connections re-made to torque; process isolation returned to **service** configuration; protective caps re-installed.  
 - Enclosure covers closed; seals/glands intact; hazardous-area integrity restored.  
@@ -199,16 +194,6 @@ This plan guides safe isolation, inspection, functional checks, and calibration 
               { key: "model_no", label: "Model Code", type: "text", default: "3051TG3A2B21AS1B4C6Q4Q8" },
               { key: "serial_no", label: "Serial No.", type: "text" },
 
-              { key: "rated_volts_kv", label: "Rated Voltage (kV) — NA for 2-wire loop", type: "number", min: 0, max: 1, step: 0.001 },
-              { key: "rated_amps_a", label: "Rated Amps (A) — NA", type: "number", min: 0, step: 0.001 },
-              { key: "int_cap_ka", label: "Interrupting Capacity (kA) — NA", type: "number", min: 0, step: 1 },
-              { key: "bil_kv", label: "BIL (kV) — NA", type: "number", min: 0, step: 1 },
-              { key: "frequency_hz", label: "System Frequency (Hz) — NA", type: "number", min: 0, max: 60, step: 1 },
-
-              { key: "close_voltage", label: "Close Coil Voltage (V) — NA", type: "number", min: 0, step: 1 },
-              { key: "trip_voltage", label: "Trip/Shunt Voltage (V) — NA", type: "number", min: 0, step: 1 },
-              { key: "operation_counter_as_found", label: "Operation Counter — As Found (NA)", type: "number", min: 0, step: 1 },
-              { key: "operation_counter_as_left", label: "Operation Counter — As Left (NA)", type: "number", min: 0, step: 1 },
 
               { key: "loop_supply_vdc", label: "Loop Supply (VDC)", type: "number", min: 10, max: 42, step: 0.1, default: 24 },
               { key: "output_signal", label: "Output Signal", type: "select", options: ["4–20 mA HART","4–20 mA","Wireless/Other"], default: "4–20 mA HART" },
@@ -254,20 +239,8 @@ This plan guides safe isolation, inspection, functional checks, and calibration 
               { key: "display_ok", label: "Local display (if present) matches PV & units" },
               { key: "diagnostics_clear", label: "No active device diagnostics; PV status GOOD" },
               { key: "loop_check_4mA", label: "Loop check at 4.000 mA reads correct in DCS" },
-              { key: "loop_check_20mA", label: "Loop check at 20.000 mA reads correct in DCS" },
+              { key: "loop_check_20mA", label: "Loop check at 20.000 mA reads correct in DCS" }
 
-              { key: "spring_charging", label: "Spring charging (breaker) — NA" },
-              { key: "electric_close", label: "Electric close (breaker) — NA" },
-              { key: "manual_close", label: "Manual close (breaker) — NA" },
-              { key: "electric_trip", label: "Electric trip (breaker) — NA" },
-              { key: "manual_trip", label: "Manual trip (breaker) — NA" },
-              { key: "anti_pump", label: "Anti-pump logic (breaker) — NA" },
-              { key: "trip_free", label: "Trip-free (breaker) — NA" },
-              { key: "ops_counter_advance", label: "Operations counter advance (breaker) — NA" },
-              { key: "automatic_racking", label: "Automatic racking (ARM) — NA" },
-              { key: "undervoltage_trip", label: "Undervoltage trip UVR (breaker) — NA" },
-              { key: "secondary_shunt_trip", label: "Secondary shunt trip (breaker) — NA" },
-              { key: "aux_contacts_functional", label: "Aux contacts functional (breaker) — NA" }
             ],
             extra_fields: [
               { key: "control_power", label: "Loop Supply (VDC)", type: "number", min: 10, max: 42, step: 0.1, default: 24 },
