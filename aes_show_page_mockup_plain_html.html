@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Alternate Energy Source - Show Page</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --border: #e5e7eb;
+      --text: #111827;
+      --muted: #6b7280;
+      --ok: #16a34a;
+      --off: #6b7280;
+      --shadow: 0 6px 18px rgba(17, 24, 39, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      line-height: 1.45;
+    }
+    .container { max-width: 980px; margin: 40px auto; padding: 0 16px; }
+    h1 { font-size: 1.75rem; margin: 0 0 16px; }
+    h2 { font-size: 1.25rem; margin: 0 0 12px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .label { color: var(--muted); font-size: 0.9rem; }
+    .value { font-weight: 600; }
+    .badge { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 6px 12px; font-weight: 700; font-size: 0.85rem; }
+    .badge.on { background: var(--ok); color: #ffffff; }
+    .badge.off { background: var(--off); color: #ffffff; }
+    .muted { color: var(--muted); }
+    .equip-list { display: grid; gap: 10px; }
+    .equip-item { display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border); background: #f9fafb; border-radius: 10px; padding: 12px 14px; }
+    .equip-name { font-weight: 600; }
+    .equip-tag { color: var(--muted); font-size: 0.9rem; }
+    .btn { appearance: none; border: 1px solid var(--border); background: #ffffff; color: var(--text); padding: 8px 12px; border-radius: 10px; cursor: pointer; font-size: 0.9rem; }
+    .btn:hover { background: #f3f4f6; }
+    .icon { width: 16px; height: 16px; vertical-align: -2px; }
+    @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main class="container" aria-label="Alternate Energy Source show page">
+    <h1>Alternate Energy Source - Show Page</h1>
+
+    <section class="card" aria-labelledby="aes-summary-heading">
+      <div class="row">
+        <div>
+          <p class="label">AES ID</p>
+          <p class="value">AES-2025-001</p>
+        </div>
+        <span class="badge on" aria-live="polite">
+          <!-- Power icon -->
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v10"/><path d="M18.36 6.64a9 9 0 1 1-12.72 0"/></svg>
+          On
+        </span>
+      </div>
+
+      <div class="grid" style="margin-top: 12px;">
+        <div>
+          <p class="label">AES Name</p>
+          <p class="value">South Substation AES Generator</p>
+        </div>
+        <div>
+          <p class="label">Location</p>
+          <p class="value">South Main Sub</p>
+        </div>
+        <div>
+          <p class="label">Last Updated</p>
+          <p class="value">2025-08-21 14:32 MDT</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="energized-heading">
+      <h2 id="energized-heading">
+        <!-- Check icon -->
+        <svg class="icon" style="margin-right: 6px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+        Energized Equipment when AES is On
+      </h2>
+
+      <div class="equip-list" role="list">
+        <div class="equip-item" role="listitem">
+          <div>
+            <div class="equip-name">SG3070A-13.8kV-LINE</div>
+            <div class="equip-tag">Tag: CB3070-01 - ID: RNOAB29-01490</div>
+          </div>
+          <button class="btn" type="button" aria-label="View details for SG3070A-13.8kV-LINE">View Details</button>
+        </div>
+
+        <div class="equip-item" role="listitem">
+          <div>
+            <div class="equip-name">Motor Control Center N10</div>
+            <div class="equip-tag">Tag: MCCN10-05 - ID: MCCN10-02345</div>
+          </div>
+          <button class="btn" type="button" aria-label="View details for Motor Control Center N10">View Details</button>
+        </div>
+
+        <div class="equip-item" role="listitem">
+          <div>
+            <div class="equip-name">Transformer TX0220</div>
+            <div class="equip-tag">Tag: TX0220 - ID: TX0220-001</div>
+          </div>
+          <button class="btn" type="button" aria-label="View details for Transformer TX0220">View Details</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

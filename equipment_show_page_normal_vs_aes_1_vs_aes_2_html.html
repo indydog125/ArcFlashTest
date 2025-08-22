@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Equipment - Show Page (Normal vs AES #1 vs AES #2)</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --border: #e5e7eb;
+      --text: #111827;
+      --muted: #6b7280;
+      --shadow: 0 6px 18px rgba(17, 24, 39, 0.08);
+      --primary: #0ea5e9;
+      --accent1: #0ea5e9; /* AES #1 tint */
+      --accent2: #22c55e; /* AES #2 tint */
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; line-height: 1.45; }
+    .container { max-width: 980px; margin: 40px auto; padding: 0 16px; }
+    h1 { font-size: 1.75rem; margin: 0 0 16px; }
+    h2 { font-size: 1.25rem; margin: 0 0 12px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); padding: 24px; margin-bottom: 20px; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .label { color: var(--muted); font-size: 0.9rem; }
+    .value { font-weight: 600; }
+    .row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .seg { display: inline-flex; border: 1px solid var(--border); background: #fff; border-radius: 12px; overflow: hidden; }
+    .seg button { appearance: none; border: 0; padding: 8px 14px; background: transparent; cursor: pointer; font-weight: 600; color: var(--muted); }
+    .seg button[aria-pressed="true"] { background: var(--primary); color: #fff; }
+    .kvs { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; margin-top: 12px; }
+    .kv { border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; background: #f9fafb; }
+    .kv .k { color: var(--muted); font-size: 0.9rem; }
+    .kv .v { font-weight: 700; }
+    .note { color: var(--muted); font-size: 0.9rem; margin-top: 8px; }
+    .aes1 { color: var(--accent1); }
+    .aes2 { color: var(--accent2); }
+    @media (max-width: 640px) { .grid, .kvs { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main class="container" aria-label="Equipment show page">
+    <h1>Equipment - Show Page</h1>
+
+    <section class="card" aria-labelledby="equip-summary">
+      <div class="grid">
+        <div>
+          <p class="label">Equipment ID</p>
+          <p class="value">RNOAB29-01490</p>
+        </div>
+        <div>
+          <p class="label">Tag</p>
+          <p class="value">CB3070-01</p>
+        </div>
+        <div>
+          <p class="label">Name</p>
+          <p class="value">SG3070A-13.8kV-LINE</p>
+        </div>
+        <div>
+          <p class="label">Location</p>
+          <p class="value">South Main Sub</p>
+        </div>
+        <div>
+          <p class="label">Last Updated</p>
+          <p class="value">2025-08-21 14:32 MDT</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="arcflash-heading">
+      <div class="row" style="margin-bottom: 10px;">
+        <h2 id="arcflash-heading">Arc Flash Data</h2>
+        <div class="seg" role="group" aria-label="Select power source">
+          <button id="btn-normal" aria-pressed="true" aria-controls="panel-normal" type="button">Normal</button>
+          <button id="btn-aes1" aria-pressed="false" aria-controls="panel-aes1" type="button">AES #1</button>
+          <button id="btn-aes2" aria-pressed="false" aria-controls="panel-aes2" type="button">AES #2</button>
+        </div>
+      </div>
+
+      <!-- Normal source panel -->
+      <div id="panel-normal" role="region" aria-labelledby="btn-normal">
+        <div class="kvs">
+          <div class="kv">
+            <div class="k">Incident Energy</div>
+            <div class="v">8.5 cal/cm²</div>
+          </div>
+          <div class="kv">
+            <div class="k">Arc Flash Boundary</div>
+            <div class="v">48 in.</div>
+          </div>
+          <div class="kv">
+            <div class="k">Available Fault Current</div>
+            <div class="v">17.918 kA</div>
+          </div>
+          <div class="kv">
+            <div class="k">Operating Voltage</div>
+            <div class="v">13.8 kV</div>
+          </div>
+        </div>
+        <p class="note">Values reflect normal plant source conditions.</p>
+      </div>
+
+      <!-- AES #1 source panel -->
+      <div id="panel-aes1" role="region" aria-labelledby="btn-aes1" hidden>
+        <div class="kvs">
+          <div class="kv">
+            <div class="k">Incident Energy (AES #1)</div>
+            <div class="v aes1">5.2 cal/cm²</div>
+          </div>
+          <div class="kv">
+            <div class="k">Arc Flash Boundary (AES #1)</div>
+            <div class="v aes1">32 in.</div>
+          </div>
+          <div class="kv">
+            <div class="k">Available Fault Current (AES #1)</div>
+            <div class="v aes1">6.4 kA</div>
+          </div>
+          <div class="kv">
+            <div class="k">Source Description</div>
+            <div class="v">AES-2025-001 South Substation Generator</div>
+          </div>
+        </div>
+        <p class="note">Values apply only when energized by AES #1.</p>
+      </div>
+
+      <!-- AES #2 source panel -->
+      <div id="panel-aes2" role="region" aria-labelledby="btn-aes2" hidden>
+        <div class="kvs">
+          <div class="kv">
+            <div class="k">Incident Energy (AES #2)</div>
+            <div class="v aes2">7.1 cal/cm²</div>
+          </div>
+          <div class="kv">
+            <div class="k">Arc Flash Boundary (AES #2)</div>
+            <div class="v aes2">41 in.</div>
+          </div>
+          <div class="kv">
+            <div class="k">Available Fault Current (AES #2)</div>
+            <div class="v aes2">9.8 kA</div>
+          </div>
+          <div class="kv">
+            <div class="k">Source Description</div>
+            <div class="v">AES-2025-014 Portable 1 MW Generator at South Main</div>
+          </div>
+        </div>
+        <p class="note">Only one alternate source may be active at a time. Values apply only when energized by AES #2.</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function(){
+      const buttons = [
+        { btn: 'btn-normal', panel: 'panel-normal' },
+        { btn: 'btn-aes1', panel: 'panel-aes1' },
+        { btn: 'btn-aes2', panel: 'panel-aes2' },
+      ];
+
+      function showPanel(targetId){
+        buttons.forEach(({btn, panel}) => {
+          const b = document.getElementById(btn);
+          const p = document.getElementById(panel);
+          const isTarget = btn === targetId;
+          b.setAttribute('aria-pressed', String(isTarget));
+          p.hidden = !isTarget;
+        });
+      }
+
+      buttons.forEach(({btn}) => {
+        document.getElementById(btn).addEventListener('click', () => showPanel(btn));
+      });
+    })();
+  </script>
+</body>
+</html>
