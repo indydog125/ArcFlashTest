@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TagSafety | AES Query Builder</title>
+  <style>
+    :root{
+      --bg:#f8fafc;--card:#fff;--border:#e5e7eb;--text:#111827;--muted:#6b7280;--shadow:0 6px 18px rgba(17,24,39,.08);
+      --blue:#0ea5e9;--green:#16a34a;--gray:#9ca3af;--red:#ef4444;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;}
+    .container{max-width:1180px;margin:28px auto;padding:0 16px}
+    .topbar{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+    .topbar h1{font-size:1.25rem;margin:0;margin-right:auto}
+    .btn{appearance:none;border:1px solid var(--border);background:#fff;border-radius:10px;padding:8px 12px;cursor:pointer;font-weight:600}
+    .btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+    .toolbar{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+    .input{border:1px solid var(--border);background:#fff;border-radius:10px;padding:8px 10px;min-width:220px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow)}
+    table{width:100%;border-collapse:separate;border-spacing:0}
+    thead th{position:sticky;top:0;background:#f3f4f6;text-align:left;padding:10px 12px;font-size:.9rem;color:#374151;border-bottom:1px solid var(--border)}
+    tbody td{padding:10px 12px;border-bottom:1px solid var(--border);background:#fff}
+    tbody tr:hover td{background:#fafafa}
+    .status{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 10px;font-weight:700;font-size:.8rem}
+    .on{background:#dcfce7;color:#14532d}
+    .off{background:#e5e7eb;color:#111827}
+    .muted{color:var(--muted)}
+    .small{font-size:.85rem}
+    .tag{display:inline-block;background:#eef2ff;color:#3730a3;border-radius:6px;padding:2px 8px;font-weight:700;font-size:.75rem}
+    .dotbtn{appearance:none;border:1px solid var(--border);background:#fff;border-radius:8px;padding:6px 8px;cursor:pointer}
+    .footer{display:flex;align-items:center;justify-content:space-between;padding:12px}
+    .pagination{display:flex;align-items:center;gap:6px}
+    .page{border:1px solid var(--border);background:#fff;border-radius:8px;padding:6px 10px;cursor:pointer}
+    .page.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+    .checkbox{display:flex;align-items:center;justify-content:center}
+    .sld{color:#0b5a7e;text-decoration:underline;cursor:pointer}
+  </style>
+</head>
+<body>
+  <main class="container">
+    <div class="topbar">
+      <h1>AES Sources</h1>
+      <button class="btn">Create QRCode</button>
+      <button class="btn">Export CSV File</button>
+      <button class="btn">Download Template</button>
+    </div>
+
+    <div class="card">
+      <div class="toolbar" style="padding:12px 12px 0 12px;">
+        <input class="input" placeholder="Search AES name, ID, location" aria-label="Search" />
+        <button class="btn">Filter</button>
+        <button class="btn">Clear</button>
+      </div>
+
+      <div style="overflow:auto; border-top-left-radius:16px;border-top-right-radius:16px;">
+        <table aria-label="AES query table">
+          <thead>
+            <tr>
+              <th style="width:34px"><input type="checkbox" aria-label="Select all"/></th>
+              <th>AES ID</th>
+              <th>AES Name</th>
+              <th>Status</th>
+              <th>Location</th>
+              <th>Feed Voltage</th>
+              <th>Capacity</th>
+              <th>Energized Equip</th>
+              <th>SLD</th>
+              <th>Last Updated</th>
+              <th>Retired</th>
+              <th style="width:60px">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="checkbox"><input type="checkbox"/></td>
+              <td><span class="small"><a href="https://www.arcflashapp.com/aes_show_page_mockup_plain_html.html">AES-2025-001</a></span></td>
+              <td>South Substation AES Generator</td>
+              <td><span class="status on">On</span></td>
+              <td>South Main Sub</td>
+              <td>13.8 kV</td>
+              <td>1,000 kW</td>
+              <td>12</td>
+              <td><span class="sld">01-E-D-18015-01</span></td>
+              <td class="small muted">2025-08-21 14:32 MDT</td>
+              <td class="checkbox"><input type="checkbox" aria-label="Retired"/></td>
+              <td class="checkbox"><button class="dotbtn" aria-label="Row actions">⋯</button></td>
+            </tr>
+            <tr>
+              <td class="checkbox"><input type="checkbox"/></td>
+              <td><span class="small">AES-2025-002</span></td>
+              <td>North Yard Portable GenSet A</td>
+              <td><span class="status off">Off</span></td>
+              <td>North Yard</td>
+              <td>4.16 kV</td>
+              <td>500 kW</td>
+              <td>5</td>
+              <td><span class="sld">01-E-D-18015-02</span></td>
+              <td class="small muted">2025-08-18 09:05 MDT</td>
+              <td class="checkbox"><input type="checkbox"/></td>
+              <td class="checkbox"><button class="dotbtn">⋯</button></td>
+            </tr>
+            <tr>
+              <td class="checkbox"><input type="checkbox"/></td>
+              <td><span class="small">AES-2025-003</span></td>
+              <td>MCCN8 Backfeed via TX0220</td>
+              <td><span class="status on">On</span></td>
+              <td>MS103 Building</td>
+              <td>600 V</td>
+              <td>750 kW</td>
+              <td>8</td>
+              <td><span class="sld">01-E-D-18015-05</span></td>
+              <td class="small muted">2025-08-20 11:42 MDT</td>
+              <td class="checkbox"><input type="checkbox"/></td>
+              <td class="checkbox"><button class="dotbtn">⋯</button></td>
+            </tr>
+            <tr>
+              <td class="checkbox"><input type="checkbox"/></td>
+              <td><span class="small">AES-2025-004</span></td>
+              <td>Boiler House Temporary Feed</td>
+              <td><span class="status off">Off</span></td>
+              <td>Boiler House</td>
+              <td>13.8 kV</td>
+              <td>1,500 kW</td>
+              <td>0</td>
+              <td><span class="sld">01-E-D-18015-03</span></td>
+              <td class="small muted">2025-08-17 07:15 MDT</td>
+              <td class="checkbox"><input type="checkbox"/></td>
+              <td class="checkbox"><button class="dotbtn">⋯</button></td>
+            </tr>
+            <tr>
+              <td class="checkbox"><input type="checkbox"/></td>
+              <td><span class="small">AES-2025-005</span></td>
+              <td>Admin Building UPS Bypass AES</td>
+              <td><span class="status on">On</span></td>
+              <td>Administration</td>
+              <td>480 V</td>
+              <td>150 kW</td>
+              <td>10</td>
+              <td><span class="sld">01-E-D-18015-06</span></td>
+              <td class="small muted">2025-08-22 08:02 MDT</td>
+              <td class="checkbox"><input type="checkbox"/></td>
+              <td class="checkbox"><button class="dotbtn">⋯</button></td>
+            </tr>
+            <tr>
+              <td class="checkbox"><input type="checkbox"/></td>
+              <td><span class="small">AES-2025-006</span></td>
+              <td>Tank Farm Generator Dock</td>
+              <td><span class="status off">Off</span></td>
+              <td>Tank Farm NE</td>
+              <td>4.16 kV</td>
+              <td>800 kW</td>
+              <td>3</td>
+              <td><span class="sld">01-E-D-18015-07</span></td>
+              <td class="small muted">2025-08-16 15:26 MDT</td>
+              <td class="checkbox"><input type="checkbox"/></td>
+              <td class="checkbox"><button class="dotbtn">⋯</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="footer">
+        <div class="small muted">Showing 6 total records</div>
+        <div class="pagination">
+          <button class="page active" aria-current="page">1</button>
+          <button class="page" disabled>2</button>
+          <span class="small muted">per page</span>
+          <select class="input" style="width:auto; padding:6px 8px;">
+            <option selected>100</option>
+            <option>50</option>
+            <option>25</option>
+          </select>
+          <button class="btn">Export</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
