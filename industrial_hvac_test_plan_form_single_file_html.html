@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Industrial HVAC — Test Plan / Form Viewer</title>
+  <style>
+    :root { --bg:#0b0c0f; --panel:#111318; --muted:#a0a4ac; --text:#e8e9ec; --brand:#06b6d4; }
+    *{box-sizing:border-box}
+    body{margin:0;font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans";background:var(--bg);color:var(--text)}
+    .topbar{position:sticky;top:0;z-index:10;backdrop-filter:blur(6px);background:rgba(17,19,24,.8);border-bottom:1px solid #1e2430}
+    .container{max-width:1100px;margin:0 auto;padding:16px}
+    .row{display:flex;align-items:center;gap:10px}
+    .spacer{flex:1}
+    .btn{appearance:none;border:1px solid #2a3242;background:#161a22;color:var(--text);padding:10px 14px;border-radius:12px;cursor:pointer}
+    .btn:hover{background:#1a1f29}
+    .btn.primary{border-color:transparent;background:var(--brand);color:#001014;font-weight:700}
+    .btn.primary:hover{filter:brightness(.95)}
+    .btn.toggled{background:#1f2633;border-color:#3a4458}
+    .panel{background:var(--panel);border:1px solid #1e2430;border-radius:16px;padding:20px;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+    .hidden{display:none}
+    h1,h2,h3{line-height:1.2}
+    h1{font-size:28px;margin:8px 0 16px}
+    h2{font-size:20px;margin:20px 0 8px;border-bottom:1px solid #1f2430;padding-bottom:6px}
+    h3{font-size:16px;margin:16px 0 6px}
+    p{margin:10px 0}
+    code,pre{background:#0f1217;border:1px solid #1f2633;border-radius:8px;padding:2px 6px}
+    pre{padding:12px;overflow:auto}
+    ul{margin:8px 0 8px 22px}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px}
+    .label{font-size:12px;color:var(--muted)}
+    .input,select,textarea{background:#0f1217;color:var(--text);border:1px solid #293042;border-radius:10px;padding:9px 10px}
+    textarea{min-height:90px}
+    .section{margin-bottom:18px}
+    .section-header{display:flex;align-items:baseline;gap:10px}
+    .section-title{font-weight:700;font-size:16px}
+    .section-desc{color:var(--muted);font-size:12px}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:8px;border-top:1px solid #1e2430}
+    th{text-align:left;font-weight:600;color:var(--muted)}
+    td.center{text-align:center}
+    .group{border:1px dashed #2f3747;border-radius:14px;padding:12px;margin-top:6px}
+    .group-title{font-weight:600;margin-bottom:8px}
+    .footer{color:var(--muted);font-size:12px;margin:20px 0 40px}
+    .pill{padding:2px 8px;font-size:11px;border:1px solid #2a3242;border-radius:999px;color:var(--muted)}
+    .meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+  <div class="topbar">
+    <div class="container">
+      <div class="row">
+        <div style="font-weight:700">Industrial HVAC Spec Viewer</div>
+        <div class="pill" id="specMeta">loading…</div>
+        <div class="spacer"></div>
+        <button id="btnPlan" class="btn toggled">Test Plan</button>
+        <button id="btnForm" class="btn">Show Form</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="margin-top:16px">
+    <!-- Plan -->
+    <div id="planView" class="panel"><div id="markdown"></div></div>
+
+    <!-- Form -->
+    <div id="formView" class="panel hidden">
+      <div class="meta" style="margin-bottom:10px">
+        <div class="pill" id="specTitle"></div>
+        <div class="pill" id="specId"></div>
+        <div class="pill" id="specVer"></div>
+        <div class="spacer"></div>
+        <button id="exportBtn" class="btn primary">Export Filled JSON</button>
+      </div>
+      <div id="formRoot"></div>
+    </div>
+
+    <div class="footer">Rendered locally from embedded spec. Follow site PPE/LOTO, confined space rules, fall protection, and lockouts for fans/pumps.</div>
+  </div>
+
+  <script>
+    const SPEC = {
+      test_plan_markdown: `# Industrial HVAC Inspection & Functional Test Plan\n\n**Scope:** Industrial HVAC assets including AHUs/MAUs/RTUs, supply/return/exhaust fans, VAV boxes (if applicable), coils, pumps, chillers/condensers (if on the same work order), VFDs, dampers and economizers. **Use case:** shutdown/turnaround maintenance and routine inspection.\n\n## Safety & Hazards\n- **LOTO:** Isolate fan motors, heaters, and hydronic pumps. Verify absence of voltage and zero energy (rotation/pressure).\n- **Confined spaces & heights:** Follow access permits; secure panels and guards.\n- **Airborne hazards:** Dust/mold; use respirator as required; avoid disturbing media.\n- **Refrigerant circuits (if DX):** Use rated gauges and hoses; ventilate; no open flames.\n- **Hydronic systems:** Hot surfaces; pressure; chemical treatment.\n\n## Prerequisites\n- Drawings, O&M manuals, BAS point list, previous PM records.\n- Calibrated tools: DMM, clamp meter, manometer (in. w.c.), RTDs/thermometers, vibration meter, tach, anemometer or airflow hood (if required), refrigerant gauges (if DX).\n\n## Visual Inspection\n- Panels closed and gasketing intact; filters present; belts and pulleys condition/tension; bearings and lubrication; drain pans clean; coils free of heavy debris; guards present; damper linkages secure; wiring tidy; anchors and isolation mounts intact; no rubbing or abnormal vibration.\n\n## Functional Tests\n- **Start/Stop:** Local HOA and BAS command; verify rotation and abnormal noise.\n- **Safeties:** Smoke/fire shutdown, high-static cutout, freezestat, HP/LP (DX), condensate float, airflow switches, door interlocks.\n- **Dampers/Economizer:** Command min/outdoor/return positions; confirm end switches and travel.\n- **VFD:** Commanded speed, accel/decel, fault memory cleared; trend min Hz at which airflow/pressure holds.\n- **Alarms/Indication:** BAS points healthy; local display values match instruments.\n\n## Measurements to Record\n- **Electrical:** Supply voltage (V), phase imbalance (%), running current per phase (A), PF (if metered), VFD speed (%).\n- **Air side:** Supply/return/outdoor air temps (°C), coil ΔT (°C), supply static (in. w.c.), filter ΔP (in. w.c.), measured airflow (CFM if available).\n- **Water side (if hydronic):** CHW/HW supply/return temps (°C), ΔT, coil ΔP (kPa), pump DP (kPa).\n- **DX refrigeration (if applicable):** Suction/discharge pressures (kPa), superheat/subcool (°C).\n- **Mechanical:** Vibration (mm/s), bearing temp (°C), belt tension noted.\n\n## Acceptance Guidance (practical)\n- Voltage imbalance ≤ ~2–3%; current imbalance ≤ ~10%.\n- Filter ΔP vs change-out threshold per site; coil ΔT in line with design or historical baseline.\n- Fans deliver expected static at design speed; VFD stable without hunting.\n- DX systems superheat/subcool within manufacturer norms; hydronic ΔT consistent with design.\n\n## Completion\n- Remove lockouts only after reassembly, guards on, tools accounted, BAS returned to normal, trend checks satisfactory.\n\n## References\n- SMACNA, AMCA 203, ASHRAE guidelines, manufacturer O&M.\n`,
+      form_spec: {
+        spec_id: "industrial-hvac-inspection-v1",
+        version: "2025-10-22T00:00:00Z",
+        title: "Industrial HVAC — Inspection & Functional Test Sheet",
+        status_enum: ["OK","N-OK","C","NA"],
+        sections: [
+          { key: "ident", title: "Equipment Identification", instructions: "Record asset and job identifiers. Date defaults to today.", fields: [
+              { key: "asset_tag", label: "Asset Tag / Equipment No.", type: "text", required: true },
+              { key: "equipment_type", label: "Equipment Type", type: "select", options: ["AHU","MAU","RTU","Supply Fan","Return Fan","Exhaust Fan","VAV/Air Handler","Chiller","Boiler","Pump","Cooling Tower Cell","Heat Exchanger","Other"], required: true },
+              { key: "location", label: "Location / Area", type: "text" },
+              { key: "date", label: "Date", type: "date", default: "today", required: true },
+              { key: "work_order_no", label: "Work Order / WO#", type: "text" },
+              { key: "tested_by", label: "Tested By", type: "text", required: true },
+              { key: "witnessed_by", label: "Witnessed By", type: "text" }
+            ], comments_field: { key: "ident_comments", label: "Comments", type: "textarea" } },
+
+          { key: "nameplate", title: "Nameplate & Configuration", instructions: "Capture device data and control notes.", fields: [
+              { key: "manufacturer", label: "Manufacturer", type: "text" },
+              { key: "model_no", label: "Model No.", type: "text" },
+              { key: "serial_no", label: "Serial No.", type: "text" },
+              { key: "voltage_v", label: "Motor Voltage (V)", type: "number", min: 110, max: 690, step: 1 },
+              { key: "phase", label: "Phase", type: "select", options: ["1","3"], default: "3" },
+              { key: "motor_hp", label: "Motor Size (HP)", type: "number", min: 0, step: 0.1 },
+              { key: "motor_fla_a", label: "Motor FLA (A)", type: "number", min: 0, step: 0.1 },
+              { key: "vfd_present", label: "VFD Present", type: "select", options: ["Yes","No"], default: "Yes" },
+              { key: "bas_control", label: "BAS Controlled", type: "select", options: ["Yes","No"], default: "Yes" },
+              { key: "refrigerant_type", label: "Refrigerant Type (if DX)", type: "text" },
+              { key: "design_airflow_cfm", label: "Design Airflow (CFM)", type: "number", min: 0, step: 1 },
+              { key: "heating_type", label: "Heating Type", type: "select", options: ["None","Hot Water Coil","Steam Coil","Electric","Gas Furnace"] }
+            ], comments_field: { key: "nameplate_comments", label: "Comments", type: "textarea" } },
+
+          { key: "inspections", title: "Inspections — Visual & Mechanical", instructions: "Unit safe and isolated per LOTO. Record status for each item.", items: [
+              { key: "panels_gaskets", label: "Panels closed; gasketing intact; enclosure dry" },
+              { key: "filters_installed", label: "Filters installed; correct size; no bypass" },
+              { key: "belts_pulleys", label: "Belts/pulleys condition and tension" },
+              { key: "bearings_lube", label: "Bearings condition; lubrication completed" },
+              { key: "coil_clean", label: "Coils and drain pans clean; drains clear" },
+              { key: "guards_present", label: "Guards/covers present; door interlocks function" },
+              { key: "wiring_neat", label: "Wiring neat; glands sealed; ground intact" },
+              { key: "dampers_linkages", label: "Dampers move freely; linkages secure; end-switches aligned" },
+              { key: "isolation_mounts", label: "Base, anchors, isolation mounts intact" },
+              { key: "vibration_abnormal", label: "No abnormal noise/vibration/rubbing" }
+            ], comments_field: { key: "inspections_comments", label: "Inspection Comments / Defects", type: "textarea" } },
+
+          { key: "functional", title: "Functional Tests", instructions: "Restore power for live tests; maintain safeguards and spotter as needed.", items: [
+              { key: "start_stop_local", label: "Start/Stop via local HOA" },
+              { key: "start_stop_bas", label: "Start/Stop via BAS command" },
+              { key: "rotation_verified", label: "Fan/pump rotation verified" },
+              { key: "smoke_fire_shutdown", label: "Smoke/Fire input trips unit" },
+              { key: "high_static_cutout", label: "High static cutout functional (if equipped)" },
+              { key: "freezestat", label: "Freezestat trips and resets (if equipped)" },
+              { key: "dx_hp_lp", label: "DX HP/LP safeties proven (if applicable)" },
+              { key: "condensate_float", label: "Condensate float shuts unit (if equipped)" },
+              { key: "airflow_switch", label: "Airflow/DP switch proven (if equipped)" },
+              { key: "economizer_positions", label: "Economizer/dampers reach commanded min/ret/OA" },
+              { key: "vfd_command", label: "VFD accepts speed cmd; accel/decel OK; no trips" },
+              { key: "alarms_indication", label: "BAS points and local display indicate correctly" }
+            ], extra_fields: [
+              { key: "control_power", label: "Control Power (V & source)", type: "text", default: "120 VAC" },
+              { key: "notes_isolation", label: "Safety Measures in Place (guards/spotter/fall protection)", type: "text" }
+            ], comments_field: { key: "functional_comments", label: "Functional Test Comments", type: "textarea" } },
+
+          { key: "measurements", title: "Measurements", instructions: "Record applicable measurements; mark NA where not applicable.", groups: [
+              { key: "electrical", title: "Electrical", fields: [
+                  { key: "supply_volts_l1l2", label: "Supply Voltage L1-L2 (V)", type: "number", min: 0, max: 690, step: 1 },
+                  { key: "supply_volts_l2l3", label: "Supply Voltage L2-L3 (V)", type: "number", min: 0, max: 690, step: 1 },
+                  { key: "supply_volts_l3l1", label: "Supply Voltage L3-L1 (V)", type: "number", min: 0, max: 690, step: 1 },
+                  { key: "voltage_imbalance_pct", label: "Voltage Imbalance (%)", type: "number", min: 0, max: 10, step: 0.1 },
+                  { key: "run_current_l1_a", label: "Running Current L1 (A)", type: "number", min: 0, step: 0.1 },
+                  { key: "run_current_l2_a", label: "Running Current L2 (A)", type: "number", min: 0, step: 0.1 },
+                  { key: "run_current_l3_a", label: "Running Current L3 (A)", type: "number", min: 0, step: 0.1 },
+                  { key: "current_imbalance_pct", label: "Current Imbalance (%)", type: "number", min: 0, max: 20, step: 0.1 },
+                  { key: "vfd_speed_pct", label: "VFD Commanded Speed (%)", type: "number", min: 0, max: 100, step: 1 },
+                  { key: "power_factor", label: "Power Factor (if metered)", type: "number", min: 0, max: 1, step: 0.01 }
+                ] },
+              { key: "air_side", title: "Air Side", fields: [
+                  { key: "oa_temp_c", label: "Outdoor Air Temp (°C)", type: "number", min: -50, max: 60, step: 0.1 },
+                  { key: "ra_temp_c", label: "Return Air Temp (°C)", type: "number", min: -10, max: 60, step: 0.1 },
+                  { key: "sa_temp_c", label: "Supply Air Temp (°C)", type: "number", min: -10, max: 60, step: 0.1 },
+                  { key: "coil_delta_t_c", label: "Coil ΔT (°C)", type: "number", min: -10, max: 40, step: 0.1 },
+                  { key: "supply_static_inwc", label: "Supply Static (in. w.c.)", type: "number", min: 0, max: 10, step: 0.01 },
+                  { key: "filter_dp_inwc", label: "Filter ΔP (in. w.c.)", type: "number", min: 0, max: 5, step: 0.01 },
+                  { key: "measured_airflow_cfm", label: "Measured Airflow (CFM)", type: "number", min: 0, step: 1 }
+                ] },
+              { key: "water_side", title: "Water Side (if hydronic)", fields: [
+                  { key: "chw_supply_c", label: "CHW Supply (°C)", type: "number", min: 0, max: 20, step: 0.1 },
+                  { key: "chw_return_c", label: "CHW Return (°C)", type: "number", min: 0, max: 30, step: 0.1 },
+                  { key: "hw_supply_c", label: "HW Supply (°C)", type: "number", min: 20, max: 100, step: 0.1 },
+                  { key: "hw_return_c", label: "HW Return (°C)", type: "number", min: 20, max: 100, step: 0.1 },
+                  { key: "coil_dp_kpa", label: "Coil ΔP (kPa)", type: "number", min: 0, max: 100, step: 0.1 },
+                  { key: "pump_dp_kpa", label: "Pump ΔP (kPa)", type: "number", min: 0, max: 500, step: 0.1 }
+                ] },
+              { key: "dx_refrigeration", title: "DX Refrigeration (if applicable)", fields: [
+                  { key: "suction_pressure_kpa", label: "Suction Pressure (kPa)", type: "number", min: 0, max: 3000, step: 1 },
+                  { key: "discharge_pressure_kpa", label: "Discharge Pressure (kPa)", type: "number", min: 0, max: 4000, step: 1 },
+                  { key: "superheat_c", label: "Superheat (°C)", type: "number", min: -5, max: 40, step: 0.1 },
+                  { key: "subcool_c", label: "Subcool (°C)", type: "number", min: -5, max: 40, step: 0.1 }
+                ] },
+              { key: "mechanical", title: "Mechanical", fields: [
+                  { key: "vibration_mms", label: "Vibration RMS (mm/s)", type: "number", min: 0, max: 50, step: 0.1 },
+                  { key: "bearing_temp_c", label: "Bearing Temp (°C)", type: "number", min: 0, max: 120, step: 0.1 },
+                  { key: "belt_tension_note", label: "Belt Tension / Notes", type: "text" }
+                ] }
+            ], comments_field: { key: "measurements_comments", label: "Measurements Comments / Notes", type: "textarea" } },
+
+          { key: "completion", title: "Completion Checklist", instructions: "Restore to normal and document final condition.", fields: [
+              { key: "assembly_complete", label: "Assembly complete; guards on; panels closed", type: "select", options: ["Yes","No"], default: "Yes" },
+              { key: "tools_accounted", label: "All tools & materials accounted for", type: "select", options: ["Yes","No"], default: "Yes" },
+              { key: "bas_normal", label: "BAS returned to normal; alarms clear", type: "select", options: ["Yes","No"], default: "Yes" },
+              { key: "trend_started", label: "Post-maintenance trend/monitoring started", type: "select", options: ["Yes","No"], default: "Yes" }
+            ], comments_field: { key: "completion_comments", label: "Completion Comments", type: "textarea" } },
+
+          { key: "final_comments", title: "Final Comments", fields: [ { key: "final_comments_text", label: "Final Comments / Defects & Corrective Actions", type: "textarea" } ] },
+
+          { key: "signoff", title: "Sign-Off", fields: [
+              { key: "so_tested_by", label: "Tested By", type: "text", required: true },
+              { key: "so_witnessed_by", label: "Witnessed By", type: "text" },
+              { key: "so_company", label: "Company", type: "text" },
+              { key: "so_signature", label: "Signature (typed)", type: "text" },
+              { key: "so_date", label: "Date", type: "date", default: "today" }
+            ] }
+        ]
+      }
+    };
+
+    // UI toggle
+    const btnPlan = document.getElementById('btnPlan');
+    const btnForm = document.getElementById('btnForm');
+    const planView = document.getElementById('planView');
+    const formView = document.getElementById('formView');
+    btnPlan.addEventListener('click', () => showView('plan'));
+    btnForm.addEventListener('click', () => showView('form'));
+    function showView(which){
+      if(which==='plan'){ planView.classList.remove('hidden'); formView.classList.add('hidden'); btnPlan.classList.add('toggled'); btnForm.classList.remove('toggled'); }
+      else{ formView.classList.remove('hidden'); planView.classList.add('hidden'); btnForm.classList.add('toggled'); btnPlan.classList.remove('toggled'); }
+    }
+
+    // Meta & Markdown
+    document.getElementById('specMeta').textContent = SPEC.form_spec.title;
+    document.getElementById('specTitle').textContent = SPEC.form_spec.title;
+    document.getElementById('specId').textContent = 'spec_id: ' + SPEC.form_spec.spec_id;
+    document.getElementById('specVer').textContent = 'version: ' + SPEC.form_spec.version;
+    document.getElementById('markdown').innerHTML = marked.parse(SPEC.test_plan_markdown);
+
+    // Form renderer
+    const root = document.getElementById('formRoot');
+    const statusEnum = SPEC.form_spec.status_enum || ["OK","N-OK","C","NA"];
+    const state = buildInitialState(SPEC.form_spec);
+
+    SPEC.form_spec.sections.forEach(section => {
+      const secEl = document.createElement('div'); secEl.className='section'; secEl.dataset.sectionKey=section.key;
+      const header = document.createElement('div'); header.className='section-header';
+      header.innerHTML = `<div class="section-title">${escapeHTML(section.title)}</div>` + (section.instructions ? ` <div class="section-desc">${escapeHTML(section.instructions)}</div>` : '');
+      secEl.appendChild(header);
+
+      if(section.fields && section.fields.length){
+        const grid = document.createElement('div'); grid.className='grid';
+        section.fields.forEach(f => grid.appendChild(renderField('field', section.key, f, state)));
+        secEl.appendChild(grid);
+      }
+
+      if(section.items && section.items.length){
+        const table = document.createElement('table');
+        const thead = document.createElement('thead'); const trh = document.createElement('tr');
+        const th0 = document.createElement('th'); th0.textContent='Item'; trh.appendChild(th0);
+        statusEnum.forEach(s => { const th = document.createElement('th'); th.textContent=s; th.className='center'; trh.appendChild(th); });
+        thead.appendChild(trh); table.appendChild(thead);
+        const tbody = document.createElement('tbody');
+        section.items.forEach(it => {
+          const tr = document.createElement('tr');
+          const tdLab = document.createElement('td'); tdLab.textContent = it.label; tr.appendChild(tdLab);
+          statusEnum.forEach(s => {
+            const td = document.createElement('td'); td.className='center';
+            const id = `${section.key}__${it.key}__${s}`;
+            const input = document.createElement('input'); input.type='radio'; input.name=`${section.key}__${it.key}`; input.value=s; input.id=id;
+            input.addEventListener('change', () => { state[section.key].items[it.key] = s; });
+            td.appendChild(input); tr.appendChild(td);
+          });
+          tbody.appendChild(tr);
+        });
+        table.appendChild(tbody); secEl.appendChild(table);
+      }
+
+      if(section.extra_fields && section.extra_fields.length){
+        const grid = document.createElement('div'); grid.className='grid';
+        section.extra_fields.forEach(f => grid.appendChild(renderField('extra', section.key, f, state)));
+        secEl.appendChild(grid);
+      }
+
+      if(section.groups && section.groups.length){
+        section.groups.forEach(g => {
+          const grp = document.createElement('div'); grp.className='group'; grp.dataset.groupKey=g.key;
+          const title = document.createElement('div'); title.className='group-title'; title.textContent = g.title; grp.appendChild(title);
+          const grid = document.createElement('div'); grid.className='grid';
+          g.fields.forEach(f => grid.appendChild(renderField('group', section.key, f, state, g.key)));
+          grp.appendChild(grid); secEl.appendChild(grp);
+        });
+      }
+
+      if(section.comments_field){
+        const wrap = document.createElement('div'); wrap.className='field';
+        const lbl = document.createElement('label'); lbl.className='label'; lbl.textContent = section.comments_field.label; wrap.appendChild(lbl);
+        const ta = document.createElement('textarea'); ta.addEventListener('input', () => { state[section.key].comments = ta.value; });
+        wrap.appendChild(ta); secEl.appendChild(wrap);
+      }
+
+      root.appendChild(secEl);
+    });
+
+    function renderField(scope, sectionKey, field, stateObj, groupKey){
+      const wrap = document.createElement('div'); wrap.className='field';
+      const id = `${sectionKey}__${groupKey?groupKey+'__':''}${field.key}`;
+      const lbl = document.createElement('label'); lbl.className='label'; lbl.setAttribute('for', id); lbl.textContent = field.label; wrap.appendChild(lbl);
+
+      const setVal = (val) => {
+        if(scope==='field') stateObj[sectionKey].fields[field.key] = val;
+        else if(scope==='extra') stateObj[sectionKey].extra_fields[field.key] = val;
+        else if(scope==='group') { stateObj[sectionKey].groups[groupKey] = stateObj[sectionKey].groups[groupKey] || {}; stateObj[sectionKey].groups[groupKey][field.key] = val; }
+      };
+
+      const def = defaultFor(field); setVal(def);
+
+      if(field.type==='textarea'){
+        const ta = document.createElement('textarea'); ta.className='input'; ta.id=id; ta.value = def || '';
+        ta.addEventListener('input', () => setVal(ta.value)); wrap.appendChild(ta); return wrap;
+      }
+      if(field.type==='select'){
+        const sel = document.createElement('select'); sel.className='input'; sel.id=id;
+        const opt0 = document.createElement('option'); opt0.value=''; opt0.textContent='Select…'; opt0.disabled=true; sel.appendChild(opt0);
+        (field.options||[]).forEach(o => { const op=document.createElement('option'); op.value=o; op.textContent=o; sel.appendChild(op); });
+        sel.value = def || '';
+        sel.addEventListener('change', () => setVal(sel.value)); wrap.appendChild(sel); return wrap;
+      }
+      if(field.type==='date'){
+        const inp = document.createElement('input'); inp.type='date'; inp.className='input'; inp.id=id; inp.value = def || '';
+        inp.addEventListener('input', () => setVal(inp.value)); wrap.appendChild(inp); return wrap;
+      }
+      if(field.type==='number'){
+        const inp = document.createElement('input'); inp.type='number'; inp.className='input'; inp.id=id; inp.value = (def ?? '') + '';
+        if(field.min!==undefined) inp.min = field.min; if(field.max!==undefined) inp.max = field.max; if(field.step!==undefined) inp.step = field.step;
+        inp.addEventListener('input', () => setVal(inp.value === '' ? '' : Number(inp.value))); wrap.appendChild(inp); return wrap;
+      }
+      const inp = document.createElement('input'); inp.type='text'; inp.className='input'; inp.id=id; inp.value = def ?? '';
+      inp.addEventListener('input', () => setVal(inp.value)); wrap.appendChild(inp); return wrap;
+    }
+
+    function defaultFor(field){ if(field.type==='date' && field.default==='today') return todayISO(); return field.default !== undefined ? field.default : ''; }
+    function todayISO(){ const d = new Date(); const tz = d.getTimezoneOffset(); const local = new Date(d.getTime() - tz*60000); return local.toISOString().slice(0,10); }
+    function escapeHTML(s){ return s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+
+    function buildInitialState(formSpec){
+      const state = {}; (formSpec.sections||[]).forEach(s => {
+        const sec = { fields:{}, items:{}, groups:{}, extra_fields:{}, comments:"" };
+        (s.fields||[]).forEach(f => { sec.fields[f.key] = (f.type==='date' && f.default==='today') ? todayISO() : (f.default!==undefined ? f.default : ''); });
+        (s.items||[]).forEach(it => { sec.items[it.key] = ""; });
+        (s.extra_fields||[]).forEach(f => { sec.extra_fields[f.key] = (f.type==='date' && f.default==='today') ? todayISO() : (f.default!==undefined ? f.default : ''); });
+        (s.groups||[]).forEach(g => { const gobj={}; (g.fields||[]).forEach(f => { gobj[f.key] = (f.type==='date' && f.default==='today') ? todayISO() : (f.default!==undefined ? f.default : ''); }); sec.groups[g.key]=gobj; });
+        if(s.comments_field) sec.comments=""; state[s.key]=sec; });
+      return state;
+    }
+
+    // Export filled JSON
+    document.getElementById('exportBtn').addEventListener('click', () => {
+      const out = { spec_meta: { spec_id: SPEC.form_spec.spec_id, title: SPEC.form_spec.title, version: SPEC.form_spec.version, exported_at: new Date().toISOString() }, data: state };
+      const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href=url; a.download = `${SPEC.form_spec.spec_id}-filled.json`; a.click(); URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
