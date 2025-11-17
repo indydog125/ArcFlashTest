@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Constituent Voice | Let Constituents Be Heard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Constituent Voice at constituentvoice.democracy gives elected representatives a clear, verified signal of what their constituents think about key issues."
+  />
+
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-alt: #020617;
+      --accent: #22c55e;
+      --accent-soft: rgba(34, 197, 94, 0.12);
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --card-bg: #020617;
+      --border-subtle: #1f2937;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1f2937 0, #020617 45%, #000 100%);
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(12px);
+      background: linear-gradient(
+        to bottom,
+        rgba(15, 23, 42, 0.9),
+        rgba(15, 23, 42, 0.7),
+        transparent
+      );
+      border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+    }
+
+    .nav-inner {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0.8rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #bbf7d0, #22c55e, #16a34a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 30px rgba(34, 197, 94, 0.7);
+    }
+
+    .brand-mark svg {
+      width: 20px;
+      height: 20px;
+      fill: #022c22;
+    }
+
+    .brand-text-main {
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      font-size: 1.05rem;
+    }
+
+    .brand-text-sub {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .nav-cta {
+      font-size: 0.85rem;
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(15, 23, 42, 0.7);
+    }
+
+    .nav-cta span.tag-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.9);
+    }
+
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    .hero {
+      padding-top: 3.5rem;
+      padding-bottom: 2.5rem;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    .hero-kicker {
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2.1rem, 3vw, 2.8rem);
+      line-height: 1.1;
+      margin: 0;
+    }
+
+    .hero-title span.highlight {
+      color: var(--accent);
+      text-shadow: 0 0 14px rgba(34, 197, 94, 0.7);
+    }
+
+    .hero-subtitle {
+      margin-top: 1rem;
+      font-size: 1.04rem;
+      color: var(--text-muted);
+      max-width: 34rem;
+    }
+
+    .hero-subsubtitle {
+      margin-top: 0.6rem;
+      font-size: 0.95rem;
+      color: #9ca3af;
+    }
+
+    .hero-ctas {
+      margin-top: 1.6rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .btn-primary {
+      border: none;
+      cursor: pointer;
+      padding: 0.8rem 1.5rem;
+      border-radius: 999px;
+      font-size: 0.98rem;
+      font-weight: 500;
+      background: linear-gradient(120deg, #22c55e, #16a34a);
+      color: #022c22;
+      box-shadow:
+        0 12px 35px rgba(34, 197, 94, 0.4),
+        0 0 0 1px rgba(21, 128, 61, 0.6);
+    }
+
+    .btn-secondary {
+      border-radius: 999px;
+      padding: 0.75rem 1.35rem;
+      font-size: 0.9rem;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: rgba(15, 23, 42, 0.7);
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .hero-meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.7rem;
+    }
+
+    .hero-meta strong {
+      color: #e5e7eb;
+      font-weight: 500;
+    }
+
+    .hero-card {
+      border-radius: 1.2rem;
+      padding: 1.3rem 1.4rem;
+      background: radial-gradient(circle at top left, #111827, #020617);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      box-shadow:
+        0 22px 50px rgba(15, 23, 42, 0.9),
+        0 0 0 1px rgba(15, 23, 42, 0.9);
+    }
+
+    .hero-card-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-muted);
+      margin-bottom: 0.6rem;
+    }
+
+    .hero-card-title {
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 0.6rem;
+    }
+
+    .hero-card-pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .pill {
+      font-size: 0.75rem;
+      padding: 0.35rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      color: var(--text-muted);
+    }
+
+    .pill.accent {
+      background: var(--accent-soft);
+      color: #bbf7d0;
+      border-color: rgba(34, 197, 94, 0.6);
+    }
+
+    .hero-card-bar {
+      margin-top: 0.7rem;
+      margin-bottom: 0.4rem;
+      height: 9px;
+      width: 100%;
+      border-radius: 999px;
+      background: #020617;
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      overflow: hidden;
+      display: flex;
+    }
+
+    .hero-card-bar span.support {
+      display: block;
+      height: 100%;
+      width: 72%;
+      background: linear-gradient(90deg, #22c55e, #bbf7d0);
+    }
+
+    .hero-card-bar span.opposed {
+      display: block;
+      height: 100%;
+      width: 14%;
+      background: linear-gradient(90deg, #f97316, #ea580c);
+    }
+
+    .hero-card-bar span.undecided {
+      display: block;
+      height: 100%;
+      width: 14%;
+      background: linear-gradient(90deg, #475569, #64748b);
+    }
+
+    .hero-card-legend {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .hero-card-legend span strong {
+      color: #e5e7eb;
+      font-weight: 500;
+    }
+
+    .section {
+      margin-top: 3rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .section h2 {
+      font-size: 1.4rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .section p {
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 42rem;
+      font-size: 0.97rem;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.8rem;
+      align-items: flex-start;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 1.1rem;
+      padding: 1.2rem 1.3rem;
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      font-size: 1.05rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .card p {
+      font-size: 0.9rem;
+      margin-top: 0.1rem;
+    }
+
+    .card ul {
+      margin: 0.5rem 0 0;
+      padding-left: 1.1rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .card ul li {
+      margin-bottom: 0.3rem;
+    }
+
+    .trust-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.2rem;
+    }
+
+    .trust-item h4 {
+      margin: 0 0 0.3rem;
+      font-size: 0.9rem;
+    }
+
+    .trust-item p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .beta-strip {
+      margin-top: 2.4rem;
+      margin-bottom: 2.2rem;
+      padding: 1.2rem 1.3rem;
+      border-radius: 1rem;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .beta-strip-main {
+      font-size: 0.96rem;
+    }
+
+    .beta-strip-main strong {
+      font-weight: 600;
+    }
+
+    .beta-strip small {
+      display: block;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+      font-size: 0.8rem;
+    }
+
+    .beta-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .beta-input {
+      padding: 0.6rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: #020617;
+      color: var(--text-main);
+      font-size: 0.85rem;
+      min-width: 220px;
+    }
+
+    .beta-input::placeholder {
+      color: #6b7280;
+    }
+
+    .beta-submit {
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(120deg, #22c55e, #16a34a);
+      color: #022c22;
+      font-size: 0.9rem;
+      padding: 0.6rem 1.2rem;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    footer {
+      border-top: 1px solid rgba(15, 23, 42, 1);
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+      background: radial-gradient(circle at top, #020617, #000);
+    }
+
+    .footer-inner {
+      max-width: 980px;
+      margin: 0 auto;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.8rem;
+      align-items: center;
+    }
+
+    .footer-inner span strong {
+      color: #e5e7eb;
+    }
+
+    @media (max-width: 840px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-inner {
+        padding-inline: 1rem;
+      }
+
+      main {
+        padding-inline: 1rem;
+      }
+
+      .two-col {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .trust-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .beta-strip {
+        align-items: flex-start;
+      }
+
+      .hero-title {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <!-- Simple speech bubble checkmark icon -->
+          <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+            <path d="M5 4h14a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-5.1l-3.2 3.2a1 1 0 0 1-1.7-.7V15.5H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm4.1 6.9 1.4 1.4 4-4a1 1 0 0 0-1.4-1.4l-2.6 2.58-1-1a1 1 0 1 0-1.4 1.42z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-text-main">Constituent Voice</div>
+          <div class="brand-text-sub">constituentvoice.democracy</div>
+        </div>
+      </div>
+
+      <div class="nav-cta">
+        <span class="tag-dot"></span>
+        <span>Early access list now forming</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="hero-kicker">Civic tech for real representation</div>
+        <h1 class="hero-title">
+          Turn <span class="highlight">constituent opinion</span> into a clear mandate.
+        </h1>
+        <p class="hero-subtitle">
+          Constituent Voice lets people in a riding or ward signal how they want their representatives to vote on key issues at the municipal, provincial, and federal level.
+        </p>
+        <p class="hero-subsubtitle">
+          Voters verify where they live, raise issues, and support the ones they care about. Representatives log in to see real data from real constituents before they vote on the floor.
+        </p>
+
+        <div class="hero-ctas">
+          <button class="btn-primary" type="button">
+            Join the early access list
+          </button>
+          <a href="#how-it-works" class="btn-secondary">
+            <span>How it works</span>
+          </a>
+        </div>
+        <div class="hero-meta">
+          <strong>Designed for Canada first</strong> and built to extend to other democracies.
+        </div>
+      </div>
+
+      <aside class="hero-card" aria-label="Example issue snapshot">
+        <div class="hero-card-label">Example issue</div>
+        <div class="hero-card-title">Should we cap short-term rentals to protect housing?</div>
+        <div class="hero-card-pill-row">
+          <span class="pill accent">Ward 6 · Municipal</span>
+          <span class="pill">Live sentiment</span>
+          <span class="pill">Verified addresses only</span>
+        </div>
+        <div class="hero-card-bar">
+          <span class="support"></span>
+          <span class="opposed"></span>
+          <span class="undecided"></span>
+        </div>
+        <div class="hero-card-legend">
+          <span><strong>72%</strong> support</span>
+          <span><strong>14%</strong> oppose</span>
+          <span><strong>14%</strong> unsure</span>
+        </div>
+        <p style="margin-top: 0.7rem; font-size: 0.84rem; color: var(--text-muted);">
+          A councillor logs in and sees which way their constituents lean and how many verified participants the numbers represent before voting at council.
+        </p>
+      </aside>
+    </section>
+
+    <section class="section" id="how-it-works">
+      <h2>What is Constituent Voice?</h2>
+      <p>
+        Constituent Voice is a civic platform that connects residents and their elected representatives through structured, verifiable feedback on public issues. Instead of guessing what people think from social media noise or one-off emails, representatives see a clear signal of how their district actually feels.
+      </p>
+    </section>
+
+    <section class="section">
+      <div class="two-col">
+        <div class="card">
+          <h3>For constituents</h3>
+          <p>
+            Give your representatives usable direction in a few clicks.
+          </p>
+          <ul>
+            <li>Create issues that matter to you in your community or country.</li>
+            <li>Verify where you live so your voice counts in the right riding or ward.</li>
+            <li>Support or oppose issues with a simple vote, then add context if you want.</li>
+            <li>See how your neighbours feel and how your representatives respond over time.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>For representatives</h3>
+          <p>
+            Trade guesswork for a live, structured briefing from the people you serve.
+          </p>
+          <ul>
+            <li>See sentiment on each issue from the people who can actually vote you in or out.</li>
+            <li>Filter by level of government so you see only what is in your lane.</li>
+            <li>Respond in public so constituents see how you are thinking and why.</li>
+            <li>Track how closely your voting record matches the will of your district.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Trust, verification, and signal over noise</h2>
+      <p>
+        The value of Constituent Voice rests on one thing: trust. The platform is being designed so that both residents and representatives can rely on what they see as an honest, tamper-resistant picture of public opinion in each constituency.
+      </p>
+
+      <div class="trust-grid" style="margin-top: 1.4rem;">
+        <div class="trust-item">
+          <h4>Verified location</h4>
+          <p>
+            Each participant confirms where they live so their input maps to the correct ward, riding, or district. No riding, no voice on that file.
+          </p>
+        </div>
+        <div class="trust-item">
+          <h4>One person, one signal</h4>
+          <p>
+            Rate limiting and verification patterns restrict multiple accounts and automated abuse. The goal is a clean, representative signal, not raw volume.
+          </p>
+        </div>
+        <div class="trust-item">
+          <h4>Transparent aggregation</h4>
+          <p>
+            Representatives see aggregated numbers rather than raw identities. The public sees high level results and how elected officials respond.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="beta-strip">
+      <div class="beta-strip-main">
+        <strong>Be part of the founding cohort.</strong>
+        <small>
+          We are gathering early users, civic leaders, and representatives who want to shape the first release of Constituent Voice at
+          <span style="color:#e5e7eb;">constituencyvoice.democracy</span>.
+        </small>
+      </div>
+
+      <!-- Replace this with real handling later; for now it is just visual -->
+      <form
+        class="beta-form"
+        action="mailto:info@constituencyvoice.democracy"
+        method="post"
+        enctype="text/plain"
+      >
+        <input
+          type="email"
+          name="email"
+          class="beta-input"
+          placeholder="you@example.com"
+          required
+        />
+        <button class="beta-submit" type="submit">
+          Request early access
+        </button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>
+        © <span id="year">2025</span> Constituent Voice. All rights reserved.
+      </span>
+      <span>
+        Built for people who believe the mandate does not end on election day.
+      </span>
+    </div>
+  </footer>
+
+  <script>
+    // Just keeps the footer year current
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
+
